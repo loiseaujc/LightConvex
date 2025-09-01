@@ -18,9 +18,9 @@ Lightweight package for [convex programming](https://en.wikipedia.org/wiki/Conve
 
 $$
 \begin{aligned}
-    \mathrm{minimize}   &   \quad   \mathbf{c}^T \mathbf{x} \\
-    \mathrm{subject~to} &   \quad   \mathbf{Ax} = \mathbf{b} \\
-                        &   \quad   \mathbf{x} \geq \mathbf{0},
+    \mathrm{minimize}   &   \quad   c^T x \\
+    \mathrm{subject~to} &   \quad   Ax = b \\
+                        &   \quad   x \geq 0,
 \end{aligned}
 $$
 
@@ -28,12 +28,13 @@ and [quadratic programs](https://en.wikipedia.org/wiki/Quadratic_programming), e
 
 $$
 \begin{aligned}
-    \mathrm{minimize}   &   \quad   \dfrac12 \mathbf{x}^\mathbf{P}x + \mathbf{x}^T \mathbf{q} + r \\
-    \mathrm{subject~to} &   \quad   \mathbf{Gx} \leq \mathbf{h} \\
-                        &   \quad   \mathbf{Ax} = \mathbf{b}.
+    \mathrm{minimize}   &   \quad   \dfrac12 x^T P x + x^T q + r \\
+    \mathrm{subject~to} &   \quad   Gx \leq h \\
+                        &   \quad   Ax = b,
 \end{aligned}
 $$
 
+where the inequalities are applied element-wise, and $P \in \mathbb{R}^{n \times n}$ is a symmetric positive semi-definite matrix.
 While we strive for an intuitive user interface, we do not compromise with computational performances and make extensive use of Modern Fortran constructs for the implementation of battle-tested algorithms. The current version of `LightConvex` focuses on designing the structure of the package and its interface. For that purpose, `LightConvex` is thus currently restricted to linear programs.
 
 #### Road map
