@@ -17,9 +17,14 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        compiler: [gfortran, ifx, lfortran]
         include:
           - os: ubuntu-latest
+            compiler: gfortran
+            compiler-version: 13.3.0
+            extra-packages: ""
+          - os: ubuntu-latest
+            compiler: ifx
+            compiler-version: 2025.2.1
             extra-packages: ""
 
     steps:
