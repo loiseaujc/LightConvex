@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Convex Programming in Modern Fortran">
+    <meta name="author" content="" >
+    <link rel="icon" href="./favicon.png">
+
+    <title> LightConvex </title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="./css/fontawesome.min.css" rel="stylesheet">
+    <link href="./css/brands.min.css" rel="stylesheet">
+    <link href="./css/regular.min.css" rel="stylesheet">
+    <link href="./css/solid.min.css" rel="stylesheet">
+    <link href="./css/v4-font-face.min.css" rel="stylesheet">
+    <link href="./css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="./css/local.css" rel="stylesheet">
+    <link href="./css/pygments.css" rel="stylesheet">
+    <script src="./js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="./index.html">LightConvex </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="page/index.html">Contributing and specs</a></li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="./sourcefile/lightconvex.f90.html">Source File</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./lists/procedures.html">Procedures</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="./search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <!-- Main component for a primary marketing message or call to action -->
+    <div class="p-5 mb-4 bg-light border rounded-3" id="jumbotron">
+      <p>Convex Programming in Modern Fortran</p>
+        <p> Find us on&hellip;</p>
+      <p>
+        <a class="btn btn-lg btn-primary" href="https://github.com/loiseaujc/LightConvex" role="button">GitHub</a>
+        
+        
+        
+        
+        <a class="btn btn-lg btn-danger" style="float:right" href="https://github.com/loiseaujc/LightConvex/archive/HEAD.zip" role="button">Download the Source</a>
+      </p>
+    </div>
+
+      <div class="row" id='text'>
+        <div class=col-md-12>
+          <h1>LightConvex</h1>
+          <h1 id="project_website-httpsfortran-langgithubiofftpack">project_website: https://fortran-lang.github.io/fftpack/</h1>
+<p>favicon: doc/media/favicon.ico
+license: by-sa
+author: Jean-Christophe Loiseau
+author_pic: https://fortran-lang.org/assets/img/fortran_logo_512x512.png
+email: jean-christophe.loiseau@ensam.eu
+github: https://github.com/loiseaujc
+twitter: https://twitter.com/jcloiseau
+website: https://loiseaujc.github.io
+dbg: true
+parallel: 4</p>
+<hr>
+<div class="toc">
+<ul>
+<li><a href="#project_website-httpsfortran-langgithubiofftpack">project_website: https://fortran-lang.github.io/fftpack/</a></li>
+<li><a href="#fortran-fftpack-api-documentation">Fortran FFTPACK API Documentation</a></li>
+<li><a href="#lightconvex">LightConvex</a><ul>
+<li><a href="#description">Description</a></li>
+<li><a href="#road-map">Road map</a><ul>
+<li><a href="#linear-programming">Linear Programming</a></li>
+</ul>
+</li>
+<li><a href="#building-lightconvex">Building LightConvex</a><ul>
+<li><a href="#fortran-package-manager-fpm">Fortran Package Manager (fpm)</a></li>
+</ul>
+</li>
+<li><a href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="alert alert-warning">
+<p class="alert-title h4">Warning</p>
+<p>This API documentation for the Modern Fortran Edition of the <code>quadprog</code> solver is a work in progress.</p>
+</div>
+<h1 id="fortran-fftpack-api-documentation">Fortran FFTPACK API Documentation</h1>
+<p>This is the main API documentation landing page generated by <a href="https://github.com/Fortran-FOSS-Programmers/ford#readme">FORD</a>.
+The documentation for comment markup in source code, running <a href="https://github.com/Fortran-FOSS-Programmers/ford#readme">FORD</a> and the <a href="https://github.com/fortran-lang/fftpack/blob/HEAD/API-doc-FORD-file.md">FORD project file</a> are all maintained on the <a href="https://github.com/Fortran-FOSS-Programmers/ford/wiki">FORD wiki</a>.</p>
+<h1 id="lightconvex">LightConvex</h1>
+<p>Lightweight package for <a href="https://en.wikipedia.org/wiki/Convex_optimization">convex programming</a> written in Modern Fortran.</p>
+<p><a href="https://github.com/topics/fortran"><img alt="Language" src="https://img.shields.io/badge/-Fortran-734f96?logo=fortran&amp;logoColor=white"></a>
+<a href="https://github.com/loiseaujc/LightConvex/releases/latest"><img alt="GitHub release" src="https://img.shields.io/github/release/loiseaujc/LightConvex.svg"></a>
+<a href="https://github.com/loiseaujc/LightConvex/actions"><img alt="Build Status" src="https://github.com/loiseaujc/LightConvex/actions/workflows/ci.yml/badge.svg"></a>
+<a href="https://codecov.io/gh/loiseaujc/LightConvex"><img alt="codecov" src="https://codecov.io/gh/loiseaujc/LightConvex/branch/main/graph/badge.svg"></a>
+<a href="https://github.com/loiseaujc/LightConvex/commits/main"><img alt="last-commit" src="https://img.shields.io/github/last-commit/loiseaujc/LightConvex"></a></p>
+<p><strong>Status :</strong> Prototype</p>
+<h2 id="description">Description</h2>
+<p><code>LightConvex</code> is an experiment about writing convex programming solvers in Modern Fortran. It aims at providing an easy-to-use API for solving both dense and sparse convex programs, including <a href="https://en.wikipedia.org/wiki/Linear_programming">linear programs</a>, e.g.</p>
+<p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \mathrm{minimize}   &   \quad   c^T x \\
+    \mathrm{subject~to} &   \quad   Ax = b \\
+                        &   \quad   x \geq 0,
+\end{aligned}
+</script>
+</p>
+<p>and <a href="https://en.wikipedia.org/wiki/Quadratic_programming">quadratic programs</a>, e.g.</p>
+<p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \mathrm{minimize}   &   \quad   \dfrac12 x^T P x + x^T q + r \\
+    \mathrm{subject~to} &   \quad   Gx \leq h \\
+                        &   \quad   Ax = b,
+\end{aligned}
+</script>
+</p>
+<p>where the inequalities are applied element-wise, and $P \in \mathbb{R}^{n \times n}$ is a symmetric positive semi-definite matrix.
+While we strive for an intuitive user interface, we do not compromise with computational performances and make extensive use of Modern Fortran constructs for the implementation of battle-tested algorithms. The current version of <code>LightConvex</code> focuses on designing the structure of the package and its interface. For that purpose, <code>LightConvex</code> is thus currently restricted to linear programs.</p>
+<h2 id="road-map">Road map</h2>
+<h3 id="linear-programming">Linear Programming</h3>
+<p><em>Linear programming</em> (LP) is a method to achieve the best outcome (such as maximizing profit or minimizing cost) in a mathematical model whose requirements and objective are represented by linear relationships. The standard form of an LP reads</p>
+<p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \mathrm{minimize}   &   \quad   c^T x   \\
+    \mathrm{subject~to} &   \quad   Ax = b  \\
+                        &   \quad   x \geq 0,
+\end{aligned}
+</script>
+</p>
+<p>with $c \in \mathbb{R}^n$, $x \in \mathbb{R}^n$, $A \in \mathbb{R}^{m \times n}$ (with $m \leq n$) and $b \in \mathbb{R}^m$. Although it may seem restrictive at first, all LP can be formulated in this format.</p>
+<p>Below is a tentative list of features to be included in the first working prototype of <code>LightConvex</code>:</p>
+<ul>
+<li><strong>Support for dense LP</strong><ul>
+<li>Algorithms<ul>
+<li>[ ] Primal simplex algorithm</li>
+<li>[ ] Dual simplex algorithm</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Support for sparse LP</strong><ul>
+<li>Algorithms<ul>
+<li>[ ] Primal simplex algorithm</li>
+<li>[ ] Dual simplex algorithm</li>
+<li>[ ] Primal Affine Scaling</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Preprocessing</strong><ul>
+<li>[ ] Conversion of any LP into standard equality form</li>
+<li>[ ] Idiot Crash Algorithm</li>
+</ul>
+</li>
+<li><strong>Utilities</strong><ul>
+<li>[ ] (Compressed) <a href="https://en.wikipedia.org/wiki/MPS_(format)">MPS</a> file reader</li>
+</ul>
+</li>
+<li><strong>Examples</strong><ul>
+<li>[ ] Max Flow / Min Cut</li>
+</ul>
+</li>
+<li><strong>Continuous integration and documentation</strong><ul>
+<li>[ ] Unit tests based on the <a href="https://www.netlib.org/lp">netlib LP test suite</a></li>
+<li>[ ] CI based on <a href="https://github.com/gha3mi/setup-fortran-conda">setup-fortran-conda</a> with <code>fpm</code> build system and automatic documentation with <code>FORD</code></li>
+</ul>
+</li>
+</ul>
+<p>For the sake of simplicity, only double precision arithmetic is currently supported.</p>
+<h2 id="building-lightconvex">Building LightConvex</h2>
+<h3 id="fortran-package-manager-fpm">Fortran Package Manager (<code>fpm</code>)</h3>
+<p>The library can be build with the <a href="https://github.com/fortran-lang/fpm">Fortran Package Manager</a> <code>fpm</code> using the provided <code>fpm.toml</code> like so:</p>
+<div class="codehilite"><pre><span></span><code>    fpm build --release
+</code></pre></div>
+
+<p>Only double precision (<code>real64</code>) is currently supported.</p>
+<p>To use <code>LightConvex</code> within your <code>fpm</code> project, add the following line to your <code>fpm.toml</code> file:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">[dependencies]</span><span class="w"></span>
+<span class="n">LightConvex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="n">git</span><span class="o">=</span><span class="s">&quot;https://github.com/loiseaujc/LightConvex.git&quot;</span><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<h2 id="references">References</h2>
+<ul>
+<li>Boyd, Stephen P., and Lieven Vandenberghe. Convex optimization. Cambridge university press, 2004.</li>
+</ul>
+        </div>
+      </div>
+        <div class="row">
+          <hr>
+          <div class="col-xs-6 col-sm-4">
+            <div>
+              <h3>Source Files</h3>
+              <ul><li><a href='sourcefile/lightconvex.f90.html'>LightConvex.f90</a></li></ul>
+            </div>
+            <div>
+              <ul>
+                <li><a href="./lists/files.html"><em>All source files&hellip;</em></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xs-6 col-sm-4">
+            <div>
+              <h3>Modules</h3>
+              <ul><li><a href='module/lightconvex.html'>LightConvex</a></li></ul>
+            </div>
+            <div>
+              <ul>
+                <li><a href="./lists/modules.html"><em>All modules&hellip;</em></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xs-6 col-sm-4">
+            <div>
+              <h3>Procedures</h3>
+              <ul><li><a href='proc/say_hello.html'>say_hello</a></li></ul>
+            </div>
+            <div>
+              <ul>
+                <li><a href="./lists/procedures.html"><em>All procedures&hellip;</em></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              LightConvex
+              &copy; 2025 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2025-09-01 09:39 +0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
