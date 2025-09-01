@@ -1,7 +1,5 @@
 # LightConvex
 
----
-
 Lightweight package for [convex programming](https://en.wikipedia.org/wiki/Convex_optimization) written in Modern Fortran.
 
 [![Language](https://img.shields.io/badge/-Fortran-734f96?logo=fortran&logoColor=white)](https://github.com/topics/fortran)
@@ -52,32 +50,51 @@ $$
 \end{aligned}
 $$
 
-with $c \in \mathbb{R}^n$, $x \in \mathbb{R}^n$, $A \in \mathbb{R}^{m \times n}$ (with $m \leq n$) and $b \in \mathbb{R}^n$. Although it may seem restrictive at first, all LP can be formulated in this format.
+with $c \in \mathbb{R}^n$, $x \in \mathbb{R}^n$, $A \in \mathbb{R}^{m \times n}$ (with $m \leq n$) and $b \in \mathbb{R}^m$. Although it may seem restrictive at first, all LP can be formulated in this format.
 
 Below is a tentative list of features to be included in the first working prototype of `LightConvex`:
 
 - **Support for dense LP**
     - Algorithms
         - [ ] Primal simplex algorithm
+        - [ ] Dual simplex algorithm
 - **Support for sparse LP**
     - Algorithms
         - [ ] Primal simplex algorithm
+        - [ ] Dual simplex algorithm
         - [ ] Primal Affine Scaling
 - **Preprocessing**
     - [ ] Conversion of any LP into standard equality form
     - [ ] Idiot Crash Algorithm
 - **Utilities**
     - [ ] (Compressed) [MPS](https://en.wikipedia.org/wiki/MPS_(format)) file reader
+- **Examples**
+    - [ ] Max Flow / Min Cut
 - **Continuous integration and documentation**
     - [ ] Unit tests based on the [netlib LP test suite](https://www.netlib.org/lp)
     - [ ] CI based on [setup-fortran-conda](https://github.com/gha3mi/setup-fortran-conda) with `fpm` build system and automatic documentation with `FORD`
 
+For the sake of simplicity, only double precision arithmetic is currently supported.
+
 ## Building LightConvex
 
-## Examples
+### Fortran Package Manager (`fpm`)
 
-## Licence
+The library can be build with the [Fortran Package Manager](https://github.com/fortran-lang/fpm) `fpm` using the provided `fpm.toml` like so:
 
-## Development
+```bash
+    fpm build --release
+```
+
+Only double precision (`real64`) is currently supported.
+
+To use `LightConvex` within your `fpm` project, add the following line to your `fpm.toml` file:
+
+```toml
+[dependencies]
+LightConvex = {git="https://github.com/loiseaujc/LightConvex.git"}
+```
 
 ## References
+
+- Boyd, Stephen P., and Lieven Vandenberghe. Convex optimization. Cambridge university press, 2004.
