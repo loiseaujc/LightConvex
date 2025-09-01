@@ -73,6 +73,7 @@ Below is a tentative list of features to be included in the first working protot
 - **Continuous integration and documentation**
     - [ ] Unit tests based on the [netlib LP test suite](https://www.netlib.org/lp)
     - [ ] CI based on [setup-fortran-conda](https://github.com/gha3mi/setup-fortran-conda) with `fpm` build system and automatic documentation with `FORD`
+    - [ ] Add code coverage using `codecov`
 
 For the sake of simplicity, only double precision arithmetic is currently supported.
 

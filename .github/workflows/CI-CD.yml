@@ -1,4 +1,4 @@
-name: Setup Fortran Conda CI/CD
+name: CI/CD
 
 on: [push]
   # push:
@@ -18,38 +18,9 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         compiler: [gfortran, ifx, lfortran]
-        # os: [ubuntu-latest, macos-latest, windows-latest]
-        # compiler: [gfortran, ifx, lfortran, flang-new, nvfortran]
         include:
           - os: ubuntu-latest
             extra-packages: ""
-          # - os: windows-latest
-          #   extra-packages: ""
-          # - os: macos-latest
-          #   extra-packages: ""
-        # exclude:
-        #   - os: ubuntu-latest
-        #     compiler: flang-new
-        #   - os: ubuntu-latest
-        #     compiler: nvfortran
-        #   - os: macos-latest
-        #     compiler: lfortran
-        #   - os: macos-latest
-        #     compiler: gfortran
-        #   - os: macos-latest
-        #     compiler: flang-new
-        #   - os: macos-latest
-        #     compiler: ifx
-        #   - os: macos-latest
-        #     compiler: nvfortran
-        #   - os: windows-latest
-        #     compiler: lfortran
-        #   - os: windows-latest
-        #     compiler: flang-new
-        #   - os: windows-latest
-        #     compiler: ifx
-        #   - os: windows-latest
-        #     compiler: nvfortran
 
     steps:
       - name: Setup Fortran
@@ -64,98 +35,6 @@ jobs:
 
       - name: fpm test (release)
         run: fpm test --compiler ${{ matrix.compiler }} --profile release --verbose
-
-  # # Run CMake + Ninja build/tests across OS/compiler matrix
-  # test_cmake:
-  #   name: ${{ matrix.os }}_${{ matrix.compiler }}_cmake
-  #   runs-on: ${{ matrix.os }}
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       os: [ubuntu-latest, macos-latest, windows-latest]
-  #       compiler: [gfortran, ifx, lfortran, flang-new, nvfortran]
-  #       include:
-  #         - os: ubuntu-latest
-  #           extra-packages: ""
-  #         - os: windows-latest
-  #           extra-packages: ""
-  #         - os: macos-latest
-  #           extra-packages: ""
-  #       exclude:
-  #         - os: macos-latest
-  #           compiler: flang-new
-  #         - os: macos-latest
-  #           compiler: ifx
-  #         - os: macos-latest
-  #           compiler: nvfortran
-  #         - os: windows-latest
-  #           compiler: nvfortran
-  #
-  #   steps:
-  #     - name: Setup Fortran
-  #       uses: gha3mi/setup-fortran-conda@latest
-  #       with:
-  #         compiler: ${{ matrix.compiler }}
-  #         platform: ${{ matrix.os }}
-  #         extra-packages: ${{ matrix.extra-packages }}
-  #
-  #     - name: cmake test (debug)
-  #       run: |
-  #         cmake -S . -B build/debug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_Fortran_COMPILER=${{ matrix.compiler }} -G Ninja
-  #         cmake --build build/debug
-  #         ctest --test-dir build/debug --output-on-failure
-  #
-  #     - name: cmake test (release)
-  #       run: |
-  #         cmake -S . -B build/release -DCMAKE_BUILD_TYPE=Release -DCMAKE_Fortran_COMPILER=${{ matrix.compiler }} -G Ninja
-  #         cmake --build build/release
-  #         ctest --test-dir build/release --output-on-failure
-  #
-  # # Run Meson builds and tests across OS/compiler matrix
-  # test_meson:
-  #   name: ${{ matrix.os }}_${{ matrix.compiler }}_meson
-  #   runs-on: ${{ matrix.os }}
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       os: [ubuntu-latest, macos-latest, windows-latest]
-  #       compiler: [gfortran, ifx, lfortran, flang-new, nvfortran]
-  #       include:
-  #         - os: ubuntu-latest
-  #           extra-packages: ""
-  #         - os: windows-latest
-  #           extra-packages: ""
-  #         - os: macos-latest
-  #           extra-packages: ""
-  #       exclude:
-  #         - os: macos-latest
-  #           compiler: flang-new
-  #         - os: macos-latest
-  #           compiler: ifx
-  #         - os: macos-latest
-  #           compiler: nvfortran
-  #         - os: windows-latest
-  #           compiler: nvfortran
-  #
-  #   steps:
-  #     - name: Setup Fortran
-  #       uses: gha3mi/setup-fortran-conda@latest
-  #       with:
-  #         compiler: ${{ matrix.compiler }}
-  #         platform: ${{ matrix.os }}
-  #         extra-packages: ${{ matrix.extra-packages }}
-  #
-  #     - name: meson test (debug)
-  #       run: |
-  #         meson setup --wipe build/meson/debug --buildtype debug --backend=ninja
-  #         meson compile -C build/meson/debug --verbose
-  #         meson test -C build/meson/debug --verbose
-  #
-  #     - name: meson test (release)
-  #       run: |
-  #         meson setup --wipe build/meson/release --buildtype release --backend=ninja
-  #         meson compile -C build/meson/release --verbose
-  #         meson test -C build/meson/release --verbose
 
   # Build and deploy FORD documentation
   doc_ford:
@@ -173,22 +52,6 @@ jobs:
           ford-branch: gh-pages-ford
           ford-target-folder: API-doc
 
-  # # Build and deploy Doxygen documentation
-  # doc_doxygen:
-  #   name: Generate Doxygen Documentation
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Setup and Generate Doxygen Documentation
-  #       uses: gha3mi/setup-fortran-conda@latest
-  #       with:
-  #         compiler: gfortran
-  #         generate-doc-doxygen: true
-  #         doxygen-working-directory: .
-  #         doxygen-config: Doxyfile
-  #         doxygen-output-directory: doc/doxygen
-  #         doxygen-branch: gh-pages-doxygen
-  #         doxygen-target-folder: doc/doxygen
-
   # Generate STATUS.md from FPM job results
   status_fpm:
     name: Generate STATUS.md
@@ -200,47 +63,6 @@ jobs:
         uses: gha3mi/setup-fortran-conda@latest
         with:
           generate-status-fpm: true
-
-  # # Generate STATUS.md from CMake job results
-  # status_cmake:
-  #   name: Generate STATUS.md
-  #   if: always()
-  #   needs: test_cmake
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Generate summary
-  #       uses: gha3mi/setup-fortran-conda@latest
-  #       with:
-  #         generate-status-cmake: true
-  #
-  # # Generate STATUS.md from Meson job results
-  # status_meson:
-  #   name: Generate STATUS.md
-  #   if: always()
-  #   needs: test_meson
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Generate summary
-  #       uses: gha3mi/setup-fortran-conda@latest
-  #       with:
-  #         generate-status-meson: true
-
-  # Inject CI status table into README.md
-  # update_readme_table:
-  #   name: Update README.md status table
-  #   if: |
-  #     always() &&
-  #     github.ref != 'refs/heads/update-readme-table'
-  #   needs: [status_fpm, status_cmake]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Update README status
-  #       uses: gha3mi/setup-fortran-conda@latest
-  #       with:
-  #         update-readme-table: true
-  #         update-readme-token: ${{ secrets.GH_PAT }}   # Update with your GitHub personal access token
-  #         update-readme-user-name: "Jean-Christophe Loiseau" # Update with your name
-  #         update-readme-user-email: "loiseau.jc@gmail.com"  # Update with your email
 
   # Run Fortran linter with Fortitude
   linter_fortitude:
