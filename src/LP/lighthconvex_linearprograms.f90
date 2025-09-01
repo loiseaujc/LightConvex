@@ -167,7 +167,7 @@ contains
             end if
          end do
       end associate
-   end function
+   end function find_pivot
 
    pure subroutine left_right_exchange(A, ip, kp, i1, k1)
       real(dp), intent(inout) :: A(:, :)
@@ -187,5 +187,5 @@ contains
       A(irow, icol) = A(irow, icol) - outer_product(A(irow, kp1), A(ip1, icol))
       A(ip1, icol) = -A(ip1, icol)*piv
       A(ip1, kp1) = piv
-   end subroutine
+   end subroutine left_right_exchange
 end submodule lightconvex_lp
