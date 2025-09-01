@@ -4,7 +4,7 @@ Lightweight package for [convex programming](https://en.wikipedia.org/wiki/Conve
 
 [![Language](https://img.shields.io/badge/-Fortran-734f96?logo=fortran&logoColor=white)](https://github.com/topics/fortran)
 [![GitHub release](https://img.shields.io/github/release/loiseaujc/LightConvex.svg)](https://github.com/loiseaujc/LightConvex/releases/latest)
-[![Build Status](https://github.com/loiseaujc/LightConvex/actions/workflows/ci.yml/badge.svg)](https://github.com/loiseaujc/LightConvex/actions)
+[![Build Status](https://github.com/loiseaujc/LightConvex/actions/workflows/CI-CD.yml/badge.svg)](https://github.com/loiseaujc/LightConvex/actions)
 [![codecov](https://codecov.io/gh/loiseaujc/LightConvex/branch/main/graph/badge.svg)](https://codecov.io/gh/loiseaujc/LightConvex)
 [![last-commit](https://img.shields.io/github/last-commit/loiseaujc/LightConvex)](https://github.com/loiseaujc/LightConvex/commits/main)
 
@@ -73,6 +73,7 @@ Below is a tentative list of features to be included in the first working protot
 - **Continuous integration and documentation**
     - [ ] Unit tests based on the [netlib LP test suite](https://www.netlib.org/lp)
     - [ ] CI based on [setup-fortran-conda](https://github.com/gha3mi/setup-fortran-conda) with `fpm` build system and automatic documentation with `FORD`
+    - [ ] Add code coverage using `codecov`
 
 For the sake of simplicity, only double precision arithmetic is currently supported.
 
