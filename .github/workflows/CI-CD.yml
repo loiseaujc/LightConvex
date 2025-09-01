@@ -1,8 +1,8 @@
 name: Setup Fortran Conda CI/CD
 
-on:
-  push:
-    branches: [main, master, dev]
+on: [push]
+  # push:
+    # branches: [main, master, dev]
 
 permissions:
   contents: write
