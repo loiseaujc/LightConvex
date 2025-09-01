@@ -1,5 +1,5 @@
 program check
-implicit none
+   implicit none(external)
 
-print *, "Put some tests in here!"
+   print *, "Put some tests in here!"
 end program check

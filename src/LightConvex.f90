@@ -1,10 +1,10 @@
 module LightConvex
-  implicit none
-  private
+   implicit none(external)
+   private
 
-  public :: say_hello
+   public :: say_hello
 contains
-  subroutine say_hello
-    print *, "Hello, LightConvex!"
-  end subroutine say_hello
+   subroutine say_hello
+      print *, "Hello, LightConvex!"
+   end subroutine say_hello
 end module LightConvex
