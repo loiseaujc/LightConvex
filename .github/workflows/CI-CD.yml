@@ -48,7 +48,20 @@ jobs:
           COV_DIR: build/coverage
 
       - name: fpm test (debug)
-        run: fpm test --compiler ${{ matrix.compiler }} --profile debug --verbose --flag "${{ matrix.flag-debug }}"
+        run: |
+          fpm build --compiler ${{ matrix.compiler }} --profile debug --flag "${{ matrix.flag-debug }}" --verbose --show-model
+          fpm test --compiler ${{ matrix.compiler }} --profile debug --flag "${{ matrix.flag-debug }}" --verbose
+
+      - name: Create coverage report
+        if: contains( matrix.os, 'ubuntu') && contains( matrix.compiler, 'gfortran')
+        run: |
+          mkdir -p ${{ env.COV_DIR }}
+          mv ./build/gfortran_*/*/* ${{ env.COV_DIR }}
+          lcov --capture --initial --base-directory . --directory ${{ env.COV_DIR }} --output-file ${{ env.COV_DIR }}/coverage.base
+          lcov --capture           --base-directory . --directory ${{ env.COV_DIR }} --output-file ${{ env.COV_DIR }}/coverage.capture
+          lcov --add-tracefile ${{ env.COV_DIR }}/coverage.base --add-tracefile ${{ env.COV_DIR }}/coverage.capture --output-file ${{ env.COV_DIR }}/coverage.info
+        env:
+          COV_DIR: build/coverage
 
       - name: Upload coverage report
         if: contains( matrix.os, 'ubuntu') && contains( matrix.compiler, 'gfortran')
@@ -57,7 +70,6 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build/coverage/coverage.info
           verbose: true
-       
 
   # Build and deploy FORD documentation
   doc_ford:
