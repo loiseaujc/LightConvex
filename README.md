@@ -16,7 +16,7 @@ Lightweight package for [convex programming](https://en.wikipedia.org/wiki/Conve
 
 $$
 \begin{aligned}
-    \mathrm{minimize}   &   \quad   c^T x \\
+    \mathrm{maximize}   &   \quad   c^T x \\
     \mathrm{subject~to} &   \quad   Ax = b \\
                         &   \quad   x \geq 0,
 \end{aligned}
@@ -44,7 +44,7 @@ While we strive for an intuitive user interface, we do not compromise with compu
 
 $$
 \begin{aligned}
-    \mathrm{minimize}   &   \quad   c^T x   \\
+    \mathrm{maximize}   &   \quad   c^T x   \\
     \mathrm{subject~to} &   \quad   Ax = b  \\
                         &   \quad   x \geq 0,
 \end{aligned}
@@ -55,14 +55,16 @@ with $c \in \mathbb{R}^n$, $x \in \mathbb{R}^n$, $A \in \mathbb{R}^{m \times n}$
 Below is a tentative list of features to be included in the first working prototype of `LightConvex`:
 
 - **Support for dense LP**
-    - Algorithms
-        - [ ] Primal simplex algorithm
-        - [ ] Dual simplex algorithm
+    - [x] Standard primal simplex algorithm
+    - [ ] Standard dual simplex algorithm
+    - [ ] Revised dual simplex algorithm
 - **Support for sparse LP**
-    - Algorithms
-        - [ ] Primal simplex algorithm
-        - [ ] Dual simplex algorithm
-        - [ ] Primal Affine Scaling
+    - [ ] Primal simplex algorithm
+    - [ ] Revised dual simplex algorithm
+    - [ ] Primal Affine Scaling
+- **High-level interfaces**
+    - [ ] `problem = LP(c, A, b)` for dense and sparse LP.
+    - [ ] `solution = solve(problem, alg)` for dense and sparse LP.
 - **Preprocessing**
     - [ ] Conversion of any LP into standard equality form
     - [ ] Idiot Crash Algorithm
@@ -70,9 +72,12 @@ Below is a tentative list of features to be included in the first working protot
     - [ ] (Compressed) [MPS](https://en.wikipedia.org/wiki/MPS_(format)) file reader
 - **Examples**
     - [ ] Max Flow / Min Cut
+- **Documentation**
+    - [ ] In-code documentation
+    - [ ] Online documentation using `FORD`
 - **Continuous integration and documentation**
     - [ ] Unit tests based on the [netlib LP test suite](https://www.netlib.org/lp)
-    - [ ] CI based on [setup-fortran-conda](https://github.com/gha3mi/setup-fortran-conda) with `fpm` build system and automatic documentation with `FORD`
+    - [x] CI based on [setup-fortran-conda](https://github.com/gha3mi/setup-fortran-conda) with `fpm` build system and automatic documentation with `FORD`
     - [ ] Add code coverage using `codecov`
 
 For the sake of simplicity, only double precision arithmetic is currently supported.
