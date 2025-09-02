@@ -1,4 +1,5 @@
 module TestLinearPrograms
+   use, intrinsic :: iso_fortran_env, only: error_unit, output_unit
    use testdrive, only: new_unittest, unittest_type, error_type, check
    use stdlib_linalg_constants, only: ilp, dp, lk
    use LightConvex, only: simplex
@@ -10,11 +11,26 @@ contains
    subroutine collect_dense_simplex_problems(testsuite)
       type(unittest_type), allocatable, intent(out) :: testsuite(:)
       testsuite = [new_unittest("Num. recipes example", test_num_recipes_problem)]
+      testsuite = [testsuite, new_unittest("Wiki example", test_wikipedia_example)]
    end subroutine collect_dense_simplex_problems
 
+   ! Test problem (10.8.6)-(10.8.7) from Numerical Recipes.
+   ! The original LP reads
+   !
+   !   maximize    x1 + x2 + x3 - 0.5 x4
+   !   subject to           x1 + 2 x3 <= 740
+   !                     2 x2 - 7 x4 <= 0
+   !                  x2 - x3 + 2 x4 >= 0.5
+   !               x1 + x2 + x3 + x4  = 9
+   !                  x1, x2, x3, x4 >= 0
+   !
+   ! The solution reported in the reference is given by
+   ! x = [0.0, 3.33, 4.74, 0.95] (up to two significant digits)
+   ! along with the slacks s = [730.55, 0, 0, 0]. The corresponding
+   ! optimal cost is c = 17.03
    subroutine test_num_recipes_problem(error)
       type(error_type), allocatable, intent(out) :: error
-      integer(ilp), parameter :: m = 4, n = 4
+      integer(ilp), parameter :: m = 4, n = 4, maxiter = 10
       real(dp), dimension(m + 2, n + 1) :: A
       integer(ilp), parameter :: nleq = 2, ngeq = 1, neq = 1
       real(dp) :: x(n), s(m), cost, cost_ref
@@ -32,9 +48,10 @@ contains
       block
          real(dp) :: start_time, end_time
          call cpu_time(start_time)
-         call simplex(A, nleq, ngeq, neq, iposv, info)
+         call simplex(A, nleq, ngeq, neq, iposv, maxiter, info)
          call cpu_time(end_time)
-         print *, "     - Running time :", (end_time - start_time)*1000.0_dp, "milliseconds."
+         write (output_unit, '(A, F6.3, A)') &
+            "     - Running time :", (end_time - start_time)*1000.0_dp, " milliseconds."
       end block
 
       !> Extract the primal and slack variables.
@@ -59,4 +76,61 @@ contains
       if (allocated(error)) return
 
    end subroutine test_num_recipes_problem
+
+   ! Test problem taken from wikipedia: https://en.wikipedia.org/wiki/Simplex_algorithm
+   ! The original LP reads
+   !
+   !   maximize    2x + 3y + 4z
+   !   subject to  3x + 2y + z  <= 10
+   !               2x + 5y + 3z <= 15
+   !                    x, y, z >= 0
+   !
+   ! The solution is given by x = [0, 0, 5] with slack variables
+   ! given by s = [5, 0]. Corresponding optimal cost is c = 20.
+   subroutine test_wikipedia_example(error)
+      type(error_type), allocatable, intent(out) :: error
+      integer(ilp), parameter :: m = 2, n = 3, maxiter = 10
+      real(dp), dimension(m + 2, n + 1) :: A
+      integer(ilp), parameter :: nleq = 2, ngeq = 0, neq = 0
+      real(dp) :: x(n), s(m), cost, cost_ref
+      real(dp) :: xref(n), sref(m)
+      integer(ilp) :: iposv(m), info, i, j
+
+      !> Initialize the simplex tableau.
+      A(1, :) = [0.0_dp, 2.0_dp, 3.0_dp, 4.0_dp]
+      A(2, :) = [10.0_dp, -3.0_dp, -2.0_dp, -1.0_dp]
+      A(3, :) = [15.0_dp, -2.0_dp, -5.0_dp, -3.0_dp]
+
+      !> Solve the problem using the simplex method.
+      block
+         real(dp) :: start_time, end_time
+         call cpu_time(start_time)
+         call simplex(A, nleq, ngeq, neq, iposv, maxiter, info)
+         call cpu_time(end_time)
+         write (output_unit, '(A, F6.3, A)') &
+            "     - Running time :", (end_time - start_time)*1000.0_dp, " milliseconds."
+      end block
+
+      !> Extract the primal and slack variables.
+      x = 0.0_dp; s = 0.0_dp; cost = A(1, 1)
+      do i = 1, m
+         if (iposv(i) <= n) x(iposv(i)) = A(i + 1, 1)
+         if (iposv(i) > n) s(iposv(i) - n) = A(i + 1, 1)
+      end do
+
+      !> Reference solution.
+      cost_ref = 20.0_dp
+      xref = [0.0_dp, 0.0_dp, 5.0_dp]
+      sref = [5.0_dp, 0.0_dp]
+
+      call check(error, info == 0)              ! Optimal solution found.
+      if (allocated(error)) return
+      call check(error, maxval(abs(x - xref)))  ! Matching primal.
+      if (allocated(error)) return
+      call check(error, maxval(abs(s - sref)))  ! Matching slack.
+      if (allocated(error)) return
+      call check(error, abs(cost - cost_ref))   ! Matching cost.
+      if (allocated(error)) return
+
+   end subroutine test_wikipedia_example
 end module TestLinearPrograms
