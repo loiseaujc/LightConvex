@@ -12,6 +12,8 @@ contains
       type(unittest_type), allocatable, intent(out) :: testsuite(:)
       testsuite = [new_unittest("Num. recipes example", test_num_recipes_problem)]
       testsuite = [testsuite, new_unittest("Wiki example", test_wikipedia_example)]
+      testsuite = [testsuite, new_unittest("Infeasible example", test_infeasible_lp)]
+      testsuite = [testsuite, new_unittest("Unbounded example", test_unbounded_lp)]
    end subroutine collect_dense_simplex_problems
 
    ! Test problem (10.8.6)-(10.8.7) from Numerical Recipes.
@@ -133,4 +135,76 @@ contains
       if (allocated(error)) return
 
    end subroutine test_wikipedia_example
+
+   ! This is a simple example illustrating an infeasible problem.
+   ! The corresponding LP reads
+   !
+   !   maximize    x + y
+   !   subject to  -x -y >= 1
+   !                x, y >= 0
+   !
+   ! which obviously has no solution.
+   subroutine test_infeasible_lp(error)
+      type(error_type), allocatable, intent(out) :: error
+      integer(ilp), parameter :: m = 1, n = 2, maxiter = 10
+      real(dp), dimension(m + 2, n + 1) :: A
+      integer(ilp), parameter :: nleq = 0, ngeq = 1, neq = 0
+      real(dp) :: x(n), s(m), cost, cost_ref
+      real(dp) :: xref(n), sref(m)
+      integer(ilp) :: iposv(m), info, i, j
+
+      !> Initialize the simplex tableau.
+      A(1, :) = [0.0_dp, 1.0_dp, 1.0_dp]
+      A(2, :) = [1.0_dp, 1.0_dp, 1.0_dp]
+
+      !> Solve the problem using the simplex method.
+      block
+         real(dp) :: start_time, end_time
+         call cpu_time(start_time)
+         call simplex(A, nleq, ngeq, neq, iposv, maxiter, info)
+         call cpu_time(end_time)
+         write (output_unit, '(A, F6.3, A)') &
+            "     - Running time :", (end_time - start_time)*1000.0_dp, " milliseconds."
+      end block
+
+      call check(error, info == -1)              ! Problem is infeasible.
+      if (allocated(error)) return
+
+   end subroutine test_infeasible_lp
+
+   ! This is a simple example illustrating an unbounded problem.
+   ! The corresponding LP reads
+   !
+   !   maximize     x + y
+   !   subject to   x + y >= 5
+   !                x, y >= 0
+   !
+   ! which clearly has no finite solution.
+   subroutine test_unbounded_lp(error)
+      type(error_type), allocatable, intent(out) :: error
+      integer(ilp), parameter :: m = 1, n = 2, maxiter = 10
+      real(dp), dimension(m + 2, n + 1) :: A
+      integer(ilp), parameter :: nleq = 0, ngeq = 1, neq = 0
+      real(dp) :: x(n), s(m), cost, cost_ref
+      real(dp) :: xref(n), sref(m)
+      integer(ilp) :: iposv(m), info, i, j
+
+      !> Initialize the simplex tableau.
+      A(1, :) = [0.0_dp, 1.0_dp, 1.0_dp]
+      A(2, :) = [5.0_dp, -1.0_dp, -1.0_dp]
+
+      !> Solve the problem using the simplex method.
+      block
+         real(dp) :: start_time, end_time
+         call cpu_time(start_time)
+         call simplex(A, nleq, ngeq, neq, iposv, maxiter, info)
+         call cpu_time(end_time)
+         write (output_unit, '(A, F6.3, A)') &
+            "     - Running time :", (end_time - start_time)*1000.0_dp, " milliseconds."
+      end block
+
+      call check(error, info == 1)              ! Objective is unbounded.
+      if (allocated(error)) return
+
+   end subroutine test_unbounded_lp
 end module TestLinearPrograms
