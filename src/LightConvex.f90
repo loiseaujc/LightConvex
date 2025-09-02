@@ -17,12 +17,14 @@ module LightConvex
    !--------------------------------------
 
    interface simplex
-      pure module subroutine dense_standard_simplex(A, nleq, ngeq, neq, iposv, info)
+      pure module subroutine dense_standard_simplex(A, nleq, ngeq, neq, iposv, maxiter, info)
          implicit none(external)
          real(dp), intent(inout) :: A(:, :)
         !! Simplex tableau of dimension n+2 x m
          integer(ilp), intent(in) :: nleq, ngeq, neq
         !! Number of constraints of each type.
+         integer(ilp), intent(in) :: maxiter
+        !! Maximum number of iterations.
          integer(ilp), intent(out) :: info
         !! Return flag:
         !!  - info = 1  : Optimal solution has been found.
