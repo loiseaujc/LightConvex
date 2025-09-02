@@ -36,17 +36,6 @@ jobs:
           platform: ${{ matrix.os }}
           extra-packages: ${{ matrix.extra-packages }}
 
-      - name: Prepare for code coverage
-        if: contains( matrix.os, 'ubuntu') && contains( matrix.compiler, 'gfortran')
-        run: |
-          mkdir -p ${{ env.COV_DIR }}
-          mv ./build/gfortran_*/*/* ${{ env.COV_DIR }}
-          lcov --capture --initial --base-directory . --directory ${{ env.COV_DIR }} --output-file ${{ env.COV_DIR }}/coverage.base
-          lcov --capture           --base-directory . --directory ${{ env.COV_DIR }} --output-file ${{ env.COV_DIR }}/coverage.capture
-          lcov --add-tracefile ${{ env.COV_DIR }}/coverage.base --add-tracefile ${{ env.COV_DIR }}/coverage.capture --output-file ${{ env.COV_DIR }}/coverage.info
-        env:
-          COV_DIR: build/coverage
-
       - name: fpm test (debug)
         run: |
           fpm build --compiler ${{ matrix.compiler }} --profile debug --flag "${{ matrix.flag-debug }}" --verbose --show-model
