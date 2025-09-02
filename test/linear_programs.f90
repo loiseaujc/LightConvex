@@ -32,7 +32,7 @@ contains
       block
          real(dp) :: start_time, end_time
          call cpu_time(start_time)
-         call simplex(A, nleq, ngeq, neq, info, iposv)
+         call simplex(A, nleq, ngeq, neq, iposv, info)
          call cpu_time(end_time)
          print *, "     - Running time :", (end_time - start_time)*1000.0_dp, "milliseconds."
       end block
