@@ -31,7 +31,7 @@ contains
                description="Tableau size is inconsistent with the number of constraints.")
    call assert(assertion=size(iposv) == m, &
                description="Dimension of iposv is inconsistant with the number of constraints.")
-   call assert(assertion=any(A(2:, 1) < 0.0_dp), &
+   call assert(assertion=all(A(2:, 1) >= 0.0_dp), &
                description="Constants b_i need to be non-negative.")
 
    !----- Initialization -----
@@ -103,7 +103,7 @@ contains
          if (ip == 0) then
             ! No pivot has been found. Maximum of the auxiliary function
             ! is unbounded.
-            info = -1
+            info = 1
             return
          end if
 
@@ -161,7 +161,7 @@ contains
 
       ip = find_pivot(A, kp)
       if (ip == 0) then
-         ! No pivot has been found. Problem is infeasible.
+         ! No pivot has been found. Objective function is unbounded.
          info = 1
          return
       end if
