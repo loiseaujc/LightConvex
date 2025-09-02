@@ -20,7 +20,8 @@ jobs:
           - os: ubuntu-latest
             compiler: gfortran
             compiler-version: 13.3.0
-            extra-packages: ""
+            flag-debug: "-Wno-external-argument-mismatch -coverage"
+            extra-packages: "lcov"
           - os: ubuntu-latest
             compiler: ifx
             compiler-version: 2025.2.1
@@ -35,11 +36,28 @@ jobs:
           platform: ${{ matrix.os }}
           extra-packages: ${{ matrix.extra-packages }}
 
-      - name: fpm test (debug)
-        run: fpm test --compiler ${{ matrix.compiler }} --profile debug --verbose
+      - name: Prepare for code coverage
+        if: contains( matrix.os, 'ubuntu') && contains( matrix.compiler, 'gfortran')
+        run: |
+          mkdir -p ${{ env.COV_DIR }}
+          mv ./build/gfortran_*/*/* ${{ env.COV_DIR }}
+          lcov --capture --initial --base-directory . --directory ${{ env.COV_DIR }} --output-file ${{ env.COV_DIR }}/coverage.base
+          lcov --capture           --base-directory . --directory ${{ env.COV_DIR }} --output-file ${{ env.COV_DIR }}/coverage.capture
+          lcov --add-tracefile ${{ env.COV_DIR }}/coverage.base --add-tracefile ${{ env.COV_DIR }}/coverage.capture --output-file ${{ env.COV_DIR }}/coverage.info
+        env:
+          COV_DIR: build/coverage
 
-      - name: fpm test (release)
-        run: fpm test --compiler ${{ matrix.compiler }} --profile release --verbose
+      - name: fpm test (debug)
+        run: fpm test --compiler ${{ matrix.compiler }} --profile debug --verbose --flag "${{ matrix.flag-debug }}"
+
+      - name: Upload coverage report
+        if: contains( matrix.os, 'ubuntu') && contains( matrix.compiler, 'gfortran')
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build/coverage/coverage.info
+          verbose: true
+       
 
   # Build and deploy FORD documentation
   doc_ford:
