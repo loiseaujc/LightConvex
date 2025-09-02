@@ -1,7 +1,6 @@
 submodule(lightconvex) lightconvex_lp
    use stdlib_math, only: arange, swap
    use stdlib_linalg, only: outer_product
-   use stdlib_linalg_lapack, only: ger
    use stdlib_intrinsics, only: sum => stdlib_sum
    implicit none(external)
 
@@ -12,6 +11,8 @@ contains
     !! Dimensions of the problem.
     !!  - m : Number of constraints (excluding the non-negativity).
     !!  - n : Number of variables (excluding the slack ones).
+   integer(ilp) :: niter
+    !! Current iteration number
    integer(ilp), allocatable           :: izrov(:)
     !! Book-keeping for variables being zeroed-out.
    integer(ilp), dimension(size(A, 2)) :: admissible_columns
@@ -38,7 +39,7 @@ contains
    ! Index list of columns admissible for exchange.
    nl1 = n; admissible_columns = arange(n)
    izrov = admissible_columns   ! All variables are initially right-hand.
-   iposv = n + arange(m)     ! Initial left-hand variables. <= constraints
+   iposv = n + arange(m)        ! Initial left-hand variables. <= constraints
    ! are represented by having their slacks left-hand with no artificial variable.
    ! >= constraints have their slack initially left-hand with a minus sign and their
    ! artificial variable handled implicitly during their first exchange.
@@ -140,7 +141,9 @@ contains
    !-----     Phase 2 : Compute optimal solution     -----
    !------------------------------------------------------
 
-   phase2: do
+   niter = 0
+   phase2: do while (niter <= maxiter)
+      niter = niter + 1
       if (nl1 > 0) then
          kp = maxloc(A(1, admissible_columns(:nl1) + 1), dim=1)
          kp = admissible_columns(kp)
@@ -168,6 +171,12 @@ contains
       ! Book-keeping.
       call swap(izrov(kp), iposv(ip))
    end do phase2
+
+   ! Return information flag info = 2 if the maximum number of
+   ! iterations has been reached.
+   if (niter > maxiter) then
+      info = 2; return
+   end if
 
    end procedure dense_standard_simplex
 
