@@ -27,9 +27,9 @@ module LightConvex
         !! Maximum number of iterations.
          integer(ilp), intent(out) :: info
         !! Return flag:
-        !!  - info = 1  : Optimal solution has been found.
-        !!  - info = 0  : Objective function is unbounded.
         !!  - info = -1 : Problem is infeasible.
+        !!  - info = 0  : Optimal solution has been found.
+        !!  - info = 1  : Objective function is unbounded.
          integer(ilp), intent(out) :: iposv(:)
         !! Book-keeping for the primal and slack variables.
       end subroutine dense_standard_simplex
