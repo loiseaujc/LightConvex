@@ -37,9 +37,9 @@ contains
    !----- Initialization -----
 
    ! Index list of columns admissible for exchange.
-   nl1 = n; admissible_columns = arange(n)
-   izrov = admissible_columns   ! All variables are initially right-hand.
-   iposv = n + arange(m)        ! Initial left-hand variables. <= constraints
+   nl1 = n; admissible_columns(:n) = arange(n)
+   izrov = admissible_columns(:n)   ! All variables are initially right-hand.
+   iposv = n + arange(m)            ! Initial left-hand variables. <= constraints
    ! are represented by having their slacks left-hand with no artificial variable.
    ! >= constraints have their slack initially left-hand with a minus sign and their
    ! artificial variable handled implicitly during their first exchange.
