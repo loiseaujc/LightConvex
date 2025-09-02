@@ -149,8 +149,6 @@ contains
       integer(ilp), parameter :: m = 1, n = 2, maxiter = 10
       real(dp), dimension(m + 2, n + 1) :: A
       integer(ilp), parameter :: nleq = 0, ngeq = 1, neq = 0
-      real(dp) :: x(n), s(m), cost, cost_ref
-      real(dp) :: xref(n), sref(m)
       integer(ilp) :: iposv(m), info, i, j
 
       !> Initialize the simplex tableau.
@@ -185,8 +183,6 @@ contains
       integer(ilp), parameter :: m = 1, n = 2, maxiter = 10
       real(dp), dimension(m + 2, n + 1) :: A
       integer(ilp), parameter :: nleq = 0, ngeq = 1, neq = 0
-      real(dp) :: x(n), s(m), cost, cost_ref
-      real(dp) :: xref(n), sref(m)
       integer(ilp) :: iposv(m), info, i, j
 
       !> Initialize the simplex tableau.
