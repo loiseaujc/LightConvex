@@ -17,7 +17,7 @@ module LightConvex
    !--------------------------------------
 
    interface simplex
-      pure module subroutine dense_standard_simplex(A, nleq, ngeq, neq, info, iposv)
+      pure module subroutine dense_standard_simplex(A, nleq, ngeq, neq, iposv, info)
          implicit none(external)
          real(dp), intent(inout) :: A(:, :)
         !! Simplex tableau of dimension n+2 x m
