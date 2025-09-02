@@ -19,7 +19,7 @@ contains
       integer(ilp), parameter :: nleq = 2, ngeq = 1, neq = 1
       real(dp) :: x(n), s(m), cost, cost_ref
       real(dp) :: xref(n), sref(m)
-      integer(ilp) :: iposv(m), izrov(n), info, i, j
+      integer(ilp) :: iposv(m), info, i, j
 
       !> Initialize the simplex tableau.
       A(1, :) = [0.0_dp, 1.0_dp, 1.0_dp, 3.0_dp, -0.5_dp]
@@ -29,7 +29,13 @@ contains
       A(5, :) = [9.0_dp, -1.0_dp, -1.0_dp, -1.0_dp, -1.0_dp]
 
       !> Solve the problem using the simplex method.
-      call simplex(A, nleq, ngeq, neq, info, izrov, iposv)
+      block
+         real(dp) :: start_time, end_time
+         call cpu_time(start_time)
+         call simplex(A, nleq, ngeq, neq, info, iposv)
+         call cpu_time(end_time)
+         print *, "     - Running time :", (end_time - start_time)*1000.0_dp, "milliseconds."
+      end block
 
       !> Extract the primal and slack variables.
       x = 0.0_dp; s = 0.0_dp; cost = A(1, 1)
