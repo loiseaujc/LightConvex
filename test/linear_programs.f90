@@ -6,15 +6,15 @@ module TestLinearPrograms
    implicit none(external)
    private
 
-   public collect_dense_simplex_problems
+   public collect_dense_standard_simplex_problems
 contains
-   subroutine collect_dense_simplex_problems(testsuite)
+   subroutine collect_dense_standard_simplex_problems(testsuite)
       type(unittest_type), allocatable, intent(out) :: testsuite(:)
       testsuite = [new_unittest("Num. recipes example", test_num_recipes_problem)]
       testsuite = [testsuite, new_unittest("Wiki example", test_wikipedia_example)]
       testsuite = [testsuite, new_unittest("Infeasible example", test_infeasible_lp)]
       testsuite = [testsuite, new_unittest("Unbounded example", test_unbounded_lp)]
-   end subroutine collect_dense_simplex_problems
+   end subroutine collect_dense_standard_simplex_problems
 
    ! Test problem (10.8.6)-(10.8.7) from Numerical Recipes.
    ! The original LP reads

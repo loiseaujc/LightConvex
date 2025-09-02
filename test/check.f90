@@ -4,7 +4,7 @@ program check
    ! Unit-test utilities.
    use testdrive, only: run_testsuite, new_testsuite, testsuite_type
    ! Collection of test problems.
-   use TestLinearPrograms, only: collect_dense_simplex_problems
+   use TestLinearPrograms, only: collect_dense_standard_simplex_problems
    implicit none(external)
 
 ! Unit-test related.
@@ -14,7 +14,7 @@ program check
 
    ! Collection of test suites.
    status = 0
-   testsuites = [new_testsuite("Dense Simplex", collect_dense_simplex_problems)]
+   testsuites = [new_testsuite("Dense Standard Simplex", collect_dense_standard_simplex_problems)]
 
    ! Run all the test suites.
    do i = 1, size(testsuites)
