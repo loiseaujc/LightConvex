@@ -36,9 +36,9 @@ contains
    !----- Initialization -----
 
    ! Index list of columns admissible for exchange.
-   nl1 = n; admissible_columns(:n) = arange(1, n)
-   izrov = admissible_columns(:n)   ! All variables are initially right-hand.
-   iposv = n + arange(1, m)         ! Initial left-hand variables. <= constraints
+   nl1 = n; admissible_columns = arange(n)
+   izrov = admissible_columns   ! All variables are initially right-hand.
+   iposv = n + arange(m)     ! Initial left-hand variables. <= constraints
    ! are represented by having their slacks left-hand with no artificial variable.
    ! >= constraints have their slack initially left-hand with a minus sign and their
    ! artificial variable handled implicitly during their first exchange.
@@ -222,10 +222,10 @@ contains
       ip1 = ip + 1; kp1 = kp + 1
       piv = 1.0_dp/A(ip1, kp1)
 
-      itmp(1:k1 + 1) = arange(1, k1 + 1)
+      itmp(1:k1 + 1) = arange(k1 + 1)
       icol = pack(itmp(1:k1 + 1), itmp(1:k1 + 1) /= kp1)
 
-      itmp(1:i1 + 1) = arange(1, i1 + 1)
+      itmp(1:i1 + 1) = arange(i1 + 1)
       irow = pack(itmp(1:i1 + 1), itmp(1:i1 + 1) /= ip1)
 
       A(irow, kp1) = A(irow, kp1)*piv
