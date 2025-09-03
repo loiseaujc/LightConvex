@@ -6,6 +6,18 @@ submodule(lightconvex) lightconvex_lp
 
 contains
 
+   !============================================
+   !============================================
+   !=====                                  =====
+   !=====     PRIMAL SIMPLEX ALGORITHM     =====
+   !=====                                  =====
+   !============================================
+   !============================================
+
+   !-----------------------------------------------------------
+   !-----     STANDARD SIMPLEX METHOD (DENSE TABLEAU)     -----
+   !-----------------------------------------------------------
+
    module procedure dense_standard_simplex
    integer(ilp) :: m, n
     !! Dimensions of the problem.
@@ -15,15 +27,17 @@ contains
     !! Current iteration number
    integer(ilp), allocatable           :: izrov(:)
     !! Book-keeping for variables being zeroed-out.
-   integer(ilp), dimension(size(A, 2)) :: admissible_columns
-    !! List of columns admissible for exchange.
-   logical(lk), dimension(ngeq)        :: in_basis
+   integer(ilp), dimension(size(A, 2)) :: nonbasics
+    !! Indices of the non-basic variables.
+   logical(lk), dimension(ngeq)        :: is_basic
     !! List of >= constraints currently in the basis.
+    !! Method used to find an initial feasible point.
+   integer(ilp) :: rowpiv, colpiv
+    !! Index of the pivoting row and pivoting column.
 
    ! Miscellaneous
-   integer(ilp) :: nl1, ip, kp, i, k, kh
-   logical(lk)  :: init
-   real(dp)     :: bmax
+   integer(ilp) :: nl1
+   real(dp)     :: reduced_cost
 
    !> Sanity checks.
    m = size(A, 1) - 2; n = size(A, 2) - 1
@@ -37,154 +51,246 @@ contains
    !----- Initialization -----
 
    ! Index list of columns admissible for exchange.
-   nl1 = n; admissible_columns(:n) = arange(n)
-   izrov = admissible_columns(:n)   ! All variables are initially right-hand.
-   iposv = n + arange(m)            ! Initial left-hand variables. <= constraints
-   ! are represented by having their slacks left-hand with no artificial variable.
-   ! >= constraints have their slack initially left-hand with a minus sign and their
+   nl1 = n; nonbasics(:n) = arange(n)
+   izrov = nonbasics(:n)    ! All variables are initially non-basic.
+   iposv = n + arange(m)    ! Initial basic variables. <= constraints
+   ! are represented by having their slacks basic with no artificial variable.
+   ! >= constraints have their slack initially basic with a minus sign and their
    ! artificial variable handled implicitly during their first exchange.
-   ! == constraints have their artificial variable initially left-hand.
+   ! == constraints have their artificial variable initially basic.
 
-   !----------------------------------------------
-   !----- Phase 1 : Find a feasible solution -----
-   !----------------------------------------------
+   !--> Phase 1 : Find a feasible solution
+   !---------------------------------------
 
-   init = .true.
-   phase1: do
-      if (init) then
-         if (ngeq + neq == 0) exit phase1
-         init = .false.
-         ! List of >= constraints whose slack has never been exchanged.
-         in_basis = .true.
-         ! Auxiliary objective function.
-         A(m + 2, :) = -sum(A(nleq + 2:m + 1, :), dim=1)
-      end if
+   call find_feasible_point(initialization, A, nleq, ngeq, neq, &
+                            nonbasics, iposv, izrov, pivot, nl1, info)
+   if ((info == infeasible_status) .or. (info == unbounded_status)) return
 
-      if (nl1 > 0) then
-         ! Find the maximum coefficient of the auxiliary objective function.
-         kp = maxloc(A(m + 2, admissible_columns(:nl1) + 1), dim=1)
-         kp = admissible_columns(kp)
-         bmax = A(m + 2, kp + 1)
-      else
-         bmax = 0.0_dp
-      end if
-
-      phase1a: do
-         if ((bmax <= eps) .and. (A(m + 2, 1) < -eps)) then
-            ! Auxiliary objective is still negative and can't be improved.
-            ! No feasible solution exits.
-            info = -1
-            return
-         else if ((bmax <= eps) .and. (A(m + 2, 1) <= eps)) then
-            ! Auxiliary objective is zero and can't be improved. Feasible
-            ! starting vector has been computed. Clean out the artificial
-            ! variables corresponding to remaining equality constraints
-            ! and exit phase one.
-            do ip = nleq + ngeq + 1, m
-               if (iposv(ip) == ip + n) then
-                  if (nl1 > 0) then
-                     kp = maxloc(abs(A(ip + 1, admissible_columns(:nl1) + 1)), dim=1)
-                     kp = admissible_columns(kp)
-                     bmax = A(ip + 1, kp + 1)
-                  else
-                     bmax = 0.0_dp
-                  end if
-                  if (bmax > eps) exit phase1a
-               end if
-            end do
-            ! Change sign of row for any >= constraints still present from
-            ! the initial basis.
-            where (spread(in_basis, 2, n + 1) .eqv. .true.) &
-               A(nleq + 2:nleq + ngeq + 1, :) = -A(nleq + 2:nleq + ngeq + 1, :)
-            exit phase1
-         end if
-
-         ip = find_pivot(A, kp)
-         if (ip == 0) then
-            ! No pivot has been found. Maximum of the auxiliary function
-            ! is unbounded.
-            info = 1
-            return
-         end if
-
-         exit phase1a
-      end do phase1a
-
-      ! Exchange a basic and non-basic variable.
-      call exchange_variables(A, ip, kp, m + 1, n)
-
-      if (iposv(ip) >= n + nleq + ngeq + 1) then
-         ! Exchanged out an artifical variable for an equality constraint.
-         ! Make sure it stays out by removing it from the l1 list.
-         k = findloc(admissible_columns(:nl1), kp, dim=1)
-         nl1 = nl1 - 1
-         admissible_columns(k:nl1) = admissible_columns(k + 1:nl1 + 1)
-      else
-         kh = iposv(ip) - nleq - n
-         ! Exchanged an >= constraints.
-         if (kh >= 1) then
-            ! If it's the first time, correct the pivot column for the minus
-            ! sign and the implicit artifical variable.
-            if (in_basis(kh)) then
-               in_basis(kh) = .false.
-               A(m + 2, kp + 1) = A(m + 2, kp + 1) + 1.0_dp
-               A(:, kp + 1) = -A(:, kp + 1)
-            end if
-         end if
-      end if
-
-      ! Book-keeping.
-      call swap(izrov(kp), iposv(ip)); exit phase1
-   end do phase1
-
-   !------------------------------------------------------
-   !-----     Phase 2 : Compute optimal solution     -----
-   !------------------------------------------------------
+   !--> Phase 2 : Compute optimal solution
+   !--------------------------------------
 
    niter = 0
    phase2: do while (niter <= maxiter)
+
+      ! Update iteration counter.
       niter = niter + 1
-      if (nl1 > 0) then
-         kp = maxloc(A(1, admissible_columns(:nl1) + 1), dim=1)
-         kp = admissible_columns(kp)
-         bmax = A(1, kp + 1)
-      else
-         bmax = 0.0_dp
+
+      ! Find the pivoting column according to the selected rule.
+      colpiv = pivot_selection(pivot, A(1, nonbasics(:nl1) + 1), nonbasics, nl1)
+      reduced_cost = merge(0.0_dp, A(1, colpiv + 1), colpiv == 0)
+
+      if (reduced_cost <= eps) then
+         ! No more positive coefficient in the reduced cost function.
+         info = optimal_status; return
       end if
 
-      if (bmax <= eps) then
-         ! No more positive coefficient in the modified cost function.
-         ! Solution is optimal.
-         info = 0
-         return
-      end if
-
-      ip = find_pivot(A, kp)
-      if (ip == 0) then
+      ! Find the limiting row and make it the pivoting one.
+      rowpiv = pivoting_row(A, colpiv)
+      if (rowpiv == 0) then
          ! No pivot has been found. Objective function is unbounded.
-         info = 1
-         return
+         info = unbounded_status; return
       end if
 
-      ! Exchange a basic and non-basic variable.
-      call exchange_variables(A, ip, kp, m, n)
+      ! Exchange the basic and non-basic variables.
+      call rank1_update(A(:m + 1, :n + 1), rowpiv + 1, colpiv + 1)
+
       ! Book-keeping.
-      call swap(izrov(kp), iposv(ip))
+      call swap(izrov(colpiv), iposv(rowpiv))
    end do phase2
 
-   ! Return information flag info = 2 if the maximum number of
-   ! iterations has been reached.
    if (niter > maxiter) then
-      info = 2; return
+      info = maxiter_exceeded; return
    end if
 
    end procedure dense_standard_simplex
 
-   pure integer(ilp) function find_pivot(A, k) result(ip)
+   !-----------------------------------------
+   !-----     PIVOT SELECTION RULES     -----
+   !-----------------------------------------
+
+   !----- Main driver -----
+
+   pure integer(ilp) function pivot_selection(rule, cost, nonbasics, nl1) result(colpiv)
+      class(abstract_pivot_rule), intent(in) :: rule
+        !! Pivot selection rule.
+      real(dp), intent(in) :: cost(:)
+        !! Reduced cost at the current iteration.
+      integer(ilp), intent(in) :: nonbasics(:)
+        !! List of current non-basic variables.
+      integer(ilp), intent(in) :: nl1
+        !! Yet to be understood.
+
+      select type (rule)
+      type is (Dantzig)
+         colpiv = dantzig_pivot(cost, nonbasics, nl1)
+      class default
+         error stop "Selected rule is not implemented."
+      end select
+   end function pivot_selection
+
+   !----- Dantzig's pivot -----
+   pure integer(ilp) function dantzig_pivot(cost, nonbasics, nl1) result(colpiv)
+      real(dp), intent(in) :: cost(:)
+      integer(ilp), intent(in) :: nonbasics(:)
+      integer(ilp), intent(in) :: nl1
+
+      if (nl1 < 0) then
+         colpiv = 0
+      else
+         colpiv = maxloc(cost(nonbasics(:nl1)), dim=1)
+         colpiv = nonbasics(colpiv)
+      end if
+   end function dantzig_pivot
+
+   !------------------------------------------
+   !-----     INITIALIZATION METHODS     -----
+   !------------------------------------------
+
+   !----- Main driver -----
+
+   pure subroutine find_feasible_point(method, A, nleq, ngeq, neq, &
+                                       nonbasics, iposv, izrov, pivot, nl1, info)
+      class(abstract_feasible_initialization), intent(in) :: method
+      real(dp), intent(inout) :: A(:, :)
+      integer(ilp), intent(in) :: nleq, ngeq, neq
+      integer(ilp), intent(out) :: nonbasics(:)
+      integer(ilp), intent(out) :: iposv(:), izrov(:)
+      class(abstract_pivot_rule), intent(in) :: pivot
+      integer(ilp), intent(out) :: nl1
+      integer(ilp), intent(out) :: info
+
+      select type (method)
+      type is (auxiliary_function)
+         call auxiliary_function_initialization(A, nleq, ngeq, neq, &
+                                                nonbasics, iposv, izrov, pivot, nl1, info)
+      class default
+         error stop "Selected rule is not implemented."
+      end select
+   end subroutine find_feasible_point
+
+   !----- Find initial feasible point using the Auxiliary function method -----
+
+   pure subroutine auxiliary_function_initialization(A, nleq, ngeq, neq, &
+                                                     nonbasics, iposv, izrov, pivot, nl1, info)
+      real(dp), intent(inout) :: A(:, :)
+      integer(ilp), intent(in) :: nleq, ngeq, neq
+      integer(ilp), intent(out) :: nonbasics(:)
+      integer(ilp), intent(out) :: iposv(:), izrov(:)
+      class(abstract_pivot_rule), intent(in) :: pivot
+      integer(ilp), intent(out) :: nl1
+      integer(ilp), intent(out) :: info
+      integer(ilp) :: m, n
+
+      logical(lk), dimension(ngeq)        :: is_basic
+      integer(ilp) :: rowpiv, colpiv
+    !! Index of the pivoting row and pivoting column.
+
+      ! Miscellaneous
+      integer(ilp) :: i, k, kh
+      logical(lk)  :: init
+      real(dp)     :: reduced_cost
+      !----- Initialization -----
+
+      m = size(A, 1) - 2; n = size(A, 2) - 1
+      ! Index list of columns admissible for exchange.
+      nl1 = n; nonbasics(:n) = arange(n)
+      izrov = nonbasics(:n)    ! All variables are initially non-basic.
+      iposv = n + arange(m)    ! Initial basic variables. <= constraints
+      ! are represented by having their slacks basic with no artificial variable.
+      ! >= constraints have their slack initially basic with a minus sign and their
+      ! artificial variable handled implicitly during their first exchange.
+      ! == constraints have their artificial variable initially basic.
+
+      !--> Phase 1 : Find a feasible solution
+      !---------------------------------------
+
+      init = .true.
+      phase1: do
+
+         if (init) then
+            if (ngeq + neq == 0) exit phase1
+            init = .false.
+            ! List of >= constraints whose slack has never been exchanged.
+            is_basic = .true.
+            ! Auxiliary objective function.
+            A(m + 2, :) = -sum(A(nleq + 2:m + 1, :), dim=1)
+         end if
+
+         colpiv = pivot_selection(pivot, A(m + 2, nonbasics(:nl1) + 1), nonbasics, nl1)
+         reduced_cost = merge(0.0_dp, A(m + 2, colpiv + 1), colpiv == 0)
+
+         phase1a: do
+
+            if ((reduced_cost <= eps) .and. (A(m + 2, 1) < -eps)) then
+               ! Auxiliary objective is still negative and can't be improved.
+               info = infeasible_status
+               return
+            else if ((reduced_cost <= eps) .and. (A(m + 2, 1) <= eps)) then
+               ! Auxiliary objective is zero and can't be improved. Feasible
+               ! starting vector has been computed. Clean out the artificial
+               ! variables corresponding to remaining equality constraints
+               ! and exit phase one.
+               do i = nleq + ngeq + 1, m
+                  if (iposv(i) == i + n) then
+                     colpiv = pivot_selection(pivot, abs(A(i + 1, nonbasics(:nl1) + 1)), &
+                                              nonbasics, nl1)
+                     reduced_cost = merge(0.0_dp, A(i + 1, colpiv + 1), colpiv == 0)
+                     if (reduced_cost > eps) exit phase1a
+                  end if
+               end do
+               ! Change sign of row for any >= constraints still present from
+               ! the initial basis.
+               where (spread(is_basic, 2, n + 1) .eqv. .true.) &
+                  A(nleq + 2:nleq + ngeq + 1, :) = -A(nleq + 2:nleq + ngeq + 1, :)
+               exit phase1
+            end if
+
+            rowpiv = pivoting_row(A, colpiv)
+            if (rowpiv == 0) then
+               ! No pivot has been found. Auxiliary function is unbounded.
+               info = unbounded_status; return
+            end if
+
+            exit phase1a
+         end do phase1a
+
+         ! Exchange the basic and non-basic variables.
+         call rank1_update(A, rowpiv + 1, colpiv + 1)
+
+         if (iposv(rowpiv) >= n + nleq + ngeq + 1) then
+            ! Exchanged out an artifical variable for an equality constraint.
+            ! Make sure it stays out by removing it from the l1 list.
+            k = findloc(nonbasics(:nl1), colpiv, dim=1); nl1 = nl1 - 1
+            nonbasics(k:nl1) = nonbasics(k + 1:nl1 + 1)
+         else
+            kh = iposv(rowpiv) - nleq - n
+            ! Exchanged an >= constraints.
+            if ((kh >= 1) .and. (is_basic(kh))) then
+               ! If it's the first time, correct the pivot column for the minus
+               ! sign and the implicit artifical variable.
+               is_basic(kh) = .false.
+               A(m + 2, colpiv + 1) = A(m + 2, colpiv + 1) + 1.0_dp
+               A(:, colpiv + 1) = -A(:, colpiv + 1)
+            end if
+         end if
+
+         ! Book-keeping.
+         call swap(izrov(colpiv), iposv(rowpiv)); exit phase1
+      end do phase1
+
+   end subroutine auxiliary_function_initialization
+
+   !-------------------------------------
+   !-----     UTILITY FUNCTIONS     -----
+   !-------------------------------------
+
+   ! References:
+   ! Numerical recipes
+   pure integer(ilp) function pivoting_row(A, colpiv) result(rowpiv)
       real(dp), intent(in) :: A(:, :)
-        !! Simplex tableau
-      integer(ilp), intent(in) :: k
-        !! Current column
+    !! Simplex tableau
+      integer(ilp), intent(in) :: colpiv
+    !! Current column
 
       ! Internal variables
       real(dp) :: q, q0, q1, qp
@@ -192,56 +298,66 @@ contains
 
       associate (m => size(A, 1) - 2, n => size(A, 2) - 1)
          ! Determine if a pivot exist.
-         i = findloc(A(2:m + 1, k + 1) < -eps, .true., dim=1)
+         i = findloc(A(2:m + 1, colpiv + 1) < -eps, .true., dim=1)
          if (i > m) then
             ! No possible pivot. Problem is infeasible.
-            ip = 0; return
+            rowpiv = 0; return
          end if
 
-         q1 = -A(i + 1, 1)/A(i + 1, k + 1); ip = i
+         q1 = -A(i + 1, 1)/A(i + 1, colpiv + 1); rowpiv = i
 
-         do i = ip + 1, m
-            if (A(i + 1, k + 1) < -eps) then
-               q = -A(i + 1, 1)/A(i + 1, k + 1)
+         do i = rowpiv + 1, m
+            if (A(i + 1, colpiv + 1) < -eps) then
+               q = -A(i + 1, 1)/A(i + 1, colpiv + 1)
                if (q < q1) then
-                  ip = i; q1 = q
+                  rowpiv = i; q1 = q
                else if (q == q1) then   ! Degeneracy situation.
                   do j = 1, n
-                     qp = -A(i + 1, j + 1)/A(ip + 1, k + 1)
-                     q0 = -A(i + 1, j + 1)/A(i + 1, k + 1)
+                     qp = -A(i + 1, j + 1)/A(rowpiv + 1, colpiv + 1)
+                     q0 = -A(i + 1, j + 1)/A(i + 1, colpiv + 1)
                      if (q0 /= qp) exit
                   end do
-                  if (q0 < qp) ip = i
+                  if (q0 < qp) rowpiv = i
                end if
             end if
          end do
       end associate
 
-   end function find_pivot
+   end function pivoting_row
 
-   pure subroutine exchange_variables(A, ip, kp, i1, k1)
+   pure subroutine rank1_update(A, rowpiv, colpiv)
       real(dp), intent(inout) :: A(:, :)
-      integer(ilp), intent(in) :: ip, kp, i1, k1
-      integer(ilp) :: ip1, kp1, i, j
+        !! Simplex tableau to be updated.
+      integer(ilp), intent(in) :: rowpiv, colpiv
+        !! Indices of the pivoting row and column.
+
+      integer(ilp) :: m, n
+        !! Dimension of the tableau.
+      integer(ilp), dimension(size(A, 2) - 1) :: icol
+        !! Column indices excluding the pivoting one.
+      integer(ilp), dimension(size(A, 1) - 1) :: irow
+        !! Row indices excluding the pivoting one.
+      integer(ilp), dimension(max(size(A, 1) - 1, size(A, 2) - 1) + 1) :: itmp
+        !! Temporary array.
       real(dp) :: piv
-      integer(ilp), dimension(k1) :: icol
-      integer(ilp), dimension(i1) :: irow
-      integer(ilp), dimension(max(i1, k1) + 1) :: itmp
+        !! Pivot value.
 
-      ip1 = ip + 1; kp1 = kp + 1
-      piv = 1.0_dp/A(ip1, kp1)
+      !> Dimension of the matrix.
+      m = size(A, 1); n = size(A, 2)
 
-      itmp(1:k1 + 1) = arange(k1 + 1)
-      icol = pack(itmp(1:k1 + 1), itmp(1:k1 + 1) /= kp1)
+      !> Fetch the pivot value.
+      piv = 1.0_dp/A(rowpiv, colpiv)
 
-      itmp(1:i1 + 1) = arange(i1 + 1)
-      irow = pack(itmp(1:i1 + 1), itmp(1:i1 + 1) /= ip1)
+      !> Column indices excluding the pivoting one.
+      itmp(:n) = arange(n); icol = pack(itmp(:n), itmp(:n) /= colpiv)
 
-      A(irow, kp1) = A(irow, kp1)*piv
-      A(irow, icol) = A(irow, icol) - outer_product(A(irow, kp1), A(ip1, icol))
+      !> Row indices excluding the pivoting one.
+      itmp(:m) = arange(m); irow = pack(itmp(:m), itmp(:m) /= rowpiv)
 
-      A(ip1, icol) = -A(ip1, icol)*piv
-      A(ip1, kp1) = piv
-   end subroutine exchange_variables
+      !> Rank-1 downdate.
+      A(irow, colpiv) = piv*A(irow, colpiv)
+      A(irow, icol) = A(irow, icol) - outer_product(A(irow, colpiv), A(rowpiv, icol))
+      A(rowpiv, icol) = -piv*A(rowpiv, icol); A(rowpiv, colpiv) = piv
+   end subroutine rank1_update
 
 end submodule lightconvex_lp
