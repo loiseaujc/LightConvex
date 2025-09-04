@@ -20,6 +20,7 @@ contains
       testsuite = [testsuite, new_unittest("Infeasible example", test_infeasible_lp)]
       testsuite = [testsuite, new_unittest("Unbounded example", test_unbounded_lp)]
       testsuite = [testsuite, new_unittest("Caltech examples", test_caltech_examples)]
+      testsuite = [testsuite, new_unittest("Cornell examples", test_cornell_example)]
    end subroutine collect_dense_standard_simplex_problems
 
    ! Test problem (10.8.6)-(10.8.7) from Numerical Recipes.
@@ -413,4 +414,57 @@ contains
          if (allocated(error)) return
       end block
    end subroutine test_caltech_examples
+
+   ! This example is taken lecture notes from Cornell.
+   !    https://www.cs.cornell.edu/courses/cs6820/2023fa/handouts/splex.pdf
+   !
+   ! The problem reads
+   !
+   !   maximize    2 x1 + 3 x2
+   !   subject to  x1 + x2 <= 8
+   !               2 x1 + x2 <= 12
+   !               x1 + 2 x2 <= 14
+   !               x1, x2 >= 0
+   !
+   ! Solution is given by x = [2, 6] with cost c = 22 and
+   ! slack variables s = [0, 2, 0].
+   subroutine test_cornell_example(error)
+      type(error_type), allocatable, intent(out) :: error
+      integer(ilp), parameter :: m = 3, n = 2, maxiter = 10
+      real(dp), dimension(m + 2, n + 1) :: A
+      integer(ilp), parameter :: nleq = 3, ngeq = 0, neq = 0
+      integer(ilp) :: iposv(m), info, i, j
+      real(dp) :: x(n), s(m), cost
+      real(dp) :: xref(n), sref(m), cost_ref
+
+      !> Simplex tableau.
+      A(1, :) = [0.0_dp, 2.0_dp, 3.0_dp]
+      A(2, :) = [8.0_dp, -1.0_dp, -1.0_dp]
+      A(3, :) = [12.0_dp, -2.0_dp, -1.0_dp]
+      A(4, :) = [14.0_dp, -1.0_dp, -2.0_dp]
+
+      !> Solve the problem using the simplex method.
+      call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
+                   Dantzig(), auxiliary_function())
+
+      !> Extract the primal and slack variables.
+      x = 0.0_dp; s = 0.0_dp; cost = A(1, 1)
+      do i = 1, m
+         if (iposv(i) <= n) x(iposv(i)) = A(i + 1, 1)
+         if (iposv(i) > n) s(iposv(i) - n) = A(i + 1, 1)
+      end do
+
+      !> Reference solution.
+      cost_ref = 22.0_dp; xref = [2.0_dp, 6.0_dp]
+      sref = [0.0_dp, 2.0_dp, 0.0_dp]
+
+      call check(error, info == optimal_status)          ! Optimal solution found.
+      if (allocated(error)) return
+      call check(error, maxval(abs(x - xref)) <= tol)    ! Matching primal.
+      if (allocated(error)) return
+      call check(error, maxval(abs(s - sref)) <= tol)    ! Matching slack.
+      if (allocated(error)) return
+      call check(error, abs(cost - cost_ref) <= tol)     ! Matching cost.
+      if (allocated(error)) return
+   end subroutine test_cornell_example
 end module TestLinearPrograms
