@@ -1,10 +1,13 @@
 module TestLinearPrograms
    use, intrinsic :: iso_fortran_env, only: error_unit, output_unit
    use testdrive, only: new_unittest, unittest_type, error_type, check
+   use stdlib_math, only: is_close, all_close
    use stdlib_linalg_constants, only: ilp, dp, lk
-   use LightConvex, only: simplex, &
-                          Dantzig, &
-                          auxiliary_function, &
+   use stdlib_math, only: all_close
+   use LightConvex, only: dense_lp_type, linear_program, lp_solution, &
+                          simplex, Dantzig, auxiliary_function, &
+                          PrimalSimplex, solve, &
+                          is_optimal, &
                           infeasible_status, optimal_status, &
                           unbounded_status, maxiter_exceeded, &
                           tol
@@ -20,7 +23,7 @@ contains
       testsuite = [testsuite, new_unittest("Infeasible example", test_infeasible_lp)]
       testsuite = [testsuite, new_unittest("Unbounded example", test_unbounded_lp)]
       testsuite = [testsuite, new_unittest("Caltech examples", test_caltech_examples)]
-      testsuite = [testsuite, new_unittest("Cornell examples", test_cornell_example)]
+      testsuite = [testsuite, new_unittest("Cornell example", test_cornell_example)]
    end subroutine collect_dense_standard_simplex_problems
 
    ! Test problem (10.8.6)-(10.8.7) from Numerical Recipes.
@@ -40,43 +43,86 @@ contains
    subroutine test_num_recipes_problem(error)
       type(error_type), allocatable, intent(out) :: error
       integer(ilp), parameter :: m = 4, n = 4, maxiter = 10
-      real(dp), dimension(m + 2, n + 1) :: A
       integer(ilp), parameter :: nleq = 2, ngeq = 1, neq = 1
-      real(dp) :: x(n), s(m), cost, cost_ref
-      real(dp) :: xref(n), sref(m)
-      integer(ilp) :: iposv(m), info, i, j
-
-      !> Initialize the simplex tableau.
-      A(1, :) = [0.0_dp, 1.0_dp, 1.0_dp, 3.0_dp, -0.5_dp]
-      A(2, :) = [740.0_dp, -1.0_dp, 0.0_dp, -2.0_dp, 0.0_dp]
-      A(3, :) = [0.0_dp, 0.0_dp, -2.0_dp, 0.0_dp, 7.0_dp]
-      A(4, :) = [0.5_dp, 0.0_dp, -1.0_dp, 1.0_dp, -2.0_dp]
-      A(5, :) = [9.0_dp, -1.0_dp, -1.0_dp, -1.0_dp, -1.0_dp]
-
-      !> Solve the problem using the simplex method.
-      call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
-                   Dantzig(), auxiliary_function())
-
-      !> Extract the primal and slack variables.
-      x = 0.0_dp; s = 0.0_dp; cost = A(1, 1)
-      do i = 1, m
-         if (iposv(i) <= n) x(iposv(i)) = A(i + 1, 1)
-         if (iposv(i) > n) s(iposv(i) - n) = A(i + 1, 1)
-      end do
+      real(dp) :: xref(n), sref(m), cost_ref
+      real(dp) :: x(n), s(m), cost
+      integer(ilp) :: i, j
 
       !> Reference solution.
       cost_ref = 17.03_dp
       xref = [0.0_dp, 3.33_dp, 4.74_dp, 0.95_dp]
       sref = [730.55_dp, 0.0_dp, 0.0_dp, 0.0_dp]
 
-      call check(error, info == optimal_status)             ! Optimal solution found.
-      if (allocated(error)) return
-      call check(error, maxval(abs(x - xref)) < 0.05_dp)    ! Matching primal.
-      if (allocated(error)) return
-      call check(error, maxval(abs(s - sref)) < 0.05_dp)    ! Matching slack.
-      if (allocated(error)) return
-      call check(error, abs(cost - cost_ref) < 0.05_dp)     ! Matching cost.
-      if (allocated(error)) return
+      block
+         real(dp), dimension(m + 2, n + 1) :: A
+         integer(ilp) :: iposv(m), info
+
+         !> Initialize the simplex tableau.
+         A(1, :) = [0.0_dp, 1.0_dp, 1.0_dp, 3.0_dp, -0.5_dp]
+         A(2, :) = [740.0_dp, -1.0_dp, 0.0_dp, -2.0_dp, 0.0_dp]
+         A(3, :) = [0.0_dp, 0.0_dp, -2.0_dp, 0.0_dp, 7.0_dp]
+         A(4, :) = [0.5_dp, 0.0_dp, -1.0_dp, 1.0_dp, -2.0_dp]
+         A(5, :) = [9.0_dp, -1.0_dp, -1.0_dp, -1.0_dp, -1.0_dp]
+
+         !> Solve the problem using the simplex method.
+         call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
+                      Dantzig(), auxiliary_function())
+
+         !> Extract the primal and slack variables.
+         x = 0.0_dp; s = 0.0_dp; cost = A(1, 1)
+         do i = 1, m
+            if (iposv(i) <= n) x(iposv(i)) = A(i + 1, 1)
+            if (iposv(i) > n) s(iposv(i) - n) = A(i + 1, 1)
+         end do
+
+         call check(error, info == optimal_status)                      ! Optimal solution found.
+         if (allocated(error)) return
+         call check(error, all_close(x, xref, abs_tol=0.05_dp))         ! Matching primal.
+         if (allocated(error)) return
+         call check(error, all_close(s, sref, abs_tol=0.05_dp))         ! Matching slack.
+         if (allocated(error)) return
+         call check(error, is_close(cost, cost_ref, abs_tol=0.05_dp))   ! Matching cost.
+         if (allocated(error)) return
+      end block
+
+      block
+         real(dp) :: c(n)
+         real(dp) :: Aleq(nleq, n), bleq(nleq)
+         real(dp) :: Ageq(ngeq, n), bgeq(ngeq)
+         real(dp) :: Aeq(neq, n), beq(neq)
+         type(dense_lp_type) :: problem
+         type(lp_solution) :: solution
+
+         !> Cost vector.
+         c = [1.0_dp, 1.0_dp, 3.0_dp, -0.5_dp]
+
+         !> Linear <= inequalities.
+         Aleq(1, :) = [1.0_dp, 0.0_dp, 2.0_dp, 0.0_dp]
+         Aleq(2, :) = [0.0_dp, 2.0_dp, 0.0_dp, -7.0_dp]
+         bleq = [740.0_dp, 0.0_dp]
+
+         !> Linear >= inequalities.
+         Ageq(1, :) = [0.0_dp, 1.0_dp, -1.0_dp, 2.0_dp]
+         bgeq = 0.5_dp
+
+         !> Equality constraints.
+         Aeq(1, :) = 1.0_dp; beq = 9.0_dp
+
+         !> Construct the LP problem for LightConvex.
+         problem = linear_program(c, Aleq=Aleq, bleq=bleq, Ageq=Ageq, bgeq=bgeq, Aeq=Aeq, beq=beq)
+
+         !> Solve the problem.
+         solution = solve(problem, alg=PrimalSimplex())
+
+         call check(error, is_optimal(problem))                                             ! Optimal solution found.
+         if (allocated(error)) return
+         call check(error, all_close(solution%x, xref, abs_tol=0.05_dp))                    ! Matching primal.
+         if (allocated(error)) return
+         call check(error, all_close(solution%s, sref, abs_tol=0.05_dp))                    ! Matching slack.
+         if (allocated(error)) return
+         call check(error, is_close(solution%objective_value, cost_ref, abs_tol=0.05_dp))   ! Matching cost.
+         if (allocated(error)) return
+      end block
 
    end subroutine test_num_recipes_problem
 
