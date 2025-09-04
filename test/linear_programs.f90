@@ -329,7 +329,54 @@ contains
          if (allocated(error)) return
       end block
 
+      ! The problem reads
       !
+      !   maximize    2 x1 - 3 x2 + x3 + x4
+      !   subject to  x1 + 2 x2 + x3 + x4 = 3
+      !               x1 - 2 x2 + 2 x3 + x4 = -2
+      !               3 x1 - x2 - x4 = -1
+      !               x1, x2, x3, x4 >= 0
+      !
+      ! The solution is given by x = [3/16, 5/4, 0, 5/16] with
+      ! optimal cost c = -49/16.
+      block
+         integer(ilp), parameter :: m = 3, n = 4, maxiter = 10
+         real(dp), dimension(m + 2, n + 1) :: A
+         integer(ilp), parameter :: nleq = 0, ngeq = 0, neq = 3
+         integer(ilp) :: iposv(m), info, i, j
+         real(dp) :: x(n), cost
+         real(dp) :: xref(n), cost_ref
+
+         !> Simplex tableau.
+         A(1, :) = [0.0_dp, 2.0_dp, -3.0_dp, 1.0_dp, 1.0_dp]
+         A(2, :) = [3.0_dp, -1.0_dp, -2.0_dp, -1.0_dp, -1.0_dp]
+         A(3, :) = [2.0_dp, 1.0_dp, -2.0_dp, 2.0_dp, 1.0_dp]
+         A(4, :) = [1.0_dp, 3.0_dp, -1.0_dp, 0.0_dp, -1.0_dp]
+
+         !> Solve the problem using the simplex method.
+         call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
+                      Dantzig(), auxiliary_function())
+
+         !> Extract the primal and slack variables.
+         x = 0.0_dp; cost = A(1, 1)
+         do i = 1, m
+            if (iposv(i) <= n) x(iposv(i)) = A(i + 1, 1)
+         end do
+
+         !> Reference solution.
+         cost_ref = -49.0_dp/16.0_dp
+         xref = [3.0_dp/16.0_dp, 5.0_dp/4.0_dp, 0.0_dp, 5.0_dp/16.0_dp]
+
+         call check(error, info == 0)              ! Optimal solution found.
+         if (allocated(error)) return
+         call check(error, maxval(abs(x - xref)) <= tol)  ! Matching primal.
+         if (allocated(error)) return
+         call check(error, abs(cost - cost_ref) <= tol)   ! Matching cost.
+         if (allocated(error)) return
+      end block
+
+      ! Same problem as above with the equalities replaced by inequalities <=.
+      ! The solution is x = [0, 1, 0, 0] with optimal cost c = -3.
       block
          integer(ilp), parameter :: m = 3, n = 4, maxiter = 10
          real(dp), dimension(m + 2, n + 1) :: A
