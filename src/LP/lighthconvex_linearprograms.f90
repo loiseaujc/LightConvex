@@ -77,7 +77,7 @@ contains
       colpiv = pivot_selection(pivot, A(1, nonbasics(:nl1) + 1), nonbasics, nl1)
       reduced_cost = merge(0.0_dp, A(1, colpiv + 1), colpiv == 0)
 
-      if (reduced_cost <= eps) then
+      if (reduced_cost <= tol) then
          ! No more positive coefficient in the reduced cost function.
          info = optimal_status; return
       end if
@@ -229,13 +229,13 @@ contains
          colpiv = pivot_selection(pivot, A(m + 2, nonbasics(:nl1) + 1), nonbasics, nl1)
          reduced_cost = merge(0.0_dp, A(m + 2, colpiv + 1), colpiv == 0)
 
-         if ((reduced_cost <= eps) .and. (A(m + 2, 1) < -eps)) then
+         if ((reduced_cost <= tol) .and. (A(m + 2, 1) < -tol)) then
             ! Auxiliary objective is still negative and can't be improved.
             info = infeasible_status; return
          end if
 
          phase_1a: block
-            if ((reduced_cost <= eps) .and. (A(m + 2, 1) <= eps)) then
+            if ((reduced_cost <= tol) .and. (A(m + 2, 1) <= tol)) then
                ! Auxiliary objective is zero and can't be improved. Feasible
                ! starting vector has been computed. Clean out the artificial
                ! variables corresponding to remaining equality constraints
@@ -245,7 +245,7 @@ contains
                      colpiv = pivot_selection(pivot, abs(A(i + 1, nonbasics(:nl1) + 1)), &
                                               nonbasics, nl1)
                      reduced_cost = merge(0.0_dp, A(i + 1, colpiv + 1), colpiv == 0)
-                     if (reduced_cost > eps) exit phase_1a
+                     if (reduced_cost > tol) exit phase_1a
                   end if
                end do
                exit phase_1
@@ -311,7 +311,7 @@ contains
 
       associate (m => size(A, 1) - 2, n => size(A, 2) - 1)
          ! Determine if a pivot exist.
-         i = findloc(A(2:m + 1, colpiv + 1) < -eps, .true., dim=1)
+         i = findloc(A(2:m + 1, colpiv + 1) < -tol, .true., dim=1)
          if (i > m) then
             ! No possible pivot. Problem is infeasible.
             rowpiv = 0; return
@@ -320,7 +320,7 @@ contains
          q1 = -A(i + 1, 1)/A(i + 1, colpiv + 1); rowpiv = i
 
          do i = rowpiv + 1, m
-            if (A(i + 1, colpiv + 1) < -eps) then
+            if (A(i + 1, colpiv + 1) < -tol) then
                q = -A(i + 1, 1)/A(i + 1, colpiv + 1)
                if (q < q1) then
                   rowpiv = i; q1 = q

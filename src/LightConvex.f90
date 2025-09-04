@@ -14,6 +14,7 @@ module LightConvex
 
    real(dp), parameter :: eps = epsilon(1.0_dp)
     !! Machine precision
+   real(dp), parameter :: tol = sqrt(eps)
    integer(ilp), parameter :: unbounded_status = 1
     !! Return flag for an unbounded problem.
    integer(ilp), parameter :: optimal_status = 0
@@ -49,9 +50,9 @@ module LightConvex
    !----- Low-level algorithm -----
 
    interface simplex
-      pure module subroutine dense_standard_simplex(A, nleq, ngeq, neq, iposv, &
-                                                    maxiter, info, pivot, &
-                                                    initialization)
+      module subroutine dense_standard_simplex(A, nleq, ngeq, neq, iposv, &
+                                               maxiter, info, pivot, &
+                                               initialization)
          implicit none(external)
          real(dp), intent(inout) :: A(:, :)
         !! Simplex tableau of dimension n+2 x m
