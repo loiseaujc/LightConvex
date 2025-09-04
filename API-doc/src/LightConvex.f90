@@ -14,7 +14,7 @@ module LightConvex
 
    real(dp), parameter :: eps = epsilon(1.0_dp)
     !! Machine precision
-   real(dp), parameter :: tol = sqrt(eps)
+   real(dp), parameter, public :: tol = sqrt(eps)
    integer(ilp), parameter :: unbounded_status = 1
     !! Return flag for an unbounded problem.
    integer(ilp), parameter :: optimal_status = 0
