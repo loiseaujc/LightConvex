@@ -68,7 +68,7 @@ contains
       xref = [0.0_dp, 3.33_dp, 4.74_dp, 0.95_dp]
       sref = [730.55_dp, 0.0_dp, 0.0_dp, 0.0_dp]
 
-      call check(error, info == 0)                          ! Optimal solution found.
+      call check(error, info == optimal_status)             ! Optimal solution found.
       if (allocated(error)) return
       call check(error, maxval(abs(x - xref)) < 0.05_dp)    ! Matching primal.
       if (allocated(error)) return
@@ -121,13 +121,13 @@ contains
       xref = [0.0_dp, 0.0_dp, 5.0_dp]
       sref = [5.0_dp, 0.0_dp]
 
-      call check(error, info == 0)              ! Optimal solution found.
+      call check(error, info == optimal_status)         ! Optimal solution found.
       if (allocated(error)) return
-      call check(error, maxval(abs(x - xref)) <= tol)  ! Matching primal.
+      call check(error, maxval(abs(x - xref)) <= tol)   ! Matching primal.
       if (allocated(error)) return
-      call check(error, maxval(abs(s - sref)) <= tol)  ! Matching slack.
+      call check(error, maxval(abs(s - sref)) <= tol)   ! Matching slack.
       if (allocated(error)) return
-      call check(error, abs(cost - cost_ref) <= tol)   ! Matching cost.
+      call check(error, abs(cost - cost_ref) <= tol)    ! Matching cost.
       if (allocated(error)) return
 
    end subroutine test_wikipedia_example
@@ -155,7 +155,7 @@ contains
       call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
                    Dantzig(), auxiliary_function())
 
-      call check(error, info == -1)              ! Problem is infeasible.
+      call check(error, info == infeasible_status) ! Problem is infeasible.
       if (allocated(error)) return
 
    end subroutine test_infeasible_lp
@@ -183,7 +183,7 @@ contains
       call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
                    Dantzig(), auxiliary_function())
 
-      call check(error, info == 1)              ! Objective is unbounded.
+      call check(error, info == unbounded_status)   ! Objective is unbounded.
       if (allocated(error)) return
 
    end subroutine test_unbounded_lp
@@ -232,11 +232,11 @@ contains
          cost_ref = 6.5_dp
          xref = [1.0_dp, 1.0_dp, 0.5_dp, 0.0_dp]
 
-         call check(error, info == 0)              ! Optimal solution found.
+         call check(error, info == optimal_status)          ! Optimal solution found.
          if (allocated(error)) return
-         call check(error, maxval(abs(x - xref)) <= tol)  ! Matching primal.
+         call check(error, maxval(abs(x - xref)) <= tol)    ! Matching primal.
          if (allocated(error)) return
-         call check(error, abs(cost - cost_ref) <= tol)   ! Matching cost.
+         call check(error, abs(cost - cost_ref) <= tol)     ! Matching cost.
          if (allocated(error)) return
       end block
 
@@ -278,11 +278,11 @@ contains
          cost_ref = 1.0/20.0_dp
          xref = [1.0_dp/25.0_dp, 0.0_dp, 1.0_dp, 0.0_dp]
 
-         call check(error, info == 0)              ! Optimal solution found.
+         call check(error, info == optimal_status)          ! Optimal solution found.
          if (allocated(error)) return
-         call check(error, maxval(abs(x - xref)) <= tol)  ! Matching primal.
+         call check(error, maxval(abs(x - xref)) <= tol)    ! Matching primal.
          if (allocated(error)) return
-         call check(error, abs(cost - cost_ref) <= tol)   ! Matching cost.
+         call check(error, abs(cost - cost_ref) <= tol)     ! Matching cost.
          if (allocated(error)) return
       end block
 
@@ -321,11 +321,11 @@ contains
          cost_ref = 60.0_dp/7.0_dp
          xref = [0.0_dp, 4.0_dp/7.0_dp, 12.0_dp/7.0_dp, 0.0_dp, 0.0_dp]
 
-         call check(error, info == 0)              ! Optimal solution found.
+         call check(error, info == optimal_status)          ! Optimal solution found.
          if (allocated(error)) return
-         call check(error, maxval(abs(x - xref)) <= tol)  ! Matching primal.
+         call check(error, maxval(abs(x - xref)) <= tol)    ! Matching primal.
          if (allocated(error)) return
-         call check(error, abs(cost - cost_ref) <= tol)   ! Matching cost.
+         call check(error, abs(cost - cost_ref) <= tol)     ! Matching cost.
          if (allocated(error)) return
       end block
 
@@ -367,11 +367,11 @@ contains
          cost_ref = -49.0_dp/16.0_dp
          xref = [3.0_dp/16.0_dp, 5.0_dp/4.0_dp, 0.0_dp, 5.0_dp/16.0_dp]
 
-         call check(error, info == 0)              ! Optimal solution found.
+         call check(error, info == optimal_status)          ! Optimal solution found.
          if (allocated(error)) return
-         call check(error, maxval(abs(x - xref)) <= tol)  ! Matching primal.
+         call check(error, maxval(abs(x - xref)) <= tol)    ! Matching primal.
          if (allocated(error)) return
-         call check(error, abs(cost - cost_ref) <= tol)   ! Matching cost.
+         call check(error, abs(cost - cost_ref) <= tol)     ! Matching cost.
          if (allocated(error)) return
       end block
 
@@ -405,11 +405,11 @@ contains
          cost_ref = -3.0_dp
          xref = [0.0_dp, 1.0_dp, 0.0_dp, 0.0_dp]
 
-         call check(error, info == 0)              ! Optimal solution found.
+         call check(error, info == optimal_status)          ! Optimal solution found.
          if (allocated(error)) return
-         call check(error, maxval(abs(x - xref)) <= tol)  ! Matching primal.
+         call check(error, maxval(abs(x - xref)) <= tol)    ! Matching primal.
          if (allocated(error)) return
-         call check(error, abs(cost - cost_ref) <= tol)   ! Matching cost.
+         call check(error, abs(cost - cost_ref) <= tol)     ! Matching cost.
          if (allocated(error)) return
       end block
    end subroutine test_caltech_examples
