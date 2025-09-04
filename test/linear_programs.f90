@@ -52,15 +52,8 @@ contains
       A(5, :) = [9.0_dp, -1.0_dp, -1.0_dp, -1.0_dp, -1.0_dp]
 
       !> Solve the problem using the simplex method.
-      block
-         real(dp) :: start_time, end_time
-         call cpu_time(start_time)
-         call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
-                      Dantzig(), auxiliary_function())
-         call cpu_time(end_time)
-         write (output_unit, '(A, F6.3, A)') &
-            "     - Running time :", (end_time - start_time)*1000.0_dp, " milliseconds."
-      end block
+      call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
+                   Dantzig(), auxiliary_function())
 
       !> Extract the primal and slack variables.
       x = 0.0_dp; s = 0.0_dp; cost = A(1, 1)
@@ -112,15 +105,8 @@ contains
       A(3, :) = [15.0_dp, -2.0_dp, -5.0_dp, -3.0_dp]
 
       !> Solve the problem using the simplex method.
-      block
-         real(dp) :: start_time, end_time
-         call cpu_time(start_time)
-         call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
-                      Dantzig(), auxiliary_function())
-         call cpu_time(end_time)
-         write (output_unit, '(A, F6.3, A)') &
-            "     - Running time :", (end_time - start_time)*1000.0_dp, " milliseconds."
-      end block
+      call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
+                   Dantzig(), auxiliary_function())
 
       !> Extract the primal and slack variables.
       x = 0.0_dp; s = 0.0_dp; cost = A(1, 1)
@@ -165,15 +151,8 @@ contains
       A(2, :) = [1.0_dp, 1.0_dp, 1.0_dp]
 
       !> Solve the problem using the simplex method.
-      block
-         real(dp) :: start_time, end_time
-         call cpu_time(start_time)
-         call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
-                      Dantzig(), auxiliary_function())
-         call cpu_time(end_time)
-         write (output_unit, '(A, F6.3, A)') &
-            "     - Running time :", (end_time - start_time)*1000.0_dp, " milliseconds."
-      end block
+      call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
+                   Dantzig(), auxiliary_function())
 
       call check(error, info == -1)              ! Problem is infeasible.
       if (allocated(error)) return
@@ -200,15 +179,8 @@ contains
       A(2, :) = [5.0_dp, -1.0_dp, -1.0_dp]
 
       !> Solve the problem using the simplex method.
-      block
-         real(dp) :: start_time, end_time
-         call cpu_time(start_time)
-         call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
-                      Dantzig(), auxiliary_function())
-         call cpu_time(end_time)
-         write (output_unit, '(A, F6.3, A)') &
-            "     - Running time :", (end_time - start_time)*1000.0_dp, " milliseconds."
-      end block
+      call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
+                   Dantzig(), auxiliary_function())
 
       call check(error, info == 1)              ! Objective is unbounded.
       if (allocated(error)) return
@@ -246,15 +218,8 @@ contains
          A(4, :) = [4.0_dp, -1.0_dp, -3.0_dp, 0.0_dp, -1.0_dp]
 
          !> Solve the problem using the simplex method.
-         block
-            real(dp) :: start_time, end_time
-            call cpu_time(start_time)
-            call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
-                         Dantzig(), auxiliary_function())
-            call cpu_time(end_time)
-            write (output_unit, '(A, F6.3, A)') &
-               "     - Running time :", (end_time - start_time)*1000.0_dp, " milliseconds."
-         end block
+         call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
+                      Dantzig(), auxiliary_function())
 
          !> Extract the primal and slack variables.
          x = 0.0_dp; cost = A(1, 1)
@@ -300,15 +265,8 @@ contains
          A(4, :) = [1.0_dp, 0.0_dp, 0.0_dp, -1.0_dp, 1.0_dp]
 
          !> Solve the problem using the simplex method.
-         block
-            real(dp) :: start_time, end_time
-            call cpu_time(start_time)
-            call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
-                         Dantzig(), auxiliary_function())
-            call cpu_time(end_time)
-            write (output_unit, '(A, F6.3, A)') &
-               "     - Running time :", (end_time - start_time)*1000.0_dp, " milliseconds."
-         end block
+         call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
+                      Dantzig(), auxiliary_function())
 
          !> Extract the primal and slack variables.
          x = 0.0_dp; cost = A(1, 1)
@@ -319,6 +277,50 @@ contains
          !> Reference solution.
          cost_ref = 1.0/20.0_dp
          xref = [1.0_dp/25.0_dp, 0.0_dp, 1.0_dp, 0.0_dp]
+
+         call check(error, info == 0)              ! Optimal solution found.
+         if (allocated(error)) return
+         call check(error, maxval(abs(x - xref)))  ! Matching primal.
+         if (allocated(error)) return
+         call check(error, abs(cost - cost_ref))   ! Matching cost.
+         if (allocated(error)) return
+
+      end block
+
+      ! The problem reads
+      !
+      !   maximize      -x1 - 6 x2 + 7 x3 - x4 - 5 x5
+      !   subject to    5 x1 - 4 x2 + 13 x3 - 2 x4 + x5 = 20
+      !                 x1 - x2 + 5 x3 - x4 + x5 = 8
+      !                 x1, x2, x3, x4, x5 >= 0
+      !
+      ! Primal solution is x = [0, 4/7, 12/7, 0, 0] with cost c.T @ x = 60/7
+      block
+         integer(ilp), parameter :: m = 2, n = 5, maxiter = 10
+         real(dp), dimension(m + 2, n + 1) :: A
+         integer(ilp), parameter :: nleq = 0, ngeq = 0, neq = 2
+         integer(ilp) :: iposv(m), info, i, j
+         real(dp) :: x(n), cost
+         real(dp) :: xref(n), cost_ref
+
+         !> Simplex tableau.
+         A(1, :) = [0.0_dp, -1.0_dp, -6.0_dp, 7.0_dp, -1.0_dp, -5.0_dp]
+         A(2, :) = [20.0_dp, -5.0_dp, 4.0_dp, -13.0_dp, 2.0_dp, -1.0_dp]
+         A(3, :) = [8.0_dp, -1.0_dp, 1.0_dp, -5.0_dp, 1.0_dp, -1.0_dp]
+
+         !> Solve the problem using the simplex method.
+         call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
+                      Dantzig(), auxiliary_function())
+
+         !> Extract the primal and slack variables.
+         x = 0.0_dp; cost = A(1, 1)
+         do i = 1, m
+            if (iposv(i) <= n) x(iposv(i)) = A(i + 1, 1)
+         end do
+
+         !> Reference solution.
+         cost_ref = 60.0_dp/7.0_dp
+         xref = [0.0_dp, 4.0_dp/7.0_dp, 12.0_dp/7.0_dp, 0.0_dp, 0.0_dp]
 
          call check(error, info == 0)              ! Optimal solution found.
          if (allocated(error)) return
