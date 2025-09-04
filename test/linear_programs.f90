@@ -6,7 +6,8 @@ module TestLinearPrograms
                           Dantzig, &
                           auxiliary_function, &
                           infeasible_status, optimal_status, &
-                          unbounded_status, maxiter_exceeded
+                          unbounded_status, maxiter_exceeded, &
+                          tol
    implicit none(external)
    private
 
@@ -122,11 +123,11 @@ contains
 
       call check(error, info == 0)              ! Optimal solution found.
       if (allocated(error)) return
-      call check(error, maxval(abs(x - xref)))  ! Matching primal.
+      call check(error, maxval(abs(x - xref)) <= tol)  ! Matching primal.
       if (allocated(error)) return
-      call check(error, maxval(abs(s - sref)))  ! Matching slack.
+      call check(error, maxval(abs(s - sref)) <= tol)  ! Matching slack.
       if (allocated(error)) return
-      call check(error, abs(cost - cost_ref))   ! Matching cost.
+      call check(error, abs(cost - cost_ref) <= tol)   ! Matching cost.
       if (allocated(error)) return
 
    end subroutine test_wikipedia_example
@@ -233,11 +234,10 @@ contains
 
          call check(error, info == 0)              ! Optimal solution found.
          if (allocated(error)) return
-         call check(error, maxval(abs(x - xref)))  ! Matching primal.
+         call check(error, maxval(abs(x - xref)) <= tol)  ! Matching primal.
          if (allocated(error)) return
-         call check(error, abs(cost - cost_ref))   ! Matching cost.
+         call check(error, abs(cost - cost_ref) <= tol)   ! Matching cost.
          if (allocated(error)) return
-
       end block
 
       ! The problem reads
@@ -280,11 +280,10 @@ contains
 
          call check(error, info == 0)              ! Optimal solution found.
          if (allocated(error)) return
-         call check(error, maxval(abs(x - xref)))  ! Matching primal.
+         call check(error, maxval(abs(x - xref)) <= tol)  ! Matching primal.
          if (allocated(error)) return
-         call check(error, abs(cost - cost_ref))   ! Matching cost.
+         call check(error, abs(cost - cost_ref) <= tol)   ! Matching cost.
          if (allocated(error)) return
-
       end block
 
       ! The problem reads
@@ -324,11 +323,47 @@ contains
 
          call check(error, info == 0)              ! Optimal solution found.
          if (allocated(error)) return
-         call check(error, maxval(abs(x - xref)))  ! Matching primal.
+         call check(error, maxval(abs(x - xref)) <= tol)  ! Matching primal.
          if (allocated(error)) return
-         call check(error, abs(cost - cost_ref))   ! Matching cost.
+         call check(error, abs(cost - cost_ref) <= tol)   ! Matching cost.
          if (allocated(error)) return
+      end block
 
+      !
+      block
+         integer(ilp), parameter :: m = 3, n = 4, maxiter = 10
+         real(dp), dimension(m + 2, n + 1) :: A
+         integer(ilp), parameter :: nleq = 1, ngeq = 2, neq = 0
+         integer(ilp) :: iposv(m), info, i, j
+         real(dp) :: x(n), cost
+         real(dp) :: xref(n), cost_ref
+
+         !> Simplex tableau.
+         A(1, :) = [0.0_dp, 2.0_dp, -3.0_dp, 1.0_dp, 1.0_dp]
+         A(2, :) = [3.0_dp, -1.0_dp, -2.0_dp, -1.0_dp, -1.0_dp]
+         A(3, :) = [2.0_dp, 1.0_dp, -2.0_dp, 2.0_dp, 1.0_dp]
+         A(4, :) = [1.0_dp, 3.0_dp, -1.0_dp, 0.0_dp, -1.0_dp]
+
+         !> Solve the problem using the simplex method.
+         call simplex(A, nleq, ngeq, neq, iposv, maxiter, info, &
+                      Dantzig(), auxiliary_function())
+
+         !> Extract the primal and slack variables.
+         x = 0.0_dp; cost = A(1, 1)
+         do i = 1, m
+            if (iposv(i) <= n) x(iposv(i)) = A(i + 1, 1)
+         end do
+
+         !> Reference solution.
+         cost_ref = -3.0_dp
+         xref = [0.0_dp, 1.0_dp, 0.0_dp, 0.0_dp]
+
+         call check(error, info == 0)              ! Optimal solution found.
+         if (allocated(error)) return
+         call check(error, maxval(abs(x - xref)) <= tol)  ! Matching primal.
+         if (allocated(error)) return
+         call check(error, abs(cost - cost_ref) <= tol)   ! Matching cost.
+         if (allocated(error)) return
       end block
    end subroutine test_caltech_examples
 end module TestLinearPrograms
