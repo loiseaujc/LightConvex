@@ -135,7 +135,7 @@ contains
       if (nl1 < 0) then
          colpiv = 0
       else
-         colpiv = maxloc(cost(nonbasics(:nl1)), dim=1)
+         colpiv = maxloc(cost, dim=1)
          colpiv = nonbasics(colpiv)
       end if
    end function dantzig_pivot
