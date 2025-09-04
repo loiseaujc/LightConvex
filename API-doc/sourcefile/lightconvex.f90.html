@@ -89,7 +89,7 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="13.7% of total for source files.">33 statements</a>
+                 title="14.0% of total for source files.">33 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -308,9 +308,9 @@ large graphs.</div>
 <a id="ln-49" name="ln-49" href="#ln-49"></a><span class="w">   </span><span class="c">!----- Low-level algorithm -----</span>
 <a id="ln-50" name="ln-50" href="#ln-50"></a>
 <a id="ln-51" name="ln-51" href="#ln-51"></a><span class="w">   </span><span class="k">interface </span><span class="n">simplex</span><span class="w"></span>
-<a id="ln-52" name="ln-52" href="#ln-52"></a><span class="w">      </span><span class="k">module subroutine </span><span class="n">dense_standard_simplex</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="n">nleq</span><span class="p">,</span><span class="w"> </span><span class="n">ngeq</span><span class="p">,</span><span class="w"> </span><span class="n">neq</span><span class="p">,</span><span class="w"> </span><span class="n">iposv</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<a id="ln-53" name="ln-53" href="#ln-53"></a><span class="w">                                               </span><span class="n">maxiter</span><span class="p">,</span><span class="w"> </span><span class="n">info</span><span class="p">,</span><span class="w"> </span><span class="n">pivot</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<a id="ln-54" name="ln-54" href="#ln-54"></a><span class="w">                                               </span><span class="n">initialization</span><span class="p">)</span><span class="w"></span>
+<a id="ln-52" name="ln-52" href="#ln-52"></a><span class="w">      </span><span class="k">pure module subroutine </span><span class="n">dense_standard_simplex</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="n">nleq</span><span class="p">,</span><span class="w"> </span><span class="n">ngeq</span><span class="p">,</span><span class="w"> </span><span class="n">neq</span><span class="p">,</span><span class="w"> </span><span class="n">iposv</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-53" name="ln-53" href="#ln-53"></a><span class="w">                                                    </span><span class="n">maxiter</span><span class="p">,</span><span class="w"> </span><span class="n">info</span><span class="p">,</span><span class="w"> </span><span class="n">pivot</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-54" name="ln-54" href="#ln-54"></a><span class="w">                                                    </span><span class="n">initialization</span><span class="p">)</span><span class="w"></span>
 <a id="ln-55" name="ln-55" href="#ln-55"></a><span class="w">         </span><span class="k">implicit none</span><span class="p">(</span><span class="k">external</span><span class="p">)</span><span class="w"></span>
 <a id="ln-56" name="ln-56" href="#ln-56"></a><span class="w">         </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">A</span><span class="p">(:,</span><span class="w"> </span><span class="p">:)</span><span class="w"></span>
 <a id="ln-57" name="ln-57" href="#ln-57"></a><span class="w">        </span><span class="c">!! Simplex tableau of dimension n+2 x m</span>
@@ -320,30 +320,31 @@ large graphs.</div>
 <a id="ln-61" name="ln-61" href="#ln-61"></a><span class="w">        </span><span class="c">!! Maximum number of iterations.</span>
 <a id="ln-62" name="ln-62" href="#ln-62"></a><span class="w">         </span><span class="kt">integer</span><span class="p">(</span><span class="n">ilp</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">info</span><span class="w"></span>
 <a id="ln-63" name="ln-63" href="#ln-63"></a><span class="w">        </span><span class="c">!! Return flag:</span>
-<a id="ln-64" name="ln-64" href="#ln-64"></a><span class="w">        </span><span class="c">!!  - info = -1 : Problem is infeasible.</span>
-<a id="ln-65" name="ln-65" href="#ln-65"></a><span class="w">        </span><span class="c">!!  - info = 0  : Optimal solution has been found.</span>
-<a id="ln-66" name="ln-66" href="#ln-66"></a><span class="w">        </span><span class="c">!!  - info = 1  : Objective function is unbounded.</span>
-<a id="ln-67" name="ln-67" href="#ln-67"></a><span class="w">         </span><span class="kt">integer</span><span class="p">(</span><span class="n">ilp</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iposv</span><span class="p">(:)</span><span class="w"></span>
-<a id="ln-68" name="ln-68" href="#ln-68"></a><span class="w">        </span><span class="c">!! Book-keeping for the primal and slack variables.</span>
-<a id="ln-69" name="ln-69" href="#ln-69"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">abstract_pivot_rule</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">pivot</span><span class="w"></span>
-<a id="ln-70" name="ln-70" href="#ln-70"></a><span class="w">        </span><span class="c">!! Which pivoting rule is being used.</span>
-<a id="ln-71" name="ln-71" href="#ln-71"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">abstract_feasible_initialization</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">initialization</span><span class="w"></span>
-<a id="ln-72" name="ln-72" href="#ln-72"></a><span class="w">      </span><span class="k">end subroutine </span><span class="n">dense_standard_simplex</span><span class="w"></span>
-<a id="ln-73" name="ln-73" href="#ln-73"></a><span class="w">   </span><span class="k">end interface </span><span class="n">simplex</span><span class="w"></span>
-<a id="ln-74" name="ln-74" href="#ln-74"></a>
-<a id="ln-75" name="ln-75" href="#ln-75"></a><span class="w">   </span><span class="c">!----- Pivot selection rules -----</span>
-<a id="ln-76" name="ln-76" href="#ln-76"></a>
-<a id="ln-77" name="ln-77" href="#ln-77"></a><span class="w">   </span><span class="c">!&gt; Default pivot selection rule.</span>
-<a id="ln-78" name="ln-78" href="#ln-78"></a><span class="w">   </span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">extends</span><span class="p">(</span><span class="n">abstract_pivot_rule</span><span class="p">),</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Dantzig</span><span class="w"></span>
-<a id="ln-79" name="ln-79" href="#ln-79"></a><span class="w">   </span><span class="k">end type </span><span class="n">Dantzig</span><span class="w"></span>
-<a id="ln-80" name="ln-80" href="#ln-80"></a>
-<a id="ln-81" name="ln-81" href="#ln-81"></a><span class="w">   </span><span class="c">!----- Initialization methods -----</span>
-<a id="ln-82" name="ln-82" href="#ln-82"></a>
-<a id="ln-83" name="ln-83" href="#ln-83"></a><span class="w">   </span><span class="c">!&gt; Auxiliary function maximization (default).</span>
-<a id="ln-84" name="ln-84" href="#ln-84"></a><span class="w">   </span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">extends</span><span class="p">(</span><span class="n">abstract_feasible_initialization</span><span class="p">),</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">auxiliary_function</span><span class="w"></span>
-<a id="ln-85" name="ln-85" href="#ln-85"></a><span class="w">   </span><span class="k">end type </span><span class="n">auxiliary_function</span><span class="w"></span>
-<a id="ln-86" name="ln-86" href="#ln-86"></a>
-<a id="ln-87" name="ln-87" href="#ln-87"></a><span class="k">end module </span><span class="n">LightConvex</span><span class="w"></span>
+<a id="ln-64" name="ln-64" href="#ln-64"></a><span class="w">        </span><span class="c">!!  - info = -2 : Maximum number of iterations has been exceeded.</span>
+<a id="ln-65" name="ln-65" href="#ln-65"></a><span class="w">        </span><span class="c">!!  - info = -1 : Problem is infeasible.</span>
+<a id="ln-66" name="ln-66" href="#ln-66"></a><span class="w">        </span><span class="c">!!  - info = 0  : Optimal solution has been found.</span>
+<a id="ln-67" name="ln-67" href="#ln-67"></a><span class="w">        </span><span class="c">!!  - info = 1  : Objective function is unbounded.</span>
+<a id="ln-68" name="ln-68" href="#ln-68"></a><span class="w">         </span><span class="kt">integer</span><span class="p">(</span><span class="n">ilp</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iposv</span><span class="p">(:)</span><span class="w"></span>
+<a id="ln-69" name="ln-69" href="#ln-69"></a><span class="w">        </span><span class="c">!! Book-keeping for the primal and slack variables.</span>
+<a id="ln-70" name="ln-70" href="#ln-70"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">abstract_pivot_rule</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">pivot</span><span class="w"></span>
+<a id="ln-71" name="ln-71" href="#ln-71"></a><span class="w">        </span><span class="c">!! Which pivoting rule is being used.</span>
+<a id="ln-72" name="ln-72" href="#ln-72"></a><span class="w">         </span><span class="k">class</span><span class="p">(</span><span class="n">abstract_feasible_initialization</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">initialization</span><span class="w"></span>
+<a id="ln-73" name="ln-73" href="#ln-73"></a><span class="w">      </span><span class="k">end subroutine </span><span class="n">dense_standard_simplex</span><span class="w"></span>
+<a id="ln-74" name="ln-74" href="#ln-74"></a><span class="w">   </span><span class="k">end interface </span><span class="n">simplex</span><span class="w"></span>
+<a id="ln-75" name="ln-75" href="#ln-75"></a>
+<a id="ln-76" name="ln-76" href="#ln-76"></a><span class="w">   </span><span class="c">!----- Pivot selection rules -----</span>
+<a id="ln-77" name="ln-77" href="#ln-77"></a>
+<a id="ln-78" name="ln-78" href="#ln-78"></a><span class="w">   </span><span class="c">!&gt; Default pivot selection rule.</span>
+<a id="ln-79" name="ln-79" href="#ln-79"></a><span class="w">   </span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">extends</span><span class="p">(</span><span class="n">abstract_pivot_rule</span><span class="p">),</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Dantzig</span><span class="w"></span>
+<a id="ln-80" name="ln-80" href="#ln-80"></a><span class="w">   </span><span class="k">end type </span><span class="n">Dantzig</span><span class="w"></span>
+<a id="ln-81" name="ln-81" href="#ln-81"></a>
+<a id="ln-82" name="ln-82" href="#ln-82"></a><span class="w">   </span><span class="c">!----- Initialization methods -----</span>
+<a id="ln-83" name="ln-83" href="#ln-83"></a>
+<a id="ln-84" name="ln-84" href="#ln-84"></a><span class="w">   </span><span class="c">!&gt; Auxiliary function maximization (default).</span>
+<a id="ln-85" name="ln-85" href="#ln-85"></a><span class="w">   </span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">extends</span><span class="p">(</span><span class="n">abstract_feasible_initialization</span><span class="p">),</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">auxiliary_function</span><span class="w"></span>
+<a id="ln-86" name="ln-86" href="#ln-86"></a><span class="w">   </span><span class="k">end type </span><span class="n">auxiliary_function</span><span class="w"></span>
+<a id="ln-87" name="ln-87" href="#ln-87"></a>
+<a id="ln-88" name="ln-88" href="#ln-88"></a><span class="k">end module </span><span class="n">LightConvex</span><span class="w"></span>
 </pre></div>
 
       </section>
@@ -365,7 +366,7 @@ large graphs.</div>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-09-03 20:51 +0000             </p>
+ on 2025-09-04 06:10 +0000             </p>
           </div>
         </div>
         <br>

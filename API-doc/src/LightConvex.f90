@@ -49,9 +49,9 @@ module LightConvex
    !----- Low-level algorithm -----
 
    interface simplex
-      module subroutine dense_standard_simplex(A, nleq, ngeq, neq, iposv, &
-                                               maxiter, info, pivot, &
-                                               initialization)
+      pure module subroutine dense_standard_simplex(A, nleq, ngeq, neq, iposv, &
+                                                    maxiter, info, pivot, &
+                                                    initialization)
          implicit none(external)
          real(dp), intent(inout) :: A(:, :)
         !! Simplex tableau of dimension n+2 x m
@@ -61,6 +61,7 @@ module LightConvex
         !! Maximum number of iterations.
          integer(ilp), intent(out) :: info
         !! Return flag:
+        !!  - info = -2 : Maximum number of iterations has been exceeded.
         !!  - info = -1 : Problem is infeasible.
         !!  - info = 0  : Optimal solution has been found.
         !!  - info = 1  : Objective function is unbounded.
