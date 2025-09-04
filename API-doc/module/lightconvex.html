@@ -89,7 +89,7 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="26.9% of total for modules and submodules.">101 statements</a>
+                 title="28.4% of total for modules and submodules.">109 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -153,6 +153,9 @@
       <div id="inters-0" class="collapse">
         <div class="list-group list-group-flush">
             <a class="list-group-item" href="../module/lightconvex.html#interface-primalsimplex">PrimalSimplex</a>
+            <a class="list-group-item" href="../module/lightconvex.html#interface-is_feasible">is_feasible</a>
+            <a class="list-group-item" href="../module/lightconvex.html#interface-is_optimal">is_optimal</a>
+            <a class="list-group-item" href="../module/lightconvex.html#interface-is_unbounded">is_unbounded</a>
             <a class="list-group-item" href="../module/lightconvex.html#interface-linear_program">linear_program</a>
             <a class="list-group-item" href="../module/lightconvex.html#interface-simplex">simplex</a>
             <a class="list-group-item" href="../module/lightconvex.html#interface-solve">solve</a>
@@ -177,12 +180,16 @@
       </div>
     </div>
 
+  
+  
+  
+  
       <div class="card mb-4">
-      <a data-bs-toggle="collapse" href="#funcs-0"
-         aria-expanded="false" aria-controls="funcs-0">
-         <h4 class="card-header bg-primary text-white">Functions</h4>
+      <a data-bs-toggle="collapse" href="#modprocs-0"
+         aria-expanded="false" aria-controls="modprocs-0">
+         <h4 class="card-header bg-primary text-white">Module Procedures</h4>
       </a>
-      <div id="funcs-0" class="collapse">
+      <div id="modprocs-0" class="collapse">
         <div class="list-group list-group-flush">
             <a class="list-group-item" href="../module/lightconvex.html#proc-is_feasible">is_feasible</a>
             <a class="list-group-item" href="../module/lightconvex.html#proc-is_optimal">is_optimal</a>
@@ -191,10 +198,6 @@
       </div>
     </div>
 
-  
-  
-  
-  
   
   
   
@@ -213,8 +216,8 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item">assert_m</li>
                   <li class="list-inline-item">stdlib_linalg_constants</li>
+                  <li class="list-inline-item">assert_m</li>
               </ul>
             </li>
             <li class="list-group-item">
@@ -654,6 +657,168 @@ parameter
 
               <div class="card">
     <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-is_feasible"></span>
+      <h3>        interface
+      </h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+              <h3>
+    public pure module function is_feasible(problem) result(bool)  
+    <a href="../proc/is_feasible.html"><button type="button" class="btn btn-info depwarn">Implementation &rarr;</button></a>
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-problem~2"></span>
+              class(abstract_cvx_problem),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>problem</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical(kind=lk)</small>
+    </h4>
+    
+
+        </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-is_optimal"></span>
+      <h3>        interface
+      </h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+              <h3>
+    public pure module function is_optimal(problem) result(bool)  
+    <a href="../proc/is_optimal.html"><button type="button" class="btn btn-info depwarn">Implementation &rarr;</button></a>
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-problem"></span>
+              class(abstract_cvx_problem),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>problem</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical(kind=lk)</small>
+    </h4>
+    
+
+        </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-is_unbounded"></span>
+      <h3>        interface
+      </h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+              <h3>
+    public pure module function is_unbounded(problem) result(bool)  
+    <a href="../proc/is_unbounded.html"><button type="button" class="btn btn-info depwarn">Implementation &rarr;</button></a>
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-problem~3"></span>
+              class(abstract_cvx_problem),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>problem</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical(kind=lk)</small>
+    </h4>
+    
+
+        </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
       <span class="anchor" id="interface-linear_program"></span>
       <h3>public        interface <a href='../interface/linear_program.html'>linear_program</a> 
       </h3>
@@ -994,7 +1159,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-problem~2"></span>
+              <span class="anchor" id="variable-problem~5"></span>
               type(<a href='../type/dense_lp_type.html'>dense_lp_type</a>),
             </td>
 <td>intent(inout)</td>
@@ -1397,10 +1562,15 @@ parameter
         </section>
         <br>
 
+
+
+
+
         <section>
-          <h2>Functions</h2>
+          <h2>Module Procedures</h2>
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-is_feasible"></span> <h3>public pure function <a href='../proc/is_feasible.html'>is_feasible</a>(problem) result(bool)  
+    <div class="card-header codesum"><span class="anchor" id="proc-is_feasible"></span> <h3>module procedure /home/runner/work/LightConvex/LightConvex/API-doc/module/lightconvex.html <a href='../proc/is_feasible.html'>is_feasible</a> <small>private pure module function is_feasible(problem) result(bool)</small>  
+    <a href="../interface/is_feasible.html"><button type="button" class="btn btn-info depwarn">Interface &rarr;</button></a>
 </h3></div>
     <div class="card-body">
           
@@ -1419,7 +1589,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-problem~4"></span>
+              <span class="anchor" id="variable-problem~2"></span>
               class(abstract_cvx_problem),
             </td>
 <td>intent(in)</td>
@@ -1445,7 +1615,54 @@ parameter
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-is_optimal"></span> <h3>public pure module function <a href='../proc/is_optimal.html'>is_optimal</a>(problem) result(bool)  
+    <div class="card-header codesum"><span class="anchor" id="proc-is_optimal"></span> <h3>module procedure /home/runner/work/LightConvex/LightConvex/API-doc/module/lightconvex.html <a href='../proc/is_optimal.html'>is_optimal</a> <small>private pure module function is_optimal(problem) result(bool)</small>  
+    <a href="../interface/is_optimal.html"><button type="button" class="btn btn-info depwarn">Interface &rarr;</button></a>
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-problem"></span>
+              class(abstract_cvx_problem),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>problem</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical(kind=lk)</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-is_unbounded"></span> <h3>module procedure /home/runner/work/LightConvex/LightConvex/API-doc/module/lightconvex.html <a href='../proc/is_unbounded.html'>is_unbounded</a> <small>private pure module function is_unbounded(problem) result(bool)</small>  
+    <a href="../interface/is_unbounded.html"><button type="button" class="btn btn-info depwarn">Interface &rarr;</button></a>
 </h3></div>
     <div class="card-body">
           
@@ -1489,57 +1706,7 @@ parameter
     </div>
   </div>
 
-              <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-is_unbounded"></span> <h3>public pure function <a href='../proc/is_unbounded.html'>is_unbounded</a>(problem) result(bool)  
-</h3></div>
-    <div class="card-body">
-          
-  
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th scope="col">Type</th>
-<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
-        <th scope="col"></th>
-        <th scope="col">Name</th>
-        <th scope="col"></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-problem~5"></span>
-              class(abstract_cvx_problem),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>problem</strong></td>
-            <td>
-
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-    <h4>
-    Return Value
-    <small>logical(kind=lk)</small>
-    </h4>
-    
-
-    </div>
-  </div>
-
         </section>
-        <br>
-
-
-
-
     </div>
   </div>
 
@@ -1558,7 +1725,7 @@ parameter
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-09-04 20:51 +0000             </p>
+ on 2025-09-04 20:57 +0000             </p>
           </div>
         </div>
         <br>

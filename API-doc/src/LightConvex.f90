@@ -31,6 +31,23 @@ module LightConvex
       integer(ilp) :: status
    end type abstract_cvx_problem
 
+   interface
+      pure logical(lk) module function is_optimal(problem) result(bool)
+         implicit none(external)
+         class(abstract_cvx_problem), intent(in) :: problem
+      end function is_optimal
+
+      pure logical(lk) module function is_feasible(problem) result(bool)
+         implicit none(external)
+         class(abstract_cvx_problem), intent(in) :: problem
+      end function is_feasible
+
+      pure logical(lk) module function is_unbounded(problem) result(bool)
+         implicit none(external)
+         class(abstract_cvx_problem), intent(in) :: problem
+      end function is_unbounded
+   end interface
+
    !> Base type for defining convex solvers.
    type, abstract :: abstract_cvx_solver
    end type abstract_cvx_solver
@@ -164,22 +181,16 @@ module LightConvex
 
 contains
 
-   pure logical(lk) module function is_optimal(problem) result(bool)
-      implicit none(external)
-      class(abstract_cvx_problem), intent(in) :: problem
-      bool = problem%status == optimal_status
-   end function is_optimal
+   module procedure is_optimal
+   bool = problem%status == optimal_status
+   end procedure is_optimal
 
-   pure logical(lk) function is_feasible(problem) result(bool)
-      implicit none(external)
-      class(abstract_cvx_problem), intent(in) :: problem
-      bool = problem%status /= infeasible_status
-   end function is_feasible
+   module procedure is_feasible
+   bool = problem%status /= infeasible_status
+   end procedure is_feasible
 
-   pure logical(lk) function is_unbounded(problem) result(bool)
-      implicit none(external)
-      class(abstract_cvx_problem), intent(in) :: problem
-      bool = problem%status == unbounded_status
-   end function is_unbounded
+   module procedure is_unbounded
+   bool = problem%status == unbounded_status
+   end procedure
 
 end module LightConvex
