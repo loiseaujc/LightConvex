@@ -89,20 +89,20 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="<p>14.3% of total for derived types.</p>Including implementation: 4 statements, 20.0% of total for derived types.">4 statements</a>
+                 title="<p>10.5% of total for derived types.</p>Including implementation: 4 statements, 13.3% of total for derived types.">4 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/LightConvex.f90"> Source File</a>
+              <a href="../src/lighthconvex_linearprograms.f90"> Source File</a>
             </li>
         </ul>
       </div>
       <div class="col">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb justify-content-end mb-0">
-                <li class="breadcrumb-item"><a href='../sourcefile/lightconvex.f90.html'>LightConvex.f90</a></li>
-                <li class="breadcrumb-item"><a href='../module/lightconvex.html'>LightConvex</a></li>
+                <li class="breadcrumb-item"><a href='../sourcefile/lighthconvex_linearprograms.f90.html'>lighthconvex_linearprograms.f90</a></li>
+                <li class="breadcrumb-item"><a href='../module/lightconvex_lp.html'>lightconvex_lp</a></li>
             <li class="breadcrumb-item active" aria-current="page">dense_lp_type</li>
           </ol>
         </nav>
@@ -154,7 +154,18 @@
   
   
   
-  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#boundprocs-0"
+         aria-expanded="false" aria-controls="boundprocs-0">
+         <h4 class="card-header bg-primary text-white">Type-Bound Procedures</h4>
+      </a>
+      <div id="boundprocs-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../type/dense_lp_type.html#boundprocedure-set_status">set_status</a>
+        </div>
+      </div>
+    </div>
+
   
   
     <div class="card card-primary">
@@ -171,7 +182,7 @@
     
     <div class="col-md-9" id='text'>
       <h2 id="type-def-statement">
-        type, public, extends(../../abstract_cvx_problem) :: dense_lp_type</h2>
+        type, public, extends(<a href='abstract_cvx_problem.html'>abstract_cvx_problem</a>) :: dense_lp_type</h2>
     <p>Definition of a linear program.</p>
 <br>      <div class="card">
         <div class="card-header">
@@ -198,8 +209,11 @@
 <!-- type~abstract_cvx_problem -->
 <g id="type~~dense_lp_type~~InheritsGraph_node2" class="node">
 <title>type~abstract_cvx_problem</title>
+<g id="a_type~~dense_lp_type~~InheritsGraph_node2"><a xlink:href="../type/abstract_cvx_problem.html" xlink:title="abstract_cvx_problem">
 <polygon fill="#5cb85c" stroke="#5cb85c" points="127.77,-24.27 0,-24.27 0,0 127.77,0 127.77,-24.27"/>
 <text xml:space="preserve" text-anchor="middle" x="63.88" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">abstract_cvx_problem</text>
+</a>
+</g>
 </g>
 <!-- type~dense_lp_type&#45;&gt;type~abstract_cvx_problem -->
 <g id="type~~dense_lp_type~~InheritsGraph_edge1" class="edge">
@@ -350,6 +364,79 @@ large graphs.</div>
     
 
 
+      <section>
+        <h2>Type-Bound Procedures</h2>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-set_status"></span>
+      <h3>
+          procedure, public, pass(self) ::
+  <strong>set_status</strong>
+        
+      </h3>
+    </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                <h3>interface </h3>
+                    <h3>
+    private pure module subroutine set_status(self, status)  
+    <a href="../proc/set_status.html"><button type="button" class="btn btn-info depwarn">Implementation &rarr;</button></a>
+</h3>
+
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='abstract_cvx_problem.html'>abstract_cvx_problem</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>self</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer(kind=ilp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>status</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+          </li>
+      </ul>
+  </div>
+
+          </div>
+      </section>
 
     <section>
     <h3><span class="anchor" id="src"></span>Source Code</h3>
@@ -381,7 +468,7 @@ large graphs.</div>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-09-05 08:31 +0000             </p>
+ on 2025-09-05 10:13 +0000             </p>
           </div>
         </div>
         <br>
