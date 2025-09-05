@@ -11,7 +11,7 @@ module TestLinearPrograms
    implicit none(external)
    private
 
-   public collect_dense_standard_simplex_problems
+   public :: collect_dense_standard_simplex_problems
 contains
    subroutine collect_dense_standard_simplex_problems(testsuite)
       type(unittest_type), allocatable, intent(out) :: testsuite(:)
