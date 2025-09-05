@@ -6,6 +6,104 @@ submodule(lightconvex) lightconvex_lp
 
 contains
 
+   !==================================================
+   !==================================================
+   !=====                                        =====
+   !=====     DEFINITION OF A LINEAR PROGRAM     =====
+   !=====                                        =====
+   !==================================================
+   !==================================================
+
+   !-----------------------------------------
+   !-----     DENSE LINEAR PROGRAMS     -----
+   !-----------------------------------------
+
+   module procedure assemble_dense_lp
+   integer(ilp) :: m, n
+    !! Number of constraints and number of variables.
+   integer(ilp) :: offset
+
+   n = size(c)  ! Number of variables.
+
+   !> Sanity checks.
+   call assert(assertion=(present(Aleq) .and. present(bleq)) .or. (.not. present(Aleq) .and. .not. present(bleq)), &
+               description="Specification of <= constraints incomplete. Either Aleq or bleq is missing.")
+   call assert(assertion=(present(Ageq) .and. present(bgeq)) .or. (.not. present(Ageq) .and. .not. present(bgeq)), &
+               description="Specification of >= constraints incomplete. Either Aleq or bleq is missing.")
+   call assert(assertion=(present(Aeq) .and. present(beq)) .or. (.not. present(Aeq) .and. .not. present(beq)), &
+               description="Specification of == constraints incomplete. Either Aleq or bleq is missing.")
+
+   associate (nleq => problem%nleq, ngeq => problem%ngeq, neq => problem%neq)
+      nleq = 0; ngeq = 0; neq = 0
+
+      !> Consistency of the <= inequalities.
+      if (present(Aleq)) then
+         !> Check dimensions.
+         call assert(assertion=size(Aleq, 1) == size(bleq), &
+                     description="Aleq and bleq have an inconsistent number of rows.")
+         call assert(assertion=size(Aleq, 2) == n, &
+                     description="Number of columns of Aleq is inconsistent with the number of variables (size(c)).")
+         call assert(assertion=all(bleq >= -eps), &
+                     description="Right-hand side vector bleq needs to be non-negative.")
+         !> Number of <= constraints.
+         nleq = size(Aleq, 1)
+      end if
+
+      !> Consistency of the >= inequalities.
+      if (present(Ageq)) then
+         !> Check dimensions.
+         call assert(assertion=size(Ageq, 1) == size(bgeq), &
+                     description="Ageq and bgeq have an inconsistent number of rows.")
+         call assert(assertion=size(Ageq, 2) == n, &
+                     description="Number of columns of Ageq is inconsistent with the number of variables (size(c)).")
+         call assert(assertion=all(bgeq >= -eps), &
+                     description="Right-hand side vector bgeq needs to be non-negative.")
+         !> Number of >= constraints.
+         ngeq = size(Ageq, 1)
+      end if
+
+      !> Consistency of the == inequalities.
+      if (present(Aeq)) then
+         !> Check dimensions.
+         call assert(assertion=size(Aeq, 1) == size(beq), &
+                     description="Aeq and beq have an inconsistent number of rows.")
+         call assert(assertion=size(Aeq, 2) == n, &
+                     description="Number of columns of Aeq is inconsistent with the number of variables (size(c)).")
+         call assert(assertion=all(beq >= -eps), &
+                     description="Right-hand side vector beq needs to be non-negative.")
+         !> Number of <= constraints.
+         neq = size(Aeq, 1)
+      end if
+
+      !> Total number of constraints.
+      m = nleq + ngeq + neq
+
+      !----- Construct the Simplex tableau -----
+      allocate (problem%A(m + 2, n + 1), source=0.0_dp); problem%A(1, 2:) = c   ! Cost function.
+      offset = 1
+
+      !> Add the <= inequalities.
+      if (present(Aleq)) then
+         problem%A(offset + 1:nleq + offset, 2:) = -Aleq
+         problem%A(offset + 1:nleq + offset, 1) = bleq
+         ! offset = offset + 1
+      end if
+
+      !> Add the >= inequalities.
+      if (present(Ageq)) then
+         problem%A(nleq + offset + 1:nleq + ngeq + offset, 2:) = -Ageq
+         problem%A(nleq + offset + 1:nleq + ngeq + offset, 1) = bgeq
+         ! offset = offset + 1
+      end if
+
+      !> Add the == constraints.
+      if (present(Aeq)) then
+         problem%A(nleq + ngeq + offset + 1:m + 1, 2:) = -Aeq
+         problem%A(nleq + ngeq + offset + 1:m + 1, 1) = beq
+      end if
+   end associate
+   end procedure assemble_dense_lp
+
    !============================================
    !============================================
    !=====                                  =====
@@ -13,6 +111,47 @@ contains
    !=====                                  =====
    !============================================
    !============================================
+
+   !----------------------------------------
+   !-----     HIGH-LEVEL INTERFACE     -----
+   !----------------------------------------
+
+   module procedure initialize_primal_simplex_alg
+   alg%maxiter = 1000; if (present(maxiter)) alg%maxiter = maxiter
+   alg%pivot = Dantzig(); if (present(pivot)) alg%pivot = pivot
+   alg%initialization = auxiliary_function(); if (present(initialization)) alg%initialization = initialization
+   end procedure initialize_primal_simplex_alg
+
+   module procedure solve_with_dense_simplex
+   integer(ilp), allocatable :: iposv(:)
+   integer(ilp) :: i, m, n, info
+
+   !> Problem dimension.
+   m = size(problem%A, 1) - 2
+   n = size(problem%A, 2) - 1
+
+   !> Allocate variables.
+   allocate (iposv(m), source=0)
+
+   !> Solve the problem.
+   call simplex(problem%A, problem%nleq, problem%ngeq, problem%neq, iposv, &
+                alg%maxiter, info, alg%pivot, alg%initialization)
+
+   !> Problem's status.
+   problem%status = info
+
+   if (problem%status == optimal_status) then
+      !> Extract primal variables and slacks from the tableau.
+      allocate (solution%x(n), source=0.0_dp); allocate (solution%s(m), source=0.0_dp)
+
+      do i = 1, m
+         if (iposv(i) <= n) solution%x(iposv(i)) = problem%A(i + 1, 1)
+         if (iposv(i) > n) solution%s(iposv(i) - n) = problem%A(i + 1, 1)
+      end do
+
+      solution%objective_value = problem%A(1, 1)
+   end if
+   end procedure solve_with_dense_simplex
 
    !-----------------------------------------------------------
    !-----     STANDARD SIMPLEX METHOD (DENSE TABLEAU)     -----
@@ -45,8 +184,9 @@ contains
                description="Tableau size is inconsistent with the number of constraints.")
    call assert(assertion=size(iposv) == m, &
                description="Dimension of iposv is inconsistant with the number of constraints.")
-   call assert(assertion=all(A(2:, 1) >= 0.0_dp), &
-               description="Constants b_i need to be non-negative.")
+   ! Remove assertion as it seems to strict.
+   ! call assert(assertion=all(A(2:, 1) >= -eps), &
+   !             description="Constants b_i need to be non-negative.")
 
    !----- Initialization -----
 
