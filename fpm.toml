@@ -21,4 +21,4 @@ source-form = "free"
 
 [dependencies]
 stdlib = "*"
-assert = {git="https://github.com/BerkeleyLab/assert.git", preprocess.cpp.macros = ["ASSERTIONS"]}
+assert = {git="https://github.com/BerkeleyLab/assert.git"}
