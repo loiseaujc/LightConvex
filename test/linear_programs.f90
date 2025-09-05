@@ -5,16 +5,13 @@ module TestLinearPrograms
    use stdlib_linalg_constants, only: ilp, dp, lk
    use stdlib_math, only: all_close
    use LightConvex, only: dense_lp_type, linear_program, lp_solution, &
-                          simplex, Dantzig, auxiliary_function, &
+                          Dantzig, auxiliary_function, &
                           PrimalSimplex, solve, &
-                          is_optimal, is_feasible, is_unbounded, &
-                          infeasible_status, optimal_status, &
-                          unbounded_status, maxiter_exceeded, &
-                          tol
+                          is_optimal, is_feasible, is_unbounded
    implicit none(external)
    private
 
-   public collect_dense_standard_simplex_problems
+   public :: collect_dense_standard_simplex_problems
 contains
    subroutine collect_dense_standard_simplex_problems(testsuite)
       type(unittest_type), allocatable, intent(out) :: testsuite(:)
