@@ -36,9 +36,13 @@ module lightconvex_lp
       type(dense_lp_type) module function create_dense_linear_program(c, Aleq, bleq, Ageq, bgeq, Aeq, beq) result(problem)
          implicit none(external)
          real(dp), intent(in) :: c(:)
+            !! Linear cost function.
          real(dp), intent(in), optional :: Aleq(:, :), bleq(:)
+            !! <= inequality constraints.
          real(dp), intent(in), optional :: Ageq(:, :), bgeq(:)
+            !! >= inequality constraints.
          real(dp), intent(in), optional :: Aeq(:, :), beq(:)
+            !! == equality constraints.
       end function create_dense_linear_program
    end interface
    public :: linear_program
@@ -84,16 +88,22 @@ module lightconvex_lp
 
    type, extends(abstract_cvx_solver), public :: PrimalSimplex
       class(abstract_pivot_rule), allocatable :: pivot
+        !! Rule to choose the pivoting column.
       class(abstract_feasible_initialization), allocatable :: initialization
+        !! Method to find an initial feasible point.
       integer(ilp) :: maxiter
+        !! Maximum number of iterations in the simplex method.
    end type PrimalSimplex
 
    interface PrimalSimplex
       type(PrimalSimplex) module function initialize_primal_simplex_alg(pivot, initialization, maxiter) result(alg)
          implicit none(external)
          class(abstract_pivot_rule), intent(in), optional :: pivot
+            !! Rule to choose the pivoting column.
          class(abstract_feasible_initialization), intent(in), optional :: initialization
+            !! Method to find an initial feasible point.
          integer(ilp), intent(in), optional :: maxiter
+            !! Maximum number of iterations in the simplex method.
       end function initialize_primal_simplex_alg
    end interface PrimalSimplex
 
@@ -137,9 +147,20 @@ module lightconvex_lp
 
    type, extends(abstract_cvx_solver), public :: PrimalAffineScaling
       class(abstract_feasible_initialization), allocatable :: initialization
+        !! Method to find an initial feasible point.
       integer(ilp) :: maxiter
-      real(ilp) :: tolerance
+        !! Maximum number of iterations in the PAS method.
    end type PrimalAffineScaling
+
+   interface PrimalAffineScaling
+      type(PrimalAffineScaling) module function initialize_primal_affine_scaling_alg(initialization, maxiter) result(alg)
+         implicit none(external)
+         class(abstract_feasible_initialization), intent(in), optional :: initialization
+            !! Method to find an initial feasible point.
+         integer(ilp), intent(in), optional :: maxiter
+            !! Maximum number of iterations.
+      end function initialize_primal_affine_scaling_alg
+   end interface PrimalAffineScaling
 
    !----- High-level interface -----
 
@@ -147,8 +168,20 @@ module lightconvex_lp
       type(lp_solution) module function solve_with_dense_simplex(problem, alg) result(solution)
          implicit none(external)
          type(dense_lp_type), intent(inout) :: problem
+            !! Problem to solve.
          type(PrimalSimplex), intent(in) :: alg
+            !! Algorithm used.
       end function solve_with_dense_simplex
+
+      type(lp_solution) module function solve_with_dense_PAS(problem, x0, alg) result(solution)
+         implicit none(external)
+         type(dense_lp_type), intent(inout) :: problem
+            !! Problem to solve.
+         real(dp), optional, intent(in) :: x0
+            !! Initial guess for warm starting.
+         type(PrimalAffineScaling), intent(in) :: alg
+            !! Algorithm used.
+      end function solve_with_dense_PAS
    end interface
    public :: solve
 
@@ -177,6 +210,8 @@ contains
                description="Specification of >= constraints incomplete. Either Aleq or bleq is missing.")
    call assert(assertion=(present(Aeq) .and. present(beq)) .or. (.not. present(Aeq) .and. .not. present(beq)), &
                description="Specification of == constraints incomplete. Either Aleq or bleq is missing.")
+   call assert(assertion=present(Aleq) .or. present(Ageq) .or. present(Aeq), &
+               description="No constraint has been provided. Ill-posed problem.")
 
    !> Consistency of the <= inequalities.
    if (present(Aleq)) then
@@ -219,5 +254,6 @@ contains
       !> If all good, allocate arrays.
       problem%Aeq = Aeq; problem%beq = beq
    end if
+
    end procedure create_dense_linear_program
 end module lightconvex_lp

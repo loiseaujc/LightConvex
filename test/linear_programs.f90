@@ -5,7 +5,8 @@ module TestLinearPrograms
    use stdlib_linalg_constants, only: ilp, dp, lk
    use LightConvex, only: dense_lp_type, linear_program, lp_solution, &
                           Dantzig, auxiliary_function, &
-                          PrimalSimplex, solve, &
+                          PrimalSimplex, PrimalAffineScaling, &
+                          solve, &
                           is_optimal, is_feasible, is_unbounded
    implicit none(external)
    private
@@ -71,6 +72,10 @@ contains
       !> Construct the LP problem for LightConvex.
       problem = linear_program(c, Aleq=Aleq, bleq=bleq, Ageq=Ageq, bgeq=bgeq, Aeq=Aeq, beq=beq)
 
+      !-------------------------------------
+      !-----     Simplex Algorithm     -----
+      !-------------------------------------
+
       !> Solve the problem.
       solution = solve(problem, alg=PrimalSimplex())
 
@@ -82,6 +87,13 @@ contains
       if (allocated(error)) return
       call check(error, is_close(solution%objective_value, cost_ref, abs_tol=0.05_dp))   ! Matching cost.
       if (allocated(error)) return
+
+      !-----------------------------------------
+      !-----     Primal Affine Scaling     -----
+      !-----------------------------------------
+
+      !> Solve the problem.
+      solution = solve(problem, alg=PrimalAffineScaling())
 
    end subroutine test_num_recipes_problem
 
