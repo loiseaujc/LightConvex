@@ -10,7 +10,7 @@
     <meta name="author" content="" >
     <link rel="icon" href="../favicon.png">
 
-    <title>assemble_dense_lp &ndash; LightConvex</title>
+    <title>create_dense_linear_program &ndash; LightConvex</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -78,7 +78,7 @@
 
     <div class="container">
   <div class="row">
-    <h1>assemble_dense_lp
+    <h1>create_dense_linear_program
       <small>Module Procedure</small>
       
     </h1>
@@ -89,7 +89,7 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="43.5% of total for procedures.">47 statements</a>
+                 title="26.9% of total for procedures.">29 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -103,7 +103,7 @@
           <ol class="breadcrumb justify-content-end mb-0">
                 <li class="breadcrumb-item"><a href='../sourcefile/lighthconvex_linearprograms.f90.html'>lighthconvex_linearprograms.f90</a></li>
                 <li class="breadcrumb-item"><a href='../module/lightconvex_lp.html'>lightconvex_lp</a></li>
-            <li class="breadcrumb-item active" aria-current="page">assemble_dense_lp</li>
+            <li class="breadcrumb-item active" aria-current="page">create_dense_linear_program</li>
           </ol>
         </nav>
       </div>
@@ -146,7 +146,7 @@
     <div class="card card-primary">
       <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
       <div class="list-group">
-        <a class="list-group-item" href="../proc/assemble_dense_lp.html#src">assemble_dense_lp</a>
+        <a class="list-group-item" href="../proc/create_dense_linear_program.html#src">create_dense_linear_program</a>
       </div>
     </div>
 
@@ -156,24 +156,20 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>module procedure assemble_dense_lp <small>private module function assemble_dense_lp(c, Aleq, bleq, Ageq, bgeq, Aeq, beq) result(problem)</small>  
+    <h2>module procedure create_dense_linear_program <small>private module function create_dense_linear_program(c, Aleq, bleq, Ageq, bgeq, Aeq, beq) result(problem)</small>  
 </h2>
     
 
-    <p>Sanity checks.
+    <p>Sanity check.
 Consistency of the &lt;= inequalities.
 Check dimensions.
-Number of &lt;= constraints.
+If all good, allocate arrays.
 Consistency of the &gt;= inequalities.
 Check dimensions.
-Number of &gt;= constraints.
+If all good, allocate arrays.
 Consistency of the == inequalities.
 Check dimensions.
-Number of &lt;= constraints.
-Total number of constraints.</p>
-<p>Add the &lt;= inequalities.
-Add the &gt;= inequalities.
-Add the == constraints.</p>
+If all good, allocate arrays.</p>
 
 
     <h3>Arguments</h3>
@@ -189,7 +185,7 @@ Add the == constraints.</p>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-c"></span>
+              <span class="anchor" id="variable-c~2"></span>
               real(kind=dp),
             </td>
 <td>intent(in)</td>
@@ -204,7 +200,7 @@ Add the == constraints.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-aleq"></span>
+              <span class="anchor" id="variable-aleq~2"></span>
               real(kind=dp),
             </td>
 <td>intent(in),</td>
@@ -219,7 +215,7 @@ Add the == constraints.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-bleq"></span>
+              <span class="anchor" id="variable-bleq~2"></span>
               real(kind=dp),
             </td>
 <td>intent(in),</td>
@@ -234,7 +230,7 @@ Add the == constraints.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ageq"></span>
+              <span class="anchor" id="variable-ageq~2"></span>
               real(kind=dp),
             </td>
 <td>intent(in),</td>
@@ -249,7 +245,7 @@ Add the == constraints.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-bgeq"></span>
+              <span class="anchor" id="variable-bgeq~2"></span>
               real(kind=dp),
             </td>
 <td>intent(in),</td>
@@ -264,7 +260,7 @@ Add the == constraints.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-aeq"></span>
+              <span class="anchor" id="variable-aeq~2"></span>
               real(kind=dp),
             </td>
 <td>intent(in),</td>
@@ -279,7 +275,7 @@ Add the == constraints.</p>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-beq"></span>
+              <span class="anchor" id="variable-beq~2"></span>
               real(kind=dp),
             </td>
 <td>intent(in),</td>
@@ -313,29 +309,29 @@ Add the == constraints.</p>
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Generated by graphviz version 13.1.2 (20250809.0930)
  -->
-<!-- Title: proc~~assemble_dense_lp~~CallsGraph Pages: 1 -->
-<svg id="procassemble_dense_lpCallsGraph" width="213pt" height="32pt"
- viewBox="0.00 0.00 213.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="proc~~assemble_dense_lp~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28.27)">
-<title>proc~~assemble_dense_lp~~CallsGraph</title>
-<polygon fill="white" stroke="none" points="-4,4 -4,-28.27 209.02,-28.27 209.02,4 -4,4"/>
-<!-- proc~assemble_dense_lp -->
-<g id="proc~~assemble_dense_lp~~CallsGraph_node1" class="node">
-<title>proc~assemble_dense_lp</title>
-<polygon fill="none" stroke="black" points="115.02,-24.27 0,-24.27 0,0 115.02,0 115.02,-24.27"/>
-<text xml:space="preserve" text-anchor="middle" x="57.51" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50">assemble_dense_lp</text>
+<!-- Title: proc~~create_dense_linear_program~~CallsGraph Pages: 1 -->
+<svg id="proccreate_dense_linear_programCallsGraph" width="268pt" height="32pt"
+ viewBox="0.00 0.00 268.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~create_dense_linear_program~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28.27)">
+<title>proc~~create_dense_linear_program~~CallsGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28.27 263.77,-28.27 263.77,4 -4,4"/>
+<!-- proc~create_dense_linear_program -->
+<g id="proc~~create_dense_linear_program~~CallsGraph_node1" class="node">
+<title>proc~create_dense_linear_program</title>
+<polygon fill="none" stroke="black" points="169.77,-24.27 0,-24.27 0,0 169.77,0 169.77,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="84.88" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50">create_dense_linear_program</text>
 </g>
 <!-- assert -->
-<g id="proc~~assemble_dense_lp~~CallsGraph_node2" class="node">
+<g id="proc~~create_dense_linear_program~~CallsGraph_node2" class="node">
 <title>assert</title>
-<polygon fill="#777777" stroke="#777777" points="205.02,-24.27 151.02,-24.27 151.02,0 205.02,0 205.02,-24.27"/>
-<text xml:space="preserve" text-anchor="middle" x="178.02" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">assert</text>
+<polygon fill="#777777" stroke="#777777" points="259.77,-24.27 205.77,-24.27 205.77,0 259.77,0 259.77,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="232.77" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">assert</text>
 </g>
-<!-- proc~assemble_dense_lp&#45;&gt;assert -->
-<g id="proc~~assemble_dense_lp~~CallsGraph_edge1" class="edge">
-<title>proc~assemble_dense_lp&#45;&gt;assert</title>
-<path fill="none" stroke="#ff0000" d="M115.34,-12.13C123.44,-12.13 131.61,-12.13 139.23,-12.13"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="139.16,-15.64 149.16,-12.14 139.16,-8.64 139.16,-15.64"/>
+<!-- proc~create_dense_linear_program&#45;&gt;assert -->
+<g id="proc~~create_dense_linear_program~~CallsGraph_edge1" class="edge">
+<title>proc~create_dense_linear_program&#45;&gt;assert</title>
+<path fill="none" stroke="#ff0000" d="M169.9,-12.13C178.38,-12.13 186.66,-12.13 194.25,-12.13"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="194.05,-15.64 204.05,-12.14 194.05,-8.64 194.05,-15.64"/>
 </g>
 </g>
 </svg>
@@ -434,13 +430,13 @@ large graphs.</div>
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="hl codehilite"><pre><span></span><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">dense_lp_type</span><span class="p">)</span><span class="w"> </span><span class="k">module function </span><span class="n">assemble_dense_lp</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">Aleq</span><span class="p">,</span><span class="w"> </span><span class="n">bleq</span><span class="p">,</span><span class="w"> </span><span class="n">Ageq</span><span class="p">,</span><span class="w"> </span><span class="n">bgeq</span><span class="p">,</span><span class="w"> </span><span class="n">Aeq</span><span class="p">,</span><span class="w"> </span><span class="n">beq</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">problem</span><span class="p">)</span><span class="w"></span>
+    <div class="hl codehilite"><pre><span></span><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">dense_lp_type</span><span class="p">)</span><span class="w"> </span><span class="k">module function </span><span class="n">create_dense_linear_program</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">Aleq</span><span class="p">,</span><span class="w"> </span><span class="n">bleq</span><span class="p">,</span><span class="w"> </span><span class="n">Ageq</span><span class="p">,</span><span class="w"> </span><span class="n">bgeq</span><span class="p">,</span><span class="w"> </span><span class="n">Aeq</span><span class="p">,</span><span class="w"> </span><span class="n">beq</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">problem</span><span class="p">)</span><span class="w"></span>
 <span class="w">         </span><span class="k">implicit none</span><span class="p">(</span><span class="k">external</span><span class="p">)</span><span class="w"></span>
 <span class="w">         </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">c</span><span class="p">(:)</span><span class="w"></span>
 <span class="w">         </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Aleq</span><span class="p">(:,</span><span class="w"> </span><span class="p">:),</span><span class="w"> </span><span class="n">bleq</span><span class="p">(:)</span><span class="w"></span>
 <span class="w">         </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Ageq</span><span class="p">(:,</span><span class="w"> </span><span class="p">:),</span><span class="w"> </span><span class="n">bgeq</span><span class="p">(:)</span><span class="w"></span>
 <span class="w">         </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="w"> </span><span class="k">optional</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Aeq</span><span class="p">(:,</span><span class="w"> </span><span class="p">:),</span><span class="w"> </span><span class="n">beq</span><span class="p">(:)</span><span class="w"></span>
-<span class="w">      </span><span class="k">end function </span><span class="n">assemble_dense_lp</span><span class="w"></span>
+<span class="w">      </span><span class="k">end function </span><span class="n">create_dense_linear_program</span><span class="w"></span>
 </pre></div>
 
     </section>
@@ -464,7 +460,7 @@ large graphs.</div>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-09-08 06:25 +0000             </p>
+ on 2025-09-08 12:43 +0000             </p>
           </div>
         </div>
         <br>

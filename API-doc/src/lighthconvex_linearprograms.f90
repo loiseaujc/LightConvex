@@ -1,5 +1,6 @@
 module lightconvex_lp
    use assert_m, only: assert => assert_always
+   use stdlib_optval, only: optval
    use lightconvex_constants, only: ilp, dp, lk, eps, tol, &
                                     optimal_status, infeasible_status, &
                                     unbounded_status, maxiter_exceeded
@@ -21,20 +22,24 @@ module lightconvex_lp
 
    !> Definition of a linear program.
    type, extends(abstract_cvx_problem), public :: dense_lp_type
-      real(dp), allocatable :: A(:, :)
-        !! Simplex tableau.
-      integer(ilp) :: nleq, ngeq, neq
-        !! Number of constraints of each type.
+      real(dp), allocatable :: c(:)
+        !! Linear cost function
+      real(dp), allocatable :: Aleq(:, :), bleq(:)
+        !! <= inequality constraints.
+      real(dp), allocatable :: Ageq(:, :), bgeq(:)
+        !! >= inequality constraints.
+      real(dp), allocatable :: Aeq(:, :), beq(:)
+        !! == equality constraints.
    end type dense_lp_type
 
    interface linear_program
-      type(dense_lp_type) module function assemble_dense_lp(c, Aleq, bleq, Ageq, bgeq, Aeq, beq) result(problem)
+      type(dense_lp_type) module function create_dense_linear_program(c, Aleq, bleq, Ageq, bgeq, Aeq, beq) result(problem)
          implicit none(external)
          real(dp), intent(in) :: c(:)
          real(dp), intent(in), optional :: Aleq(:, :), bleq(:)
          real(dp), intent(in), optional :: Ageq(:, :), bgeq(:)
          real(dp), intent(in), optional :: Aeq(:, :), beq(:)
-      end function assemble_dense_lp
+      end function create_dense_linear_program
    end interface
    public :: linear_program
 
@@ -69,6 +74,10 @@ module lightconvex_lp
    type, abstract :: abstract_feasible_initialization
    end type abstract_feasible_initialization
 
+   !> Auxiliary function maximization (default).
+   type, extends(abstract_feasible_initialization), public :: auxiliary_function
+   end type auxiliary_function
+
    !--------------------------------------------
    !-----     PRIMAL SIMPLEX ALGORITHM     -----
    !--------------------------------------------
@@ -88,23 +97,12 @@ module lightconvex_lp
       end function initialize_primal_simplex_alg
    end interface PrimalSimplex
 
-   !----- High-level interface -----
-
-   interface solve
-      type(lp_solution) module function solve_with_dense_simplex(problem, alg) result(solution)
-         implicit none(external)
-         type(dense_lp_type), intent(inout) :: problem
-         type(PrimalSimplex), intent(in) :: alg
-      end function solve_with_dense_simplex
-   end interface
-   public :: solve
-
    !----- Low-level algorithm -----
 
    interface simplex
-      module subroutine dense_standard_simplex(A, nleq, ngeq, neq, iposv, &
-                                               maxiter, info, pivot, &
-                                               initialization)
+      pure module subroutine dense_standard_simplex(A, nleq, ngeq, neq, iposv, &
+                                                    maxiter, info, pivot, &
+                                                    initialization)
          implicit none(external)
          real(dp), intent(inout) :: A(:, :)
         !! Simplex tableau of dimension n+2 x m
@@ -133,11 +131,26 @@ module lightconvex_lp
    type, extends(abstract_pivot_rule), public :: Dantzig
    end type Dantzig
 
-   !----- Initialization methods -----
+   !-----------------------------------------
+   !-----     PRIMAL AFFINE SCALING     -----
+   !-----------------------------------------
 
-   !> Auxiliary function maximization (default).
-   type, extends(abstract_feasible_initialization), public :: auxiliary_function
-   end type auxiliary_function
+   type, extends(abstract_cvx_solver), public :: PrimalAffineScaling
+      class(abstract_feasible_initialization), allocatable :: initialization
+      integer(ilp) :: maxiter
+      real(ilp) :: tolerance
+   end type PrimalAffineScaling
+
+   !----- High-level interface -----
+
+   interface solve
+      type(lp_solution) module function solve_with_dense_simplex(problem, alg) result(solution)
+         implicit none(external)
+         type(dense_lp_type), intent(inout) :: problem
+         type(PrimalSimplex), intent(in) :: alg
+      end function solve_with_dense_simplex
+   end interface
+   public :: solve
 
 contains
 
@@ -151,14 +164,13 @@ contains
    !-----     DENSE LINEAR PROGRAMS     -----
    !-----------------------------------------
 
-   module procedure assemble_dense_lp
-   integer(ilp) :: m, n
-    !! Number of constraints and number of variables.
-   integer(ilp) :: offset
+   module procedure create_dense_linear_program
+   integer(ilp) :: n
+    !! Number of variables.
 
-   n = size(c)  ! Number of variables.
+   n = size(c); problem%c = c
 
-   !> Sanity checks.
+   !> Sanity check.
    call assert(assertion=(present(Aleq) .and. present(bleq)) .or. (.not. present(Aleq) .and. .not. present(bleq)), &
                description="Specification of <= constraints incomplete. Either Aleq or bleq is missing.")
    call assert(assertion=(present(Ageq) .and. present(bgeq)) .or. (.not. present(Ageq) .and. .not. present(bgeq)), &
@@ -166,74 +178,46 @@ contains
    call assert(assertion=(present(Aeq) .and. present(beq)) .or. (.not. present(Aeq) .and. .not. present(beq)), &
                description="Specification of == constraints incomplete. Either Aleq or bleq is missing.")
 
-   associate (nleq => problem%nleq, ngeq => problem%ngeq, neq => problem%neq)
-      nleq = 0; ngeq = 0; neq = 0
+   !> Consistency of the <= inequalities.
+   if (present(Aleq)) then
+      !> Check dimensions.
+      call assert(assertion=size(Aleq, 1) == size(bleq), &
+                  description="Aleq and bleq have an inconsistent number of rows.")
+      call assert(assertion=size(Aleq, 2) == n, &
+                  description="Number of columns of Aleq is inconsistent with the number of variables (size(c)).")
+      call assert(assertion=all(bleq >= -eps), &
+                  description="Right-hand side vector bleq needs to be non-negative.")
 
-      !> Consistency of the <= inequalities.
-      if (present(Aleq)) then
-         !> Check dimensions.
-         call assert(assertion=size(Aleq, 1) == size(bleq), &
-                     description="Aleq and bleq have an inconsistent number of rows.")
-         call assert(assertion=size(Aleq, 2) == n, &
-                     description="Number of columns of Aleq is inconsistent with the number of variables (size(c)).")
-         call assert(assertion=all(bleq >= -eps), &
-                     description="Right-hand side vector bleq needs to be non-negative.")
-         !> Number of <= constraints.
-         nleq = size(Aleq, 1)
-      end if
+      !> If all good, allocate arrays.
+      problem%Aleq = Aleq; problem%bleq = bleq
+   end if
 
-      !> Consistency of the >= inequalities.
-      if (present(Ageq)) then
-         !> Check dimensions.
-         call assert(assertion=size(Ageq, 1) == size(bgeq), &
-                     description="Ageq and bgeq have an inconsistent number of rows.")
-         call assert(assertion=size(Ageq, 2) == n, &
-                     description="Number of columns of Ageq is inconsistent with the number of variables (size(c)).")
-         call assert(assertion=all(bgeq >= -eps), &
-                     description="Right-hand side vector bgeq needs to be non-negative.")
-         !> Number of >= constraints.
-         ngeq = size(Ageq, 1)
-      end if
+   !> Consistency of the >= inequalities.
+   if (present(Ageq)) then
+      !> Check dimensions.
+      call assert(assertion=size(Ageq, 1) == size(bgeq), &
+                  description="Ageq and bgeq have an inconsistent number of rows.")
+      call assert(assertion=size(Ageq, 2) == n, &
+                  description="Number of columns of Ageq is inconsistent with the number of variables (size(c)).")
+      call assert(assertion=all(bgeq >= -eps), &
+                  description="Right-hand side vector bgeq needs to be non-negative.")
 
-      !> Consistency of the == inequalities.
-      if (present(Aeq)) then
-         !> Check dimensions.
-         call assert(assertion=size(Aeq, 1) == size(beq), &
-                     description="Aeq and beq have an inconsistent number of rows.")
-         call assert(assertion=size(Aeq, 2) == n, &
-                     description="Number of columns of Aeq is inconsistent with the number of variables (size(c)).")
-         call assert(assertion=all(beq >= -eps), &
-                     description="Right-hand side vector beq needs to be non-negative.")
-         !> Number of <= constraints.
-         neq = size(Aeq, 1)
-      end if
+      !> If all good, allocate arrays.
+      problem%Ageq = Ageq; problem%bgeq = bgeq
+   end if
 
-      !> Total number of constraints.
-      m = nleq + ngeq + neq
+   !> Consistency of the == inequalities.
+   if (present(Aeq)) then
+      !> Check dimensions.
+      call assert(assertion=size(Aeq, 1) == size(beq), &
+                  description="Aeq and beq have an inconsistent number of rows.")
+      call assert(assertion=size(Aeq, 2) == n, &
+                  description="Number of columns of Aeq is inconsistent with the number of variables (size(c)).")
+      call assert(assertion=all(beq >= -eps), &
+                  description="Right-hand side vector beq needs to be non-negative.")
 
-      !----- Construct the Simplex tableau -----
-      allocate (problem%A(m + 2, n + 1), source=0.0_dp); problem%A(1, 2:) = c   ! Cost function.
-      offset = 1
-
-      !> Add the <= inequalities.
-      if (present(Aleq)) then
-         problem%A(offset + 1:nleq + offset, 2:) = -Aleq
-         problem%A(offset + 1:nleq + offset, 1) = bleq
-         ! offset = offset + 1
-      end if
-
-      !> Add the >= inequalities.
-      if (present(Ageq)) then
-         problem%A(nleq + offset + 1:nleq + ngeq + offset, 2:) = -Ageq
-         problem%A(nleq + offset + 1:nleq + ngeq + offset, 1) = bgeq
-         ! offset = offset + 1
-      end if
-
-      !> Add the == constraints.
-      if (present(Aeq)) then
-         problem%A(nleq + ngeq + offset + 1:m + 1, 2:) = -Aeq
-         problem%A(nleq + ngeq + offset + 1:m + 1, 1) = beq
-      end if
-   end associate
-   end procedure assemble_dense_lp
+      !> If all good, allocate arrays.
+      problem%Aeq = Aeq; problem%beq = beq
+   end if
+   end procedure create_dense_linear_program
 end module lightconvex_lp

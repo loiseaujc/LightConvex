@@ -89,7 +89,7 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="<p> 9.1% of total for derived types.</p>Including implementation: 4 statements, 11.1% of total for derived types.">4 statements</a>
+                 title="<p>11.8% of total for derived types.</p>Including implementation: 6 statements, 14.0% of total for derived types.">6 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -131,10 +131,13 @@
       </a>
       <div id="vars-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../type/dense_lp_type.html#variable-a~7">A</a>
-            <a class="list-group-item" href="../type/dense_lp_type.html#variable-neq~3">neq</a>
-            <a class="list-group-item" href="../type/dense_lp_type.html#variable-ngeq~3">ngeq</a>
-            <a class="list-group-item" href="../type/dense_lp_type.html#variable-nleq~3">nleq</a>
+            <a class="list-group-item" href="../type/dense_lp_type.html#variable-aeq">Aeq</a>
+            <a class="list-group-item" href="../type/dense_lp_type.html#variable-ageq">Ageq</a>
+            <a class="list-group-item" href="../type/dense_lp_type.html#variable-aleq">Aleq</a>
+            <a class="list-group-item" href="../type/dense_lp_type.html#variable-beq">beq</a>
+            <a class="list-group-item" href="../type/dense_lp_type.html#variable-bgeq">bgeq</a>
+            <a class="list-group-item" href="../type/dense_lp_type.html#variable-bleq">bleq</a>
+            <a class="list-group-item" href="../type/dense_lp_type.html#variable-c">c</a>
         </div>
       </div>
     </div>
@@ -290,7 +293,7 @@ large graphs.</div>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~7"></span>
+              <span class="anchor" id="variable-aeq"></span>
               real(kind=dp),
             </td>
               <td>public,</td>
@@ -298,62 +301,117 @@ large graphs.</div>
               allocatable
             </td>
             <td>::</td>
-            <td><strong>A</strong>(:,:)</td>
+            <td><strong>Aeq</strong>(:,:)</td>
                 <td></td>
                 <td></td>
             <td>
-                <p>Simplex tableau.</p>
+                <p>== equality constraints.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-neq~3"></span>
-              integer(kind=ilp),
+              <span class="anchor" id="variable-ageq"></span>
+              real(kind=dp),
             </td>
-              <td>public</td>
+              <td>public,</td>
             <td>
-              
+              allocatable
             </td>
             <td>::</td>
-            <td><strong>neq</strong></td>
+            <td><strong>Ageq</strong>(:,:)</td>
                 <td></td>
                 <td></td>
             <td>
-                <p>Number of constraints of each type.</p>
+                <blockquote>
+<p>= inequality constraints.</p>
+</blockquote>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ngeq~3"></span>
-              integer(kind=ilp),
+              <span class="anchor" id="variable-aleq"></span>
+              real(kind=dp),
             </td>
-              <td>public</td>
+              <td>public,</td>
             <td>
-              
+              allocatable
             </td>
             <td>::</td>
-            <td><strong>ngeq</strong></td>
+            <td><strong>Aleq</strong>(:,:)</td>
                 <td></td>
                 <td></td>
             <td>
-                <p>Number of constraints of each type.</p>
+                <p>&lt;= inequality constraints.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-nleq~3"></span>
-              integer(kind=ilp),
+              <span class="anchor" id="variable-beq"></span>
+              real(kind=dp),
             </td>
-              <td>public</td>
+              <td>public,</td>
             <td>
-              
+              allocatable
             </td>
             <td>::</td>
-            <td><strong>nleq</strong></td>
+            <td><strong>beq</strong>(:)</td>
                 <td></td>
                 <td></td>
             <td>
-                <p>Number of constraints of each type.</p>
+                <p>== equality constraints.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-bgeq"></span>
+              real(kind=dp),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>bgeq</strong>(:)</td>
+                <td></td>
+                <td></td>
+            <td>
+                <blockquote>
+<p>= inequality constraints.</p>
+</blockquote>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-bleq"></span>
+              real(kind=dp),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>bleq</strong>(:)</td>
+                <td></td>
+                <td></td>
+            <td>
+                <p>&lt;= inequality constraints.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-c"></span>
+              real(kind=dp),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>c</strong>(:)</td>
+                <td></td>
+                <td></td>
+            <td>
+                <p>Linear cost function</p>
             </td>
         </tr>
     </tbody>
@@ -441,10 +499,14 @@ large graphs.</div>
     <section>
     <h3><span class="anchor" id="src"></span>Source Code</h3>
     <div class="hl codehilite"><pre><span></span><span class="w">   </span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">extends</span><span class="p">(</span><span class="n">abstract_cvx_problem</span><span class="p">),</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">dense_lp_type</span><span class="w"></span>
-<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">A</span><span class="p">(:,</span><span class="w"> </span><span class="p">:)</span><span class="w"></span>
-<span class="w">        </span><span class="c">!! Simplex tableau.</span>
-<span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="n">ilp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">nleq</span><span class="p">,</span><span class="w"> </span><span class="n">ngeq</span><span class="p">,</span><span class="w"> </span><span class="n">neq</span><span class="w"></span>
-<span class="w">        </span><span class="c">!! Number of constraints of each type.</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">c</span><span class="p">(:)</span><span class="w"></span>
+<span class="w">        </span><span class="c">!! Linear cost function</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Aleq</span><span class="p">(:,</span><span class="w"> </span><span class="p">:),</span><span class="w"> </span><span class="n">bleq</span><span class="p">(:)</span><span class="w"></span>
+<span class="w">        </span><span class="c">!! &lt;= inequality constraints.</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Ageq</span><span class="p">(:,</span><span class="w"> </span><span class="p">:),</span><span class="w"> </span><span class="n">bgeq</span><span class="p">(:)</span><span class="w"></span>
+<span class="w">        </span><span class="c">!! &gt;= inequality constraints.</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">Aeq</span><span class="p">(:,</span><span class="w"> </span><span class="p">:),</span><span class="w"> </span><span class="n">beq</span><span class="p">(:)</span><span class="w"></span>
+<span class="w">        </span><span class="c">!! == equality constraints.</span>
 <span class="w">   </span><span class="k">end type </span><span class="n">dense_lp_type</span><span class="w"></span>
 </pre></div>
 
@@ -468,7 +530,7 @@ large graphs.</div>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-09-08 06:25 +0000             </p>
+ on 2025-09-08 12:43 +0000             </p>
           </div>
         </div>
         <br>

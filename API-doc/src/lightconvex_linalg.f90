@@ -24,7 +24,7 @@ module lightconvex_linalg
    end type
 
    interface QR
-      type(qr_type) module function qr_fact(A) result(F)
+      pure type(qr_type) module function qr_fact(A) result(F)
          implicit none(external)
          real(dp), intent(in) :: A(:, :)
         !! Matrix to be factorized.
@@ -33,7 +33,7 @@ module lightconvex_linalg
    public :: QR
 
    interface factmv
-      module subroutine qrmv(A, x, y, trans)
+      pure module subroutine qrmv(A, x, y, trans)
          implicit none(external)
          type(qr_type), intent(inout) :: A
          real(dp), intent(in) :: x(:)
