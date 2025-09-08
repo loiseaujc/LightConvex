@@ -7,6 +7,7 @@ module lightconvex_lp
                                    abstract_cvx_solver, &
                                    abstract_cvx_solution, &
                                    is_optimal, is_feasible, is_unbounded
+   use lightconvex_linalg, only: qr_type, QR
    implicit none(external)
    private
 
