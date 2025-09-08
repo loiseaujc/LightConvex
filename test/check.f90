@@ -20,6 +20,7 @@ program check
 
    ! Run all the test suites.
    do i = 1, size(testsuites)
+      write (*, *)
       write (*, *) "-------------------------------"
       write (error_unit, fmt) "Testing :", testsuites(i)%name
       write (*, *) "-------------------------------"
