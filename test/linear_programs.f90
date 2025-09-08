@@ -35,13 +35,13 @@ contains
    !
    ! The solution reported in the reference is given by
    ! x = [0.0, 3.33, 4.74, 0.95] (up to two significant digits)
-   ! along with the slacks s = [730.55, 0, 0, 0]. The corresponding
+   ! along with the slacks s = [730.55, 0, 0]. The corresponding
    ! optimal cost is c = 17.03
    subroutine test_num_recipes_problem(error)
       type(error_type), allocatable, intent(out) :: error
       integer(ilp), parameter :: m = 4, n = 4, maxiter = 10
       integer(ilp), parameter :: nleq = 2, ngeq = 1, neq = 1
-      real(dp) :: xref(n), sref(m), cost_ref
+      real(dp) :: xref(n), sref(nleq + ngeq), cost_ref
       real(dp) :: c(n)
       real(dp) :: Aleq(nleq, n), bleq(nleq)
       real(dp) :: Ageq(ngeq, n), bgeq(ngeq)
@@ -52,7 +52,7 @@ contains
       !> Reference solution.
       cost_ref = 17.03_dp
       xref = [0.0_dp, 3.33_dp, 4.74_dp, 0.95_dp]
-      sref = [730.55_dp, 0.0_dp, 0.0_dp, 0.0_dp]
+      sref = [730.55_dp, 0.0_dp, 0.0_dp]
 
       !> Cost vector.
       c = [1.0_dp, 1.0_dp, 3.0_dp, -0.5_dp]
@@ -93,7 +93,12 @@ contains
       !-----------------------------------------
 
       !> Solve the problem.
-      solution = solve(problem, alg=PrimalAffineScaling())
+      block
+         real(dp) :: x0(n + nleq + ngeq)
+         x0(:n) = solution%x; x0(n + 1:) = solution%s
+         print *, "x0 :", x0
+         solution = solve(problem, x0, alg=PrimalAffineScaling())
+      end block
 
    end subroutine test_num_recipes_problem
 
@@ -113,7 +118,7 @@ contains
       type(error_type), allocatable, intent(out) :: error
       integer(ilp), parameter :: m = 2, n = 3, maxiter = 10
       integer(ilp), parameter :: nleq = 2, ngeq = 0, neq = 0
-      real(dp) :: xref(n), sref(m), cost_ref
+      real(dp) :: xref(n), sref(nleq), cost_ref
       real(dp) :: c(n)
       real(dp) :: Aleq(nleq, n), bleq(nleq)
       type(dense_lp_type) :: problem
@@ -454,7 +459,7 @@ contains
       type(error_type), allocatable, intent(out) :: error
       integer(ilp), parameter :: m = 3, n = 2, maxiter = 10
       integer(ilp), parameter :: nleq = 3, ngeq = 0, neq = 0
-      real(dp) :: xref(n), sref(m), cost_ref
+      real(dp) :: xref(n), sref(nleq), cost_ref
       real(dp) :: c(n), Aleq(nleq, n), bleq(nleq)
       type(dense_lp_type) :: problem
       type(lp_solution) :: solution
