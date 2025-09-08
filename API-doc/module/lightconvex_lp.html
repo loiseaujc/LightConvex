@@ -89,7 +89,7 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="20.0% of total for modules and submodules.">109 statements</a>
+                 title="21.9% of total for modules and submodules.">122 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -137,6 +137,7 @@
       </a>
       <div id="inters-0" class="collapse">
         <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/lightconvex_lp.html#interface-primalaffinescaling">PrimalAffineScaling</a>
             <a class="list-group-item" href="../module/lightconvex_lp.html#interface-primalsimplex">PrimalSimplex</a>
             <a class="list-group-item" href="../module/lightconvex_lp.html#interface-linear_program">linear_program</a>
             <a class="list-group-item" href="../module/lightconvex_lp.html#interface-simplex">simplex</a>
@@ -197,11 +198,11 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item">assert_m</li>
-                  <li class="list-inline-item">stdlib_optval</li>
-                  <li class="list-inline-item"><a href='lightconvex_constants.html'>lightconvex_constants</a></li>
                   <li class="list-inline-item"><a href='lightconvex_linalg.html'>lightconvex_linalg</a></li>
+                  <li class="list-inline-item"><a href='lightconvex_constants.html'>lightconvex_constants</a></li>
+                  <li class="list-inline-item">assert_m</li>
                   <li class="list-inline-item"><a href='lightconvex_abstract.html'>lightconvex_abstract</a></li>
+                  <li class="list-inline-item">stdlib_optval</li>
               </ul>
             </li>
             <li class="list-group-item">
@@ -564,6 +565,74 @@ large graphs.</div>
           <h2>Interfaces</h2>
               <div class="card">
     <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-primalaffinescaling"></span>
+      <h3>public        interface <a href='../interface/primalaffinescaling.html'>PrimalAffineScaling</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private module function initialize_primal_affine_scaling_alg(initialization, maxiter) result(alg)  
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-initialization~5"></span>
+              class(abstract_feasible_initialization),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>initialization</strong></td>
+            <td>
+                <p>Method to find an initial feasible point.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-maxiter~5"></span>
+              integer(kind=ilp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>maxiter</strong></td>
+            <td>
+                <p>Maximum number of iterations.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='../type/primalaffinescaling.html'>PrimalAffineScaling</a>)</small>
+    </h4>
+    
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
       <span class="anchor" id="interface-primalsimplex"></span>
       <h3>public        interface <a href='../interface/primalsimplex.html'>PrimalSimplex</a> 
       </h3>
@@ -599,7 +668,7 @@ large graphs.</div>
             <td>::</td>
             <td><strong>pivot</strong></td>
             <td>
-                
+                <p>Rule to choose the pivoting column.</p>
             </td>
         </tr>
         <tr>
@@ -614,7 +683,7 @@ large graphs.</div>
             <td>::</td>
             <td><strong>initialization</strong></td>
             <td>
-                
+                <p>Method to find an initial feasible point.</p>
             </td>
         </tr>
         <tr>
@@ -629,7 +698,7 @@ large graphs.</div>
             <td>::</td>
             <td><strong>maxiter</strong></td>
             <td>
-                
+                <p>Maximum number of iterations in the simplex method.</p>
             </td>
         </tr>
     </tbody>
@@ -683,7 +752,7 @@ large graphs.</div>
             <td>::</td>
             <td><strong>c</strong>(:)</td>
             <td>
-                
+                <p>Linear cost function.</p>
             </td>
         </tr>
         <tr>
@@ -698,7 +767,7 @@ large graphs.</div>
             <td>::</td>
             <td><strong>Aleq</strong>(:,:)</td>
             <td>
-                
+                <p>&lt;= inequality constraints.</p>
             </td>
         </tr>
         <tr>
@@ -713,7 +782,7 @@ large graphs.</div>
             <td>::</td>
             <td><strong>bleq</strong>(:)</td>
             <td>
-                
+                <p>&lt;= inequality constraints.</p>
             </td>
         </tr>
         <tr>
@@ -728,7 +797,9 @@ large graphs.</div>
             <td>::</td>
             <td><strong>Ageq</strong>(:,:)</td>
             <td>
-                
+                <blockquote>
+<p>= inequality constraints.</p>
+</blockquote>
             </td>
         </tr>
         <tr>
@@ -743,7 +814,9 @@ large graphs.</div>
             <td>::</td>
             <td><strong>bgeq</strong>(:)</td>
             <td>
-                
+                <blockquote>
+<p>= inequality constraints.</p>
+</blockquote>
             </td>
         </tr>
         <tr>
@@ -758,7 +831,7 @@ large graphs.</div>
             <td>::</td>
             <td><strong>Aeq</strong>(:,:)</td>
             <td>
-                
+                <p>== equality constraints.</p>
             </td>
         </tr>
         <tr>
@@ -773,7 +846,7 @@ large graphs.</div>
             <td>::</td>
             <td><strong>beq</strong>(:)</td>
             <td>
-                
+                <p>== equality constraints.</p>
             </td>
         </tr>
     </tbody>
@@ -816,7 +889,7 @@ large graphs.</div>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~3"></span>
+              <span class="anchor" id="variable-a"></span>
               real(kind=dp),
             </td>
 <td>intent(inout)</td>
@@ -906,7 +979,7 @@ large graphs.</div>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~3"></span>
+              <span class="anchor" id="variable-info"></span>
               integer(kind=ilp),
             </td>
 <td>intent(out)</td>
@@ -970,6 +1043,79 @@ large graphs.</div>
     <ul class="list-group">
           <li class="list-group-item">
                 <h3>
+    private module function solve_with_dense_PAS(problem, x0, alg) result(solution)  
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-problem~6"></span>
+              type(<a href='../type/dense_lp_type.html'>dense_lp_type</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>problem</strong></td>
+            <td>
+                <p>Problem to solve.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x0"></span>
+              real(kind=dp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x0</strong></td>
+            <td>
+                <p>Initial guess for warm starting.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-alg~4"></span>
+              type(<a href='../type/primalaffinescaling.html'>PrimalAffineScaling</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alg</strong></td>
+            <td>
+                <p>Algorithm used.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='../type/lp_solution.html'>lp_solution</a>)</small>
+    </h4>
+    
+
+          </li>
+          <li class="list-group-item">
+                <h3>
     private module function solve_with_dense_simplex(problem, alg) result(solution)  
 
     </h3>
@@ -988,7 +1134,7 @@ large graphs.</div>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-problem~2"></span>
+              <span class="anchor" id="variable-problem~5"></span>
               type(<a href='../type/dense_lp_type.html'>dense_lp_type</a>),
             </td>
 <td>intent(inout)</td>
@@ -998,12 +1144,12 @@ large graphs.</div>
             <td>::</td>
             <td><strong>problem</strong></td>
             <td>
-                
+                <p>Problem to solve.</p>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-alg~2"></span>
+              <span class="anchor" id="variable-alg~3"></span>
               type(<a href='../type/primalsimplex.html'>PrimalSimplex</a>),
             </td>
 <td>intent(in)</td>
@@ -1013,7 +1159,7 @@ large graphs.</div>
             <td>::</td>
             <td><strong>alg</strong></td>
             <td>
-                
+                <p>Algorithm used.</p>
             </td>
         </tr>
     </tbody>
@@ -1090,7 +1236,7 @@ large graphs.</div>
                 <td></td>
                 <td></td>
             <td>
-
+<p>Method to find an initial feasible point.</p>
             </td>
         </tr>
         <tr>
@@ -1107,30 +1253,30 @@ large graphs.</div>
                 <td></td>
                 <td></td>
             <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-tolerance"></span>
-              real(kind=ilp),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>tolerance</strong></td>
-                <td></td>
-                <td></td>
-            <td>
-
+<p>Maximum number of iterations in the PAS method.</p>
             </td>
         </tr>
     </tbody>
   </table>
 
 
+        <h4>Constructor</h4>
+          
+        <table class="table table-striped varlist">
+          <tbody>
+                <tr>
+                  <td>
+                        private
+
+                    module
+                    function
+                    <strong>initialize_primal_affine_scaling_alg</strong>
+                    (initialization, maxiter)
+                  </td>
+                  <td></td>
+                </tr>
+          </tbody>
+        </table>
 
 
     </div>
@@ -1173,7 +1319,7 @@ large graphs.</div>
                 <td></td>
                 <td></td>
             <td>
-
+<p>Method to find an initial feasible point.</p>
             </td>
         </tr>
         <tr>
@@ -1190,7 +1336,7 @@ large graphs.</div>
                 <td></td>
                 <td></td>
             <td>
-
+<p>Maximum number of iterations in the simplex method.</p>
             </td>
         </tr>
         <tr>
@@ -1207,7 +1353,7 @@ large graphs.</div>
                 <td></td>
                 <td></td>
             <td>
-
+<p>Rule to choose the pivoting column.</p>
             </td>
         </tr>
     </tbody>
@@ -1474,7 +1620,7 @@ large graphs.</div>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-t~3"></span>
+              <span class="anchor" id="variable-t"></span>
               real(kind=dp),
             </td>
               <td>public,</td>
@@ -1491,7 +1637,7 @@ large graphs.</div>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~2"></span>
+              <span class="anchor" id="variable-x"></span>
               real(kind=dp),
             </td>
               <td>public,</td>
@@ -1508,7 +1654,7 @@ large graphs.</div>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-y~2"></span>
+              <span class="anchor" id="variable-y"></span>
               real(kind=dp),
             </td>
               <td>public,</td>
@@ -1580,7 +1726,7 @@ If all good, allocate arrays.</p>
             <td>::</td>
             <td><strong>c</strong>(:)</td>
             <td>
-
+<p>Linear cost function.</p>
             </td>
         </tr>
         <tr>
@@ -1595,7 +1741,7 @@ If all good, allocate arrays.</p>
             <td>::</td>
             <td><strong>Aleq</strong>(:,:)</td>
             <td>
-
+<p>&lt;= inequality constraints.</p>
             </td>
         </tr>
         <tr>
@@ -1610,7 +1756,7 @@ If all good, allocate arrays.</p>
             <td>::</td>
             <td><strong>bleq</strong>(:)</td>
             <td>
-
+<p>&lt;= inequality constraints.</p>
             </td>
         </tr>
         <tr>
@@ -1625,7 +1771,7 @@ If all good, allocate arrays.</p>
             <td>::</td>
             <td><strong>Ageq</strong>(:,:)</td>
             <td>
-
+<p>= inequality constraints.</p><a href="../interface/linear_program.html#variable-ageq~2" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
@@ -1640,7 +1786,7 @@ If all good, allocate arrays.</p>
             <td>::</td>
             <td><strong>bgeq</strong>(:)</td>
             <td>
-
+<p>= inequality constraints.</p><a href="../interface/linear_program.html#variable-bgeq~2" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
@@ -1655,7 +1801,7 @@ If all good, allocate arrays.</p>
             <td>::</td>
             <td><strong>Aeq</strong>(:,:)</td>
             <td>
-
+<p>== equality constraints.</p>
             </td>
         </tr>
         <tr>
@@ -1670,7 +1816,7 @@ If all good, allocate arrays.</p>
             <td>::</td>
             <td><strong>beq</strong>(:)</td>
             <td>
-
+<p>== equality constraints.</p>
             </td>
         </tr>
     </tbody>
@@ -1704,7 +1850,7 @@ If all good, allocate arrays.</p>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-09-08 12:43 +0000             </p>
+ on 2025-09-08 15:24 +0000             </p>
           </div>
         </div>
         <br>

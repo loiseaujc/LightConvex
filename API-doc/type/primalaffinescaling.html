@@ -89,7 +89,7 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="<p> 9.8% of total for derived types.</p>Including implementation: 5 statements, 11.6% of total for derived types.">5 statements</a>
+                 title="<p>19.3% of total for derived types.</p>Including implementation: 4 statements,  9.5% of total for derived types.">11 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -133,13 +133,23 @@
         <div class="list-group list-group-flush">
             <a class="list-group-item" href="../type/primalaffinescaling.html#variable-initialization~4">initialization</a>
             <a class="list-group-item" href="../type/primalaffinescaling.html#variable-maxiter~4">maxiter</a>
-            <a class="list-group-item" href="../type/primalaffinescaling.html#variable-tolerance">tolerance</a>
         </div>
       </div>
     </div>
 
   
-  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#cons-0"
+         aria-expanded="false" aria-controls="cons-0">
+         <h4 class="card-header bg-primary text-white">Constructor</h4>
+      </a>
+      <div id="cons-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../type/primalaffinescaling.html#interface-primalaffinescaling">PrimalAffineScaling</a>
+        </div>
+      </div>
+    </div>
+
   
   
   
@@ -303,7 +313,7 @@ large graphs.</div>
                 <td></td>
                 <td></td>
             <td>
-                
+                <p>Method to find an initial feasible point.</p>
             </td>
         </tr>
         <tr>
@@ -320,24 +330,7 @@ large graphs.</div>
                 <td></td>
                 <td></td>
             <td>
-                
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-tolerance"></span>
-              real(kind=ilp),
-            </td>
-              <td>public</td>
-            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>tolerance</strong></td>
-                <td></td>
-                <td></td>
-            <td>
-                
+                <p>Maximum number of iterations in the PAS method.</p>
             </td>
         </tr>
     </tbody>
@@ -346,6 +339,78 @@ large graphs.</div>
     </section>
     <br>
     
+      <section>
+        <h2>Constructor</h2>
+            <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-primalaffinescaling"></span>
+      <h3>public        interface <a href='../interface/primalaffinescaling.html'>PrimalAffineScaling</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private module function initialize_primal_affine_scaling_alg(initialization, maxiter) result(alg)  
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-initialization~5"></span>
+              class(abstract_feasible_initialization),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>initialization</strong></td>
+            <td>
+                <p>Method to find an initial feasible point.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-maxiter~5"></span>
+              integer(kind=ilp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>maxiter</strong></td>
+            <td>
+                <p>Maximum number of iterations.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='primalaffinescaling.html'>PrimalAffineScaling</a>)</small>
+    </h4>
+    
+
+          </li>
+    </ul>
+  </div>
+
+      </section>
+      <br>
 
 
 
@@ -353,8 +418,9 @@ large graphs.</div>
     <h3><span class="anchor" id="src"></span>Source Code</h3>
     <div class="hl codehilite"><pre><span></span><span class="w">   </span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">extends</span><span class="p">(</span><span class="n">abstract_cvx_solver</span><span class="p">),</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">PrimalAffineScaling</span><span class="w"></span>
 <span class="w">      </span><span class="k">class</span><span class="p">(</span><span class="n">abstract_feasible_initialization</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">initialization</span><span class="w"></span>
+<span class="w">        </span><span class="c">!! Method to find an initial feasible point.</span>
 <span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="n">ilp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">maxiter</span><span class="w"></span>
-<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">ilp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">tolerance</span><span class="w"></span>
+<span class="w">        </span><span class="c">!! Maximum number of iterations in the PAS method.</span>
 <span class="w">   </span><span class="k">end type </span><span class="n">PrimalAffineScaling</span><span class="w"></span>
 </pre></div>
 
@@ -378,7 +444,7 @@ large graphs.</div>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-09-08 12:43 +0000             </p>
+ on 2025-09-08 15:24 +0000             </p>
           </div>
         </div>
         <br>
