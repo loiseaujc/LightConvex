@@ -98,7 +98,7 @@ contains
 
    if (is_optimal(problem)) then
       !> Extract primal variables and slacks from the tableau.
-      allocate (solution%x(n), source=0.0_dp); allocate (solution%s(m), source=0.0_dp)
+      allocate (solution%x(n), source=0.0_dp); allocate (solution%s(nleq + ngeq), source=0.0_dp)
 
       do i = 1, m
          if (iposv(i) <= n) solution%x(iposv(i)) = tableau(i + 1, 1)
