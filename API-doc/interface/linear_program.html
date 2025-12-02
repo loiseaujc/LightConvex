@@ -89,19 +89,19 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="<p> 7.4% of total for procedures.</p>Including implementation: 9 statements,  7.4% of total for procedures.">9 statements</a>
+                 title="<p> 8.3% of total for procedures.</p>Including implementation: 9 statements,  8.3% of total for procedures.">9 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/lighthconvex_linearprograms.f90"> Source File</a>
+              <a href="../src/lightconvex_linear_programs.f90"> Source File</a>
             </li>
         </ul>
       </div>
       <div class="col">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb justify-content-end mb-0">
-                <li class="breadcrumb-item"><a href='../sourcefile/lighthconvex_linearprograms.f90.html'>lighthconvex_linearprograms.f90</a></li>
+                <li class="breadcrumb-item"><a href='../sourcefile/lightconvex_linear_programs.f90.html'>lightconvex_linear_programs.f90</a></li>
                 <li class="breadcrumb-item"><a href='../module/lightconvex_lp.html'>lightconvex_lp</a></li>
             <li class="breadcrumb-item active" aria-current="page">linear_program</li>
           </ol>
@@ -141,7 +141,7 @@
       </a>
       <div id="funcs-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../interface/linear_program.html#proc-create_dense_linear_program">create_dense_linear_program</a>
+            <a class="list-group-item" href="../interface/linear_program.html#proc-assemble_dense_lp">assemble_dense_lp</a>
         </div>
       </div>
     </div>
@@ -166,8 +166,8 @@
 
         <h2>Functions</h2>
             <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-create_dense_linear_program"></span> <h3>private module function create_dense_linear_program(c, Aleq, bleq, Ageq, bgeq, Aeq, beq) result(problem)  
-    <a href="../proc/create_dense_linear_program.html"><button type="button" class="btn btn-info depwarn">Implementation &rarr;</button></a>
+    <div class="card-header codesum"><span class="anchor" id="proc-assemble_dense_lp"></span> <h3>private module function assemble_dense_lp(c, Aleq, bleq, Ageq, bgeq, Aeq, beq) result(problem)  
+    <a href="../proc/assemble_dense_lp.html"><button type="button" class="btn btn-info depwarn">Implementation &rarr;</button></a>
 </h3></div>
     <div class="card-body">
         
@@ -185,7 +185,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-c~2"></span>
+              <span class="anchor" id="variable-c"></span>
               real(kind=dp),
             </td>
 <td>intent(in)</td>
@@ -195,12 +195,12 @@
             <td>::</td>
             <td><strong>c</strong>(:)</td>
             <td>
-                <p>Linear cost function.</p>
+                
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-aleq~2"></span>
+              <span class="anchor" id="variable-aleq"></span>
               real(kind=dp),
             </td>
 <td>intent(in),</td>
@@ -210,12 +210,12 @@
             <td>::</td>
             <td><strong>Aleq</strong>(:,:)</td>
             <td>
-                <p>&lt;= inequality constraints.</p>
+                
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-bleq~2"></span>
+              <span class="anchor" id="variable-bleq"></span>
               real(kind=dp),
             </td>
 <td>intent(in),</td>
@@ -225,12 +225,12 @@
             <td>::</td>
             <td><strong>bleq</strong>(:)</td>
             <td>
-                <p>&lt;= inequality constraints.</p>
+                
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ageq~2"></span>
+              <span class="anchor" id="variable-ageq"></span>
               real(kind=dp),
             </td>
 <td>intent(in),</td>
@@ -240,14 +240,12 @@
             <td>::</td>
             <td><strong>Ageq</strong>(:,:)</td>
             <td>
-                <blockquote>
-<p>= inequality constraints.</p>
-</blockquote>
+                
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-bgeq~2"></span>
+              <span class="anchor" id="variable-bgeq"></span>
               real(kind=dp),
             </td>
 <td>intent(in),</td>
@@ -257,14 +255,12 @@
             <td>::</td>
             <td><strong>bgeq</strong>(:)</td>
             <td>
-                <blockquote>
-<p>= inequality constraints.</p>
-</blockquote>
+                
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-aeq~2"></span>
+              <span class="anchor" id="variable-aeq"></span>
               real(kind=dp),
             </td>
 <td>intent(in),</td>
@@ -274,12 +270,12 @@
             <td>::</td>
             <td><strong>Aeq</strong>(:,:)</td>
             <td>
-                <p>== equality constraints.</p>
+                
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-beq~2"></span>
+              <span class="anchor" id="variable-beq"></span>
               real(kind=dp),
             </td>
 <td>intent(in),</td>
@@ -289,7 +285,7 @@
             <td>::</td>
             <td><strong>beq</strong>(:)</td>
             <td>
-                <p>== equality constraints.</p>
+                
             </td>
         </tr>
     </tbody>
@@ -323,7 +319,7 @@
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-11-24 09:27 +0000             </p>
+ on 2025-12-02 07:28 +0000             </p>
           </div>
         </div>
         <br>

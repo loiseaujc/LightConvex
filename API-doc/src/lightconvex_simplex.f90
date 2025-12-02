@@ -3,16 +3,6 @@ submodule(lightconvex_lp) lightconvex_simplex
    use stdlib_linalg, only: outer_product
    use stdlib_intrinsics, only: sum => stdlib_sum
    implicit none(external)
-
-   interface to_simplex_tableau
-      pure module subroutine to_dense_simplex_tableau(problem, tableau, nleq, ngeq, neq)
-         implicit none(external)
-         type(dense_lp_type), intent(in) :: problem
-         real(dp), allocatable, intent(out) :: tableau(:, :)
-         integer(ilp), intent(out) :: nleq, ngeq, neq
-      end subroutine to_dense_simplex_tableau
-   end interface
-
 contains
    !============================================
    !============================================
@@ -21,48 +11,6 @@ contains
    !=====                                  =====
    !============================================
    !============================================
-
-   !-------------------------------------
-   !-----     UTILITY FUNCTIONS     -----
-   !-------------------------------------
-
-   module procedure to_dense_simplex_tableau
-   integer(ilp) :: m, n
-    !! Number of constraints and number of variables.
-   integer(ilp) :: offset
-
-   n = size(problem%c)  ! Number of variables.
-   nleq = 0; if (allocated(problem%Aleq)) nleq = size(problem%Aleq, 1)
-   ngeq = 0; if (allocated(problem%Ageq)) ngeq = size(problem%Ageq, 1)
-   neq = 0; if (allocated(problem%Aeq)) neq = size(problem%Aeq, 1)
-
-   !> Total number of constraints.
-   m = nleq + ngeq + neq
-
-   !----- Construct the Simplex tableau -----
-   allocate (tableau(m + 2, n + 1), source=0.0_dp); tableau(1, 2:) = problem%c   ! Cost function.
-   offset = 1
-
-   !> Add the <= inequalities.
-   if (allocated(problem%Aleq)) then
-      tableau(offset + 1:nleq + offset, 2:) = -problem%Aleq
-      tableau(offset + 1:nleq + offset, 1) = problem%bleq
-      ! offset = offset + 1
-   end if
-
-   !> Add the >= inequalities.
-   if (allocated(problem%Ageq)) then
-      tableau(nleq + offset + 1:nleq + ngeq + offset, 2:) = -problem%Ageq
-      tableau(nleq + offset + 1:nleq + ngeq + offset, 1) = problem%bgeq
-      ! offset = offset + 1
-   end if
-
-   !> Add the == constraints.
-   if (allocated(problem%Aeq)) then
-      tableau(nleq + ngeq + offset + 1:m + 1, 2:) = -problem%Aeq
-      tableau(nleq + ngeq + offset + 1:m + 1, 1) = problem%beq
-   end if
-   end procedure to_dense_simplex_tableau
 
    !----------------------------------------
    !-----     HIGH-LEVEL INTERFACE     -----
@@ -75,22 +23,18 @@ contains
    end procedure initialize_primal_simplex_alg
 
    module procedure solve_with_dense_simplex
-   real(dp), allocatable :: tableau(:, :)
    integer(ilp), allocatable :: iposv(:)
-   integer(ilp) :: i, m, n, info, nleq, ngeq, neq
-
-   !> Convert problem to simplex tableau form.
-   call to_simplex_tableau(problem, tableau, nleq, ngeq, neq)
+   integer(ilp) :: i, m, n, info
 
    !> Problem dimension.
-   m = size(tableau, 1) - 2
-   n = size(tableau, 2) - 1
+   m = size(problem%A, 1) - 2
+   n = size(problem%A, 2) - 1
 
    !> Allocate variables.
    allocate (iposv(m), source=0)
 
    !> Solve the problem.
-   call simplex(tableau, nleq, ngeq, neq, iposv, &
+   call simplex(problem%A, problem%nleq, problem%ngeq, problem%neq, iposv, &
                 alg%maxiter, info, alg%pivot, alg%initialization)
 
    !> Problem's status.
@@ -98,14 +42,14 @@ contains
 
    if (is_optimal(problem)) then
       !> Extract primal variables and slacks from the tableau.
-      allocate (solution%x(n), source=0.0_dp); allocate (solution%s(nleq + ngeq), source=0.0_dp)
+      allocate (solution%x(n), source=0.0_dp); allocate (solution%s(m), source=0.0_dp)
 
       do i = 1, m
-         if (iposv(i) <= n) solution%x(iposv(i)) = tableau(i + 1, 1)
-         if (iposv(i) > n) solution%s(iposv(i) - n) = tableau(i + 1, 1)
+         if (iposv(i) <= n) solution%x(iposv(i)) = problem%A(i + 1, 1)
+         if (iposv(i) > n) solution%s(iposv(i) - n) = problem%A(i + 1, 1)
       end do
 
-      solution%objective_value = tableau(1, 1)
+      solution%objective_value = problem%A(1, 1)
    end if
    end procedure solve_with_dense_simplex
 
