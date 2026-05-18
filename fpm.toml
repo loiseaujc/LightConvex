@@ -22,3 +22,4 @@ source-form = "free"
 [dependencies]
 stdlib = "*"
 assert = {git="https://github.com/BerkeleyLab/assert.git"}
+LightKrylov = {git="https://github.com/nekStab/LightKrylov.git"}
