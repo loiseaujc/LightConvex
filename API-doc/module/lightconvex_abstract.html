@@ -89,7 +89,7 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="23.6% of total for modules and submodules.">145 statements</a>
+                 title="27.9% of total for modules and submodules.">182 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -155,6 +155,7 @@
             <a class="list-group-item" href="../module/lightconvex_abstract.html#type-abstract_cvx_problem">abstract_cvx_problem</a>
             <a class="list-group-item" href="../module/lightconvex_abstract.html#type-abstract_cvx_solution">abstract_cvx_solution</a>
             <a class="list-group-item" href="../module/lightconvex_abstract.html#type-abstract_cvx_solver">abstract_cvx_solver</a>
+            <a class="list-group-item" href="../module/lightconvex_abstract.html#type-abstract_hessian_rdp">abstract_hessian_rdp</a>
             <a class="list-group-item" href="../module/lightconvex_abstract.html#type-kkt_linop">kkt_linop</a>
             <a class="list-group-item" href="../module/lightconvex_abstract.html#type-kkt_vector">kkt_vector</a>
         </div>
@@ -198,9 +199,9 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item">stdlib_optval</li>
                   <li class="list-inline-item">lightkrylov</li>
                   <li class="list-inline-item"><a href='lightconvex_constants.html'>lightconvex_constants</a></li>
+                  <li class="list-inline-item">stdlib_optval</li>
               </ul>
             </li>
             <li class="list-group-item">
@@ -538,7 +539,7 @@ large graphs.</div>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-problem~4"></span>
+              <span class="anchor" id="variable-problem~2"></span>
               class(<a href='../type/abstract_cvx_problem.html'>abstract_cvx_problem</a>),
             </td>
 <td>intent(in)</td>
@@ -592,7 +593,7 @@ large graphs.</div>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-problem~3"></span>
+              <span class="anchor" id="variable-problem"></span>
               class(<a href='../type/abstract_cvx_problem.html'>abstract_cvx_problem</a>),
             </td>
 <td>intent(in)</td>
@@ -646,7 +647,7 @@ large graphs.</div>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-problem~5"></span>
+              <span class="anchor" id="variable-problem~3"></span>
               class(<a href='../type/abstract_cvx_problem.html'>abstract_cvx_problem</a>),
             </td>
 <td>intent(in)</td>
@@ -744,6 +745,75 @@ large graphs.</div>
 
               <div class="card">
     <div class="card-header codesum">
+      <span class="anchor" id="type-abstract_hessian_rdp"></span>
+      <h3>
+        type, public, abstract, extends(abstract_sym_linop_rdp)&nbsp;::&nbsp;
+        <a href='../type/abstract_hessian_rdp.html'>abstract_hessian_rdp</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Base type for Hessian matrices.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-apply_hinv"></span>
+              procedure(hinv_iface),
+            </td>
+              <td>public,</td>
+            <td>
+              pointer, nopass
+            </td>
+            <td>::</td>
+            <td><strong>apply_hinv</strong></td>
+<td>=&gt; </td>
+                <td>null()</td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>  procedure, public, pass(self) ::
+  <strong><a href='../type/abstract_hessian_rdp.html#boundprocedure-has_hinv'>has_hinv</a></strong></td>
+                  <td></td>
+              </tr>
+              <tr>
+                <td>  procedure, public, pass(self) ::
+  <strong><a href='../type/abstract_hessian_rdp.html#boundprocedure-hinv_matvec'>hinv_matvec</a></strong></td>
+                  <td></td>
+              </tr>
+              <tr>
+                <td>  procedure(hessian_matvec_iface), public, deferred, pass(self) ::
+  <strong><a href='../type/abstract_hessian_rdp.html#boundprocedure-matvec'>matvec</a></strong></td>
+                  <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum">
       <span class="anchor" id="type-kkt_linop"></span>
       <h3>
         type, public, extends(abstract_sym_linop_rdp)&nbsp;::&nbsp;
@@ -767,7 +837,7 @@ large graphs.</div>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~7"></span>
+              <span class="anchor" id="variable-a~5"></span>
               class(abstract_linop_rdp),
             </td>
               <td>public,</td>
@@ -785,7 +855,7 @@ large graphs.</div>
         <tr>
             <td>
               <span class="anchor" id="variable-h"></span>
-              class(abstract_sym_linop_rdp),
+              class(<a href='../type/abstract_hessian_rdp.html'>abstract_hessian_rdp</a>),
             </td>
               <td>public,</td>
             <td>
@@ -827,7 +897,7 @@ large graphs.</div>
           <tbody>
               <tr>
                 <td>  procedure, public, pass(self) ::
-  <strong><a href='../type/kkt_linop.html#boundprocedure-matvec'>matvec</a></strong> => kkt_matvec</td>
+  <strong><a href='../type/kkt_linop.html#boundprocedure-matvec~2'>matvec</a></strong> => kkt_matvec</td>
                   <td></td>
               </tr>
           </tbody>
@@ -860,7 +930,7 @@ large graphs.</div>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x~2"></span>
+              <span class="anchor" id="variable-x"></span>
               class(abstract_vector_rdp),
             </td>
               <td>public,</td>
@@ -877,7 +947,7 @@ large graphs.</div>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-y~2"></span>
+              <span class="anchor" id="variable-y"></span>
               class(abstract_vector_rdp),
             </td>
               <td>public,</td>
@@ -966,7 +1036,7 @@ large graphs.</div>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-problem~4"></span>
+              <span class="anchor" id="variable-problem~2"></span>
               class(<a href='../type/abstract_cvx_problem.html'>abstract_cvx_problem</a>),
             </td>
 <td>intent(in)</td>
@@ -1012,7 +1082,7 @@ large graphs.</div>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-problem~3"></span>
+              <span class="anchor" id="variable-problem"></span>
               class(<a href='../type/abstract_cvx_problem.html'>abstract_cvx_problem</a>),
             </td>
 <td>intent(in)</td>
@@ -1058,7 +1128,7 @@ large graphs.</div>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-problem~5"></span>
+              <span class="anchor" id="variable-problem~3"></span>
               class(<a href='../type/abstract_cvx_problem.html'>abstract_cvx_problem</a>),
             </td>
 <td>intent(in)</td>
@@ -1103,7 +1173,7 @@ large graphs.</div>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-self"></span>
+              <span class="anchor" id="variable-self~3"></span>
               class(<a href='../type/abstract_cvx_problem.html'>abstract_cvx_problem</a>),
             </td>
 <td>intent(inout)</td>
@@ -1157,7 +1227,7 @@ large graphs.</div>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-05-18 21:16 +0000             </p>
+ on 2026-05-19 06:35 +0000             </p>
           </div>
         </div>
         <br>

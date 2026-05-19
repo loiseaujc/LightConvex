@@ -38,11 +38,37 @@ module lightconvex_abstract
       procedure, pass(self), public :: get_size => kkt_get_size
    end type kkt_vector
 
+   !> Base type for Hessian matrices.
+   type, abstract, extends(abstract_sym_linop_rdp), public :: abstract_hessian_rdp
+      procedure(hinv_iface), pointer, nopass :: apply_hinv => null()
+   contains
+      procedure(hessian_matvec_iface), pass(self), deferred :: matvec
+      procedure, pass(self) :: hinv_matvec
+      procedure, pass(self) :: has_hinv
+   end type abstract_hessian_rdp
+   abstract interface
+      subroutine hessian_matvec_iface(self, vec_in, vec_out)
+         import :: abstract_hessian_rdp, abstract_vector_rdp
+         implicit none(type, external)
+         class(abstract_hessian_rdp), intent(inout) :: self
+         class(abstract_vector_rdp), intent(in) :: vec_in
+         class(abstract_vector_rdp), intent(out) :: vec_out
+      end subroutine hessian_matvec_iface
+
+      subroutine hinv_iface(self, vec_in, vec_out)
+         import :: abstract_hessian_rdp, abstract_vector_rdp
+         implicit none(type, external)
+         class(abstract_hessian_rdp), intent(inout) :: self
+         class(abstract_vector_rdp), intent(in) :: vec_in
+         class(abstract_vector_rdp), intent(out) :: vec_out
+      end subroutine hinv_iface
+   end interface
+
    !> Base type for the KKT operator.
    type, extends(abstract_sym_linop_rdp), public :: kkt_linop
-      class(abstract_sym_linop_rdp), allocatable :: H ! Hessian operator.
-      class(abstract_linop_rdp), allocatable :: A ! Equality constraint operator.
-      class(abstract_vector_rdp), allocatable :: wrk_x
+      class(abstract_hessian_rdp), allocatable :: H    ! Hessian operator.
+      class(abstract_linop_rdp), allocatable :: A      ! Equality constraint operator.
+      class(abstract_vector_rdp), allocatable :: wrk_x ! Working array.
    contains
       procedure, pass(self), public :: matvec => kkt_matvec
    end type kkt_linop
@@ -134,7 +160,7 @@ contains
       end select
    end subroutine kkt_axpby
 
-   integer function kkt_get_size(self) result(n)
+   integer(ilp) function kkt_get_size(self) result(n)
       class(kkt_vector), intent(in) :: self
       n = self%x%get_size() + self%y%get_size()
    end function kkt_get_size
@@ -142,8 +168,8 @@ contains
    subroutine kkt_rand(self, ifnorm)
       implicit none(type, external)
       class(kkt_vector), intent(inout) :: self
-      logical, optional, intent(in) :: ifnorm
-      logical :: normalize
+      logical(lk), optional, intent(in) :: ifnorm
+      logical(lk) :: normalize
       real(dp), parameter :: alpha = 1.0_dp/sqrt(2.0_dp)
       normalize = optval(ifnorm, .true.)
       ! Generate random vectors.
@@ -155,6 +181,27 @@ contains
          call self%y%scal(alpha)
       end if
    end subroutine kkt_rand
+
+   !----------------------------------------------------------------
+   !-----     TYPE-BOUND PROCEDURES FOR THE HESSIAN MATRIX     -----
+   !----------------------------------------------------------------
+
+   pure logical(lk) function has_hinv(self)
+      class(abstract_hessian_rdp), intent(in) :: self
+      has_hinv = associated(self%apply_hinv)
+   end function has_hinv
+
+   subroutine hinv_matvec(self, vec_in, vec_out)
+      class(abstract_hessian_rdp), intent(inout) :: self
+      class(abstract_vector_rdp), intent(in) :: vec_in
+      class(abstract_vector_rdp), intent(out) :: vec_out
+
+      if (self%has_hinv()) then
+         call self%apply_hinv(self, vec_in, vec_out)
+      else
+         error stop "Hessian inverse is not available."
+      end if
+   end subroutine hinv_matvec
 
    !-----------------------------------------------------------
    !-----     TYPE-BOUND PROCEDURE FOR THE KKT MATRIX     -----
