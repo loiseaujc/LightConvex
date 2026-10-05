@@ -585,15 +585,15 @@ Examples of such libraries are: OpenBLAS, MKL (TM), Accelerate, and ATLAS. In or
 The same is possible from the <code>fpm</code> branch, where the <code>cpp</code> preprocessor is enabled by default. For example, the macros can be added to the project's manifest:</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># Link against appropriate external BLAS and LAPACK libraries, if necessary</span>
 <span class="k">[build]</span>
-<span class="n">link</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;blas&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;lapack&quot;</span><span class="p">]</span><span class="w">  </span>
+<span class="n">link</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"blas"</span><span class="p">,</span><span class="w"> </span><span class="s2">"lapack"</span><span class="p">]</span><span class="w">  </span>
 
 <span class="k">[dependencies]</span>
-<span class="n">stdlib</span><span class="o">=</span><span class="s2">&quot;*&quot;</span>
+<span class="n">stdlib</span><span class="o">=</span><span class="s2">"*"</span>
 
 <span class="c1"># Macros are only needed if using an external library</span>
 <span class="k">[preprocess]</span>
 <span class="k">[preprocess.cpp]</span>
-<span class="n">macros</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;STDLIB_EXTERNAL_BLAS&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;STDLIB_EXTERNAL_LAPACK&quot;</span><span class="p">]</span>
+<span class="n">macros</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"STDLIB_EXTERNAL_BLAS"</span><span class="p">,</span><span class="w"> </span><span class="s2">"STDLIB_EXTERNAL_LAPACK"</span><span class="p">]</span>
 </code></pre></div>
 
 <p>or directly via compiler flags: </p>
@@ -691,7 +691,7 @@ The license used for the <code>BLAS</code> and <code>LAPACK</code> backends is t
 <span class="nt">intellectual</span><span class="w"> </span><span class="nt">property</span><span class="w"> </span><span class="nt">rights</span><span class="o">.</span>
 
 <span class="nt">THIS</span><span class="w"> </span><span class="nt">SOFTWARE</span><span class="w"> </span><span class="nt">IS</span><span class="w"> </span><span class="nt">PROVIDED</span><span class="w"> </span><span class="nt">BY</span><span class="w"> </span><span class="nt">THE</span><span class="w"> </span><span class="nt">COPYRIGHT</span><span class="w"> </span><span class="nt">HOLDERS</span><span class="w"> </span><span class="nt">AND</span><span class="w"> </span><span class="nt">CONTRIBUTORS</span>
-<span class="s2">&quot;AS IS&quot;</span><span class="w"> </span><span class="nt">AND</span><span class="w"> </span><span class="nt">ANY</span><span class="w"> </span><span class="nt">EXPRESS</span><span class="w"> </span><span class="nt">OR</span><span class="w"> </span><span class="nt">IMPLIED</span><span class="w"> </span><span class="nt">WARRANTIES</span><span class="o">,</span><span class="w"> </span><span class="nt">INCLUDING</span><span class="o">,</span><span class="w"> </span><span class="nt">BUT</span><span class="w"> </span><span class="nt">NOT</span>
+<span class="s2">"AS IS"</span><span class="w"> </span><span class="nt">AND</span><span class="w"> </span><span class="nt">ANY</span><span class="w"> </span><span class="nt">EXPRESS</span><span class="w"> </span><span class="nt">OR</span><span class="w"> </span><span class="nt">IMPLIED</span><span class="w"> </span><span class="nt">WARRANTIES</span><span class="o">,</span><span class="w"> </span><span class="nt">INCLUDING</span><span class="o">,</span><span class="w"> </span><span class="nt">BUT</span><span class="w"> </span><span class="nt">NOT</span>
 <span class="nt">LIMITED</span><span class="w"> </span><span class="nt">TO</span><span class="o">,</span><span class="w"> </span><span class="nt">THE</span><span class="w"> </span><span class="nt">IMPLIED</span><span class="w"> </span><span class="nt">WARRANTIES</span><span class="w"> </span><span class="nt">OF</span><span class="w"> </span><span class="nt">MERCHANTABILITY</span><span class="w"> </span><span class="nt">AND</span><span class="w"> </span><span class="nt">FITNESS</span><span class="w"> </span><span class="nt">FOR</span>
 <span class="nt">A</span><span class="w"> </span><span class="nt">PARTICULAR</span><span class="w"> </span><span class="nt">PURPOSE</span><span class="w"> </span><span class="nt">ARE</span><span class="w"> </span><span class="nt">DISCLAIMED</span><span class="o">.</span><span class="w"> </span><span class="nt">IN</span><span class="w"> </span><span class="nt">NO</span><span class="w"> </span><span class="nt">EVENT</span><span class="w"> </span><span class="nt">SHALL</span><span class="w"> </span><span class="nt">THE</span><span class="w"> </span><span class="nt">COPYRIGHT</span>
 <span class="nt">OWNER</span><span class="w"> </span><span class="nt">OR</span><span class="w"> </span><span class="nt">CONTRIBUTORS</span><span class="w"> </span><span class="nt">BE</span><span class="w"> </span><span class="nt">LIABLE</span><span class="w"> </span><span class="nt">FOR</span><span class="w"> </span><span class="nt">ANY</span><span class="w"> </span><span class="nt">DIRECT</span><span class="o">,</span><span class="w"> </span><span class="nt">INDIRECT</span><span class="o">,</span><span class="w"> </span><span class="nt">INCIDENTAL</span><span class="o">,</span>
@@ -1822,7 +1822,7 @@ If <code>err</code> is not present, exceptions trigger an <code>error stop</code
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-05-19 06:35 +0000             </p>
+ on 2026-10-05 05:04 +0000             </p>
           </div>
         </div>
         <br>
