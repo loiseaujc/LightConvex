@@ -10,7 +10,7 @@
     <meta name="author" content="" >
     <link rel="icon" href="../favicon.png">
 
-    <title>PrimalSimplex &ndash; LightConvex</title>
+    <title>kkt_solver &ndash; LightConvex</title>
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -78,7 +78,7 @@
 
     <div class="container">
   <div class="row">
-    <h1>PrimalSimplex
+    <h1>kkt_solver
       <small>Interface</small>
       
     </h1>
@@ -89,21 +89,21 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="<p> 4.7% of total for procedures.</p>Including implementation: 8 statements,  4.7% of total for procedures.">8 statements</a>
+                 title="<p> 5.3% of total for procedures.</p>Including implementation: 9 statements,  5.3% of total for procedures.">9 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/lightconvex_linear_programs.f90"> Source File</a>
+              <a href="../src/lightconvex_kkt.f90"> Source File</a>
             </li>
         </ul>
       </div>
       <div class="col">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb justify-content-end mb-0">
-                <li class="breadcrumb-item"><a href='../sourcefile/lightconvex_linear_programs.f90.html'>lightconvex_linear_programs.f90</a></li>
-                <li class="breadcrumb-item"><a href='../module/lightconvex_lp.html'>lightconvex_lp</a></li>
-            <li class="breadcrumb-item active" aria-current="page">PrimalSimplex</li>
+                <li class="breadcrumb-item"><a href='../sourcefile/lightconvex_kkt.f90.html'>lightconvex_kkt.f90</a></li>
+                <li class="breadcrumb-item"><a href='../module/lightconvex_kkt.html'>lightconvex_kkt</a></li>
+            <li class="breadcrumb-item active" aria-current="page">kkt_solver</li>
           </ol>
         </nav>
       </div>
@@ -141,7 +141,7 @@
       </a>
       <div id="funcs-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../interface/primalsimplex.html#proc-initialize_primal_simplex_alg">initialize_primal_simplex_alg</a>
+            <a class="list-group-item" href="../interface/kkt_solver.html#proc-create_dense_kkt_solver">create_dense_kkt_solver</a>
         </div>
       </div>
     </div>
@@ -161,12 +161,13 @@
     </div>
 
     <div class="col-md-9" id='text'>
-      <h2>public interface PrimalSimplex</h2>
+      <h2>public interface kkt_solver</h2>
       
 
         <h2>Functions</h2>
             <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-initialize_primal_simplex_alg"></span> <h3>private module function initialize_primal_simplex_alg(pivot, initialization, maxiter) result(alg)  
+    <div class="card-header codesum"><span class="anchor" id="proc-create_dense_kkt_solver"></span> <h3>private module function create_dense_kkt_solver(P, A, max_refine, refine_tol) result(solver)  
+    <a href="../proc/create_dense_kkt_solver.html"><button type="button" class="btn btn-info depwarn">Implementation &rarr;</button></a>
 </h3></div>
     <div class="card-body">
         
@@ -184,37 +185,37 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-pivot~4"></span>
-              class(abstract_pivot_rule),
+              <span class="anchor" id="variable-p~2"></span>
+              real(kind=dp),
             </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
+<td>intent(in)</td>
+              <td></td>            <td>
               
             </td>
             <td>::</td>
-            <td><strong>pivot</strong></td>
+            <td><strong>P</strong>(:,:)</td>
             <td>
                 
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-initialization~2"></span>
-              class(abstract_feasible_initialization),
+              <span class="anchor" id="variable-a~10"></span>
+              real(kind=dp),
             </td>
-<td>intent(in),</td>
-              <td>optional</td>            <td>
+<td>intent(in)</td>
+              <td></td>            <td>
               
             </td>
             <td>::</td>
-            <td><strong>initialization</strong></td>
+            <td><strong>A</strong>(:,:)</td>
             <td>
                 
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-maxiter~2"></span>
+              <span class="anchor" id="variable-max_refine~2"></span>
               integer(kind=ilp),
             </td>
 <td>intent(in),</td>
@@ -222,7 +223,22 @@
               
             </td>
             <td>::</td>
-            <td><strong>maxiter</strong></td>
+            <td><strong>max_refine</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-refine_tol~2"></span>
+              real(kind=dp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>refine_tol</strong></td>
             <td>
                 
             </td>
@@ -232,7 +248,7 @@
 
     <h4>
     Return Value
-    <small>type(<a href='../type/primalsimplex.html'>PrimalSimplex</a>)</small>
+    <small>type(<a href='../type/dense_kkt_solver.html'>dense_kkt_solver</a>), allocatable</small>
     </h4>
     
 
