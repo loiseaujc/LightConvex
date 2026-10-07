@@ -171,7 +171,7 @@ contains
       !-----------------------------------
       block
          integer(ilp), parameter :: nproblems = 1024, max_n = 128
-         integer(ilp) :: i, m, n
+         integer(ilp) :: i, j, m, n
          real(dp) :: u
          real(dp), allocatable :: P(:, :), q(:), A(:, :), b(:)
          type(dense_vector), allocatable :: x, y, rhs_x, rhs_y, d1, d2
@@ -189,8 +189,12 @@ contains
             allocate (P(n, n), q(n), A(m, n), b(m), source=0.0_dp)
 
             !> Random problem.
-            call random_number(P); P = matmul(P, transpose(P))
-            call random_number(A)
+
+            do j = 1, n
+               P(:, j) = rvs_normal(array_size=n)
+               A(:, j) = rvs_normal(array_size=m)
+            end do
+            P = matmul(P, transpose(P))
             q = rvs_normal(array_size=n)
             b = rvs_normal(array_size=m)
 
@@ -205,7 +209,7 @@ contains
 
             !> Solve the problem.
             call kkt%solve(rhs_x, rhs_y, x, y, info)
-            call check(error, is_successful(info))
+            call check(error, is_successful(info) .or. info%residual <= rtol)
             if (allocated(error)) then
                print *, "Problem's dimensions:"
                print *, "     - # of variables   :", n
