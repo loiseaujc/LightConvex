@@ -18,10 +18,10 @@ contains
       solver%n = n; solver%m = m
 
       solver%max_refine = optval(max_refine, solver%max_refine)
-      if (solver%max_refine < 0) error stop "dense_kkt_solver: max_refine needs to be positive."
+      if (solver%max_refine < 0) error stop "dense_kkt_solver: max_refine needs to be non-negative."
 
-      solver%refine_tol = optval(refine_tol, solver%refine_tol)
-      if (solver%refine_tol < 0.0_dp) error stop "dense_kkt_solver: refine_tol needs to be positive."
+      solver%tol = optval(tol, solver%tol)
+      if (solver%tol < 0.0_dp) error stop "dense_kkt_solver: tol needs to be positive."
 
       ! --------------------
 
@@ -64,7 +64,7 @@ contains
             self%e2 = d2%data + optval(reg2, 0.0_dp)
 
             if (any(self%e1 < 0.0_dp) .or. any(self%e2 < 0.0_dp)) then
-               info%status = kkt_not_quasidefinite
+               info%status = kkt_invalid_regularization
                self%factorized = .false.
                return
             end if
@@ -78,12 +78,8 @@ contains
                self%ipiv = 0_ilp
                lwork = size(self%workspace, kind=ilp)
                call sytrf(uplo, n + m, self%K, n + m, self%ipiv, self%workspace, lwork, lapack_info)
-               if (lapack_info < 0) then
-                  error stop "kkt%update: error in sytrf."
-               else if (lapack_info > 0) then
-                  info%status = kkt_numerical_error
-                  return
-               end if
+               if (lapack_info < 0) error stop "kkt%update: error in sytrf."
+               if (lapack_info > 0) error stop "kkt%update: D matrix in LDLT is singular."
             end block
 
             !> Store unregularized diagonal for iterative refinement.
@@ -103,6 +99,9 @@ contains
    end procedure dense_update
 
    module procedure dense_solve
+   integer(ilp) :: i, lapack_info
+   real(dp) :: rhs_norm, res, res_prev
+   logical(lk) :: converged
    if (.not. self%factorized) then
       error stop "kkt%solve: KKT matrix has not been factorized. Aborting."
    end if
@@ -121,89 +120,67 @@ contains
                   if (rhs_y%get_size() /= m) error stop "kkt%solve: rhs_y has inconsistent dimensions."
                   if (sol_y%get_size() /= m) error stop "kkt%solve: sol_y has inconsistent dimensions."
 
+                  converged = .false.
+                  info%n_refine = 0_ilp
+
                   !> Working vector.
                   self%z(:n, 1) = rhs_x%data; self%z(n + 1:, 1) = rhs_y%data
 
                   !> Solve the linear system.
-                  block
-                     integer(ilp) :: lapack_info
-                     call sytrs(uplo, n + m, 1, self%K, n + m, self%ipiv, self%z, n + m, lapack_info)
-                     if (lapack_info /= 0) error stop "kkt%solve: Error in sytrs."
-                  end block
+                  call sytrs(uplo, n + m, 1, self%K, n + m, self%ipiv, self%z, n + m, lapack_info)
+                  if (lapack_info /= 0) error stop "kkt%solve: Error in sytrs."
 
-                  !> Iterative refinement.
-                  block
-                     integer(ilp) :: iter, lapack_info, nn, lda, i
-                     real(dp) :: res, res_prev, rhs_norm
-                     logical(lk) :: converged
+                  !> Compute residual.
+                  call compute_residual(self%P, self%A, self%K, self%ipiv, self%d1, self%d2, &
+                                        rhs_x%data, rhs_y%data, self%z, self%r)
 
-                     nn = n + m; lda = max(1_ilp, m)
-                     rhs_norm = max(norm(rhs_x%data, "inf"), norm(rhs_y%data, "inf"), tiny(1.0_dp))
-                     res_prev = huge(1.0_dp)
-                     converged = .false.
-                     info%n_refine = 0_ilp
-                     info%n_spmv = 0.0_ilp
+                  rhs_norm = max(norm(rhs_x%data, "inf"), norm(rhs_y%data, "inf"), tiny(1.0_dp))
+                  info%residual = norm(self%r, "inf")/rhs_norm
 
-                     do iter = 1, self%max_refine
-                        !> r = rhs - K @ z (with K the unregularized matrix).
-                        !  -------------------------------------------------
-                        self%r(:n) = rhs_x%data; self%r(n + 1:) = rhs_y%data
-                        ! r_x = rhs_x - P @ x (P symmetric, lower triangle storage).
-                        call symv(uplo, n, -1.0_dp, self%P, n, self%z(:n, 1), 1, 1.0_dp, self%r(:n), 1)
-                        ! r_x = r_x - d1 .* x - A.T @ y.
-                        do concurrent(i=1:n)
-                           self%r(i) = self%r(i) - self%d1(i)*self%z(i, 1)
-                        end do
-                        call gemv("T", m, n, -1.0_dp, self%A, lda, self%z(n + 1:, 1), 1, 1.0_dp, self%r(:n), 1)
-                        ! r_y = rhs_y - A @ x + d2 .* y
-                        call gemv("N", m, n, -1.0_dp, self%A, lda, self%z(:n, 1), 1, 1.0_dp, self%r(n + 1:), 1)
-                        do concurrent(i=1:m)
-                           self%r(n + i) = self%r(n + i) + self%d2(i)*self%z(n + i, 1)
-                        end do
+                  if (info%residual <= self%tol) then
+                     converged = .true.
+                  else
+                     !> Store previous residual for comparison.
+                     res_prev = info%residual
 
-                        !> Book-keeping
-                        info%n_spmv = info%n_spmv + 3_ilp
-
-                        !> Residual computation.
-                        !  --------------------
-                        res = norm(self%r, "inf")/rhs_norm
-                        info%residual = res
-
-                        ! NaN or Inf: unstable factorization.
-                        if (.not. (res <= huge(1.0_dp))) then
-                           info%status = kkt_numerical_error
-                           return
-                        end if
-
-                        ! Converged.
-                        if (res <= self%refine_tol) then
-                           converged = .true.
-                           exit
-                        end if
-
-                        ! Stagnation (less than a factor 2 gained).
-                        if ((iter > 0) .and. (res > 0.5_dp*res_prev)) exit
-
+                     iterative_refinement: do i = 1, self%max_refine
                         !> Correction: K_reg dz = r, then z = z + dz.
-                        !  -----------------------------------------
                         self%dz(:, 1) = self%r
-                        call sytrs(uplo, nn, 1, self%K, nn, self%ipiv, self%dz, nn, lapack_info)
+                        call sytrs(uplo, n + m, 1, self%K, n + m, self%ipiv, self%dz, n + m, lapack_info)
                         if (lapack_info /= 0) error stop "kkt%solve: Error sytrs (refinement)."
                         self%z = self%z + self%dz
 
                         info%n_refine = info%n_refine + 1_ilp
-                        res_prev = res
-                     end do
 
-                     !> Book-keeping
-                     info%status = merge(kkt_success, kkt_not_converged, converged)
-                     info%n_iter = 0_ilp
+                        !> r = rhs - K @ z (with K the unregularized matrix).
+                        call compute_residual(self%P, self%A, self%K, self%ipiv, self%d1, self%d2, &
+                                              rhs_x%data, rhs_y%data, self%z, self%r)
 
-                     !> Approximated solutions.
-                     sol_x%data = self%z(:n, 1)
-                     sol_y%data = self%z(n + 1:, 1)
-                  end block
+                        !> Residual norm.
+                        info%residual = norm(self%r, "inf")/rhs_norm
 
+                        if (.not. (info%residual <= huge(1.0_dp))) then
+                           ! NaN or Inf: unstable factorization.
+                           info%status = kkt_numerical_error
+                           return
+                        else if (info%residual > 0.5_dp*res_prev) then
+                           ! Stagnation.
+                           exit iterative_refinement
+                        else if (info%residual <= self%tol) then
+                           ! Solver converged.
+                           converged = .true.
+                           exit iterative_refinement
+                        end if
+
+                        !> Book-keeping.
+                        res_prev = info%residual
+                     end do iterative_refinement
+                  end if
+
+                  !> Approximated solutions.
+                  info%status = merge(kkt_success, kkt_not_converged, converged)
+                  sol_x%data = self%z(:n, 1)
+                  sol_y%data = self%z(n + 1:, 1)
                end associate
 
             class default
@@ -246,4 +223,31 @@ contains
          end do
       end associate
    end subroutine assemble_kkt_matrix
+
+   pure subroutine compute_residual(P, A, K, ipiv, d1, d2, rhs_x, rhs_y, z, r)
+      real(dp), intent(in) :: P(:, :), A(:, :), K(:, :), d1(:), d2(:)
+      real(dp), intent(in) :: rhs_x(:), rhs_y(:), z(:, :)
+      real(dp), intent(out) :: r(:)
+      integer(ilp), intent(in) :: ipiv(:)
+      integer(ilp) :: i, lda
+      associate (n => size(P, 1), m => size(A, 1), uplo => "L")
+         lda = max(1_ilp, m)
+         !> r = rhs - K @ z (with K the unregularized matrix).
+         !  -------------------------------------------------
+         r(:n) = rhs_x; r(n + 1:) = rhs_y
+         ! r_x = rhs_x - P @ x (P symmetric, lower triangle storage).
+         call symv(uplo, n, -1.0_dp, P, n, z(:n, 1), 1, 1.0_dp, r(:n), 1)
+         ! r_x = r_x - d1 .* x - A.T @ y.
+         do concurrent(i=1:n)
+            r(i) = r(i) - d1(i)*z(i, 1)
+         end do
+         call gemv("T", m, n, -1.0_dp, A, lda, z(n + 1:, 1), 1, 1.0_dp, r(:n), 1)
+         ! r_y = rhs_y - A @ x + d2 .* y
+         call gemv("N", m, n, -1.0_dp, A, lda, z(:n, 1), 1, 1.0_dp, r(n + 1:), 1)
+         do concurrent(i=1:m)
+            r(n + i) = r(n + i) + d2(i)*z(n + i, 1)
+         end do
+      end associate
+   end subroutine compute_residual
+
 end submodule lightconvex_dense_kkt

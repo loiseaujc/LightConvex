@@ -50,9 +50,9 @@ contains
          !> Solve the problem.
          call kkt%solve(rhs_x, rhs_y, x, y, info)
          call check(error, is_successful(info)) ! Successfully computed the solution.
+         if (allocated(error)) return
          call check(error, info%n_refine == 0)  ! No iterative refinement (no regularization was used).
          if (allocated(error)) return
-
          !> Check primal solution.
          call check(error, all_close(xref, x%data))
          if (allocated(error)) return
@@ -160,8 +160,6 @@ contains
          if (allocated(error)) return
 
          ! !> Check dual solution.
-         ! print *, "yref :", yref
-         ! print *, "y    :", y%data
          ! call check(error, all_close(yref, y%data(1:m - 1), abs_tol=epsilon(1.0_dp)))
          ! if (allocated(error)) return
       end block
