@@ -1,6 +1,8 @@
 module TestKKTSolvers
    use, intrinsic :: iso_fortran_env, only: error_unit, output_unit
    use testdrive, only: new_unittest, unittest_type, error_type, check
+   use stdlib_random, only: dist_rand
+   use stdlib_stats_distribution_normal, only: rvs_normal
    use stdlib_math, only: all_close, is_close
    use stdlib_linalg, only: norm, eye, solve
    use lightconvex_constants, only: ilp, dp
@@ -11,6 +13,7 @@ module TestKKTSolvers
    public :: collect_dense_kkt_solvers_tests
 
    real(dp), parameter :: atol = 1.0e-12_dp
+   real(dp), parameter :: rtol = sqrt(atol)
 contains
    subroutine collect_dense_kkt_solvers_tests(testsuite)
       type(unittest_type), allocatable, intent(out) :: testsuite(:)
@@ -145,7 +148,7 @@ contains
 
          !> Create KKT solver.
          kkt = kkt_solver(P, A)
-         call kkt%update(d1, d2, info, reg1=1e-6_dp, reg2=1e-6_dp)
+         call kkt%update(d1, d2, info, reg1=rtol, reg2=rtol)
          call check(error, is_successful(info)) ! Successfully initialized the KKT solver.
          if (allocated(error)) return
 
@@ -161,6 +164,59 @@ contains
          ! !> Check dual solution.
          ! call check(error, all_close(yref, y%data(1:m - 1), abs_tol=epsilon(1.0_dp)))
          ! if (allocated(error)) return
+      end block
+
+      !-----------------------------------
+      !-----     RANDOM PROBLEMS     -----
+      !-----------------------------------
+      block
+         integer(ilp), parameter :: nproblems = 1024, max_n = 128
+         integer(ilp) :: i, m, n
+         real(dp) :: u
+         real(dp), allocatable :: P(:, :), q(:), A(:, :), b(:)
+         type(dense_vector), allocatable :: x, y, rhs_x, rhs_y, d1, d2
+         type(dense_kkt_solver), allocatable :: kkt
+         type(kkt_info) :: info
+
+         do i = 1, nproblems
+            !> Random problem size.
+            call random_number(u)
+            n = 1_ilp + floor(max_n*u, kind=ilp)
+            call random_number(u)
+            m = 1_ilp + floor((n - 1)*u, kind=ilp) ! Ensure max(m) = n - 1.
+
+            !> Allocate data.
+            allocate (P(n, n), q(n), A(m, n), b(m), source=0.0_dp)
+
+            !> Random problem.
+            call random_number(P); P = matmul(P, transpose(P))
+            call random_number(A)
+            q = rvs_normal(array_size=n)
+            b = rvs_normal(array_size=m)
+
+            x = dense_vector(n); rhs_x = dense_vector(q); d1 = dense_vector(n)
+            y = dense_vector(m); rhs_y = dense_vector(b); d2 = dense_vector(m)
+
+            !> Create KKT solver.
+            kkt = kkt_solver(P, A)
+            call kkt%update(d1, d2, info, reg1=rtol, reg2=rtol)
+            call check(error, is_successful(info))
+            if (allocated(error)) return
+
+            !> Solve the problem.
+            call kkt%solve(rhs_x, rhs_y, x, y, info)
+            call check(error, is_successful(info))
+            if (allocated(error)) then
+               print *, "Problem's dimensions:"
+               print *, "     - # of variables   :", n
+               print *, "     - # of constraints :", m
+               print *, "Residual of KKT solver  :", info%residual
+               return
+            end if
+
+            !> Deallocate data.
+            deallocate (P, q, A, b)
+         end do
       end block
 
    end subroutine test_dense_kkt_solver_testsuite
