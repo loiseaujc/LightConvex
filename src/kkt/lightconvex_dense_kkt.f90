@@ -242,7 +242,7 @@ contains
          ! r_y = rhs_y - A @ x + d2 .* y
          call gemv("N", m, n, -1.0_dp, A, lda, z(:n, 1), 1, 1.0_dp, r(n + 1:), 1)
          do concurrent(i=1:m)
-            r(n + i) = r(n + i) + d2(i)*z(n + i, 1)
+            r(n + i) = r(n + i) - d2(i)*z(n + i, 1)
          end do
       end associate
    end subroutine compute_residual
