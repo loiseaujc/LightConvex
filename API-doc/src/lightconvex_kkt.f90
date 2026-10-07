@@ -74,7 +74,7 @@ module lightconvex_kkt
       real(dp), allocatable :: workspace(:) ! LAPACK workspace (queried only once).
       real(dp), allocatable :: z(:, :), r(:), dz(:, :)    ! Length n+m, allocated once. Working set.
       logical(lk) :: factorized = .false.
-      integer(ilp) :: max_refine = 10_ilp
+      integer(ilp) :: max_refine = 20_ilp
       real(dp) :: tol = 1.0e-08_dp
    contains
       procedure, pass(self) :: update => dense_update
