@@ -1,0 +1,489 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Convex Programming in Modern Fortran">
+    <meta name="author" content="" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>lightconvex_dense_kkt &ndash; LightConvex</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">LightConvex </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="../page/index.html">Contributing and specs</a></li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>lightconvex_dense_kkt
+      <small>Submodule</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title="18.3% of total for modules and submodules.">179 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/lightconvex_dense_kkt.f90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/lightconvex_dense_kkt.f90.html'>lightconvex_dense_kkt.f90</a></li>
+            <li class="breadcrumb-item active" aria-current="page">lightconvex_dense_kkt</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+    <em>None</em>
+
+  </div>
+
+    </div>
+
+    <div class="col-md-9" id='text'>
+      
+<br>          <div class="card mb-4">
+      <h3 class="card-header card-title bg-light">Uses</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <ul class="list-inline">
+                  <li class="list-inline-item"><a href='lightconvex_dense_vectors.html'>lightconvex_dense_vectors</a></li>
+                  <li class="list-inline-item">stdlib_linalg_lapack</li>
+              </ul>
+            </li>
+            <li class="list-group-item">
+              <ul class="list-inline">
+                <li><h5>Ancestors:</h5></li>
+                  <li class="list-inline-item"><a href='lightconvex_kkt.html'>lightconvex_kkt</a></li>
+              </ul>
+            </li>
+            <li class="list-group-item">
+              <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (20260126.1125)
+ -->
+<!-- Title: module~~lightconvex_dense_kkt~~UsesGraph Pages: 1 -->
+<svg id="modulelightconvex_dense_kktUsesGraph" width="641pt" height="222pt"
+ viewBox="0.00 0.00 641.00 222.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~lightconvex_dense_kkt~~UsesGraph" class="graph" transform="scale(0.732697 0.732697) rotate(0) translate(4 298.64)">
+<title>module~~lightconvex_dense_kkt~~UsesGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-298.64 870.85,-298.64 870.85,4 -4,4"/>
+<!-- module~lightconvex_dense_kkt -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_node1" class="node">
+<title>module~lightconvex_dense_kkt</title>
+<polygon fill="none" stroke="black" points="866.85,-170.27 736.08,-170.27 736.08,-146 866.85,-146 866.85,-170.27"/>
+<text xml:space="preserve" text-anchor="middle" x="801.47" y="-154.53" font-family="Helvetica,sans-Serif" font-size="10.50">lightconvex_dense_kkt</text>
+</g>
+<!-- module~lightconvex_dense_vectors -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_node2" class="node">
+<title>module~lightconvex_dense_vectors</title>
+<g id="a_module~~lightconvex_dense_kkt~~UsesGraph_node2"><a xlink:href="../module/lightconvex_dense_vectors.html" xlink:title="lightconvex_dense_vectors">
+<polygon fill="#337ab7" stroke="#337ab7" points="700.08,-170.27 546.06,-170.27 546.06,-146 700.08,-146 700.08,-170.27"/>
+<text xml:space="preserve" text-anchor="middle" x="623.07" y="-154.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lightconvex_dense_vectors</text>
+</a>
+</g>
+</g>
+<!-- module~lightconvex_dense_kkt&#45;&gt;module~lightconvex_dense_vectors -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_edge1" class="edge">
+<title>module~lightconvex_dense_kkt&#45;&gt;module~lightconvex_dense_vectors</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M735.78,-158.13C727.96,-158.13 719.88,-158.13 711.8,-158.13"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="711.92,-154.64 701.92,-158.14 711.92,-161.64 711.92,-154.64"/>
+</g>
+<!-- module~lightconvex_kkt -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_node3" class="node">
+<title>module~lightconvex_kkt</title>
+<g id="a_module~~lightconvex_dense_kkt~~UsesGraph_node3"><a xlink:href="../module/lightconvex_kkt.html" xlink:title="lightconvex_kkt">
+<polygon fill="#337ab7" stroke="#337ab7" points="669.71,-251.27 576.44,-251.27 576.44,-227 669.71,-227 669.71,-251.27"/>
+<text xml:space="preserve" text-anchor="middle" x="623.07" y="-235.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lightconvex_kkt</text>
+</a>
+</g>
+</g>
+<!-- module~lightconvex_dense_kkt&#45;&gt;module~lightconvex_kkt -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_edge3" class="edge">
+<title>module~lightconvex_dense_kkt&#45;&gt;module~lightconvex_kkt</title>
+<path fill="none" stroke="#ff0000" d="M773.29,-170.61C743.47,-184.31 695.38,-206.39 661.89,-221.77"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="660.57,-218.52 652.94,-225.88 663.49,-224.88 660.57,-218.52"/>
+</g>
+<!-- stdlib_linalg_lapack -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_node4" class="node">
+<title>stdlib_linalg_lapack</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="680.58,-128.27 565.56,-128.27 565.56,-104 680.58,-104 680.58,-128.27"/>
+<text xml:space="preserve" text-anchor="middle" x="623.07" y="-112.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">stdlib_linalg_lapack</text>
+</g>
+<!-- module~lightconvex_dense_kkt&#45;&gt;stdlib_linalg_lapack -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_edge2" class="edge">
+<title>module~lightconvex_dense_kkt&#45;&gt;stdlib_linalg_lapack</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M747.54,-145.53C728.79,-141.07 707.49,-136 687.93,-131.34"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="688.97,-127.99 678.43,-129.08 687.35,-134.8 688.97,-127.99"/>
+</g>
+<!-- module~lightconvex_abstract -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_node5" class="node">
+<title>module~lightconvex_abstract</title>
+<g id="a_module~~lightconvex_dense_kkt~~UsesGraph_node5"><a xlink:href="../module/lightconvex_abstract.html" xlink:title="lightconvex_abstract">
+<polygon fill="#337ab7" stroke="#337ab7" points="481.19,-272.27 360.17,-272.27 360.17,-248 481.19,-248 481.19,-272.27"/>
+<text xml:space="preserve" text-anchor="middle" x="420.68" y="-256.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lightconvex_abstract</text>
+</a>
+</g>
+</g>
+<!-- module~lightconvex_dense_vectors&#45;&gt;module~lightconvex_abstract -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_edge4" class="edge">
+<title>module~lightconvex_dense_vectors&#45;&gt;module~lightconvex_abstract</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M606.49,-170.58C580.82,-190.88 530.46,-229.79 510.06,-239.13 504.27,-241.79 498.11,-244.12 491.84,-246.18"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="491.25,-242.71 482.68,-248.95 493.27,-249.41 491.25,-242.71"/>
+</g>
+<!-- module~lightconvex_constants -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_node6" class="node">
+<title>module~lightconvex_constants</title>
+<g id="a_module~~lightconvex_dense_kkt~~UsesGraph_node6"><a xlink:href="../module/lightconvex_constants.html" xlink:title="lightconvex_constants">
+<polygon fill="#337ab7" stroke="#337ab7" points="295.29,-251.27 166.77,-251.27 166.77,-227 295.29,-227 295.29,-251.27"/>
+<text xml:space="preserve" text-anchor="middle" x="231.03" y="-235.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lightconvex_constants</text>
+</a>
+</g>
+</g>
+<!-- module~lightconvex_dense_vectors&#45;&gt;module~lightconvex_constants -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_edge5" class="edge">
+<title>module~lightconvex_dense_vectors&#45;&gt;module~lightconvex_constants</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M545.66,-162.79C486.36,-167.74 402.53,-177.66 331.29,-197.13 309.26,-203.16 285.68,-212.98 267.03,-221.62"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="265.57,-218.43 258.03,-225.88 268.57,-224.76 265.57,-218.43"/>
+</g>
+<!-- stdlib_intrinsics -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_node7" class="node">
+<title>stdlib_intrinsics</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="466.94,-108.27 374.42,-108.27 374.42,-84 466.94,-84 466.94,-108.27"/>
+<text xml:space="preserve" text-anchor="middle" x="420.68" y="-92.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">stdlib_intrinsics</text>
+</g>
+<!-- module~lightconvex_dense_vectors&#45;&gt;stdlib_intrinsics -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_edge6" class="edge">
+<title>module~lightconvex_dense_vectors&#45;&gt;stdlib_intrinsics</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M570,-145.52C561.88,-143.05 553.66,-140.25 546.06,-137.13 529.12,-130.2 527.12,-123.76 510.06,-117.13 500.02,-113.24 489.05,-109.93 478.36,-107.17"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="479.38,-103.81 468.84,-104.84 477.72,-110.61 479.38,-103.81"/>
+</g>
+<!-- stdlib_linalg -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_node8" class="node">
+<title>stdlib_linalg</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="457.94,-66.27 383.42,-66.27 383.42,-42 457.94,-42 457.94,-66.27"/>
+<text xml:space="preserve" text-anchor="middle" x="420.68" y="-50.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">stdlib_linalg</text>
+</g>
+<!-- module~lightconvex_dense_vectors&#45;&gt;stdlib_linalg -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_edge7" class="edge">
+<title>module~lightconvex_dense_vectors&#45;&gt;stdlib_linalg</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M560.31,-145.66C555.23,-143.29 550.4,-140.48 546.06,-137.13 520.83,-117.67 535.64,-94.14 510.06,-75.13 498.27,-66.38 483.37,-61.21 469.17,-58.18"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="469.96,-54.77 459.5,-56.45 468.73,-61.66 469.96,-54.77"/>
+</g>
+<!-- stdlib_linalg_blas -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_node9" class="node">
+<title>stdlib_linalg_blas</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="471.44,-24.27 369.92,-24.27 369.92,0 471.44,0 471.44,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="420.68" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">stdlib_linalg_blas</text>
+</g>
+<!-- module~lightconvex_dense_vectors&#45;&gt;stdlib_linalg_blas -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_edge8" class="edge">
+<title>module~lightconvex_dense_vectors&#45;&gt;stdlib_linalg_blas</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M557.75,-145.54C553.51,-143.19 549.55,-140.41 546.06,-137.13 510.39,-103.67 546.33,-65.95 510.06,-33.13 502.33,-26.14 492.7,-21.36 482.67,-18.11"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="483.72,-14.77 473.15,-15.55 481.9,-21.53 483.72,-14.77"/>
+</g>
+<!-- stdlib_optval -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_node10" class="node">
+<title>stdlib_optval</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="459.81,-230.27 381.54,-230.27 381.54,-206 459.81,-206 459.81,-230.27"/>
+<text xml:space="preserve" text-anchor="middle" x="420.68" y="-214.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">stdlib_optval</text>
+</g>
+<!-- module~lightconvex_dense_vectors&#45;&gt;stdlib_optval -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_edge9" class="edge">
+<title>module~lightconvex_dense_vectors&#45;&gt;stdlib_optval</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M580.87,-170.73C559.71,-177.18 533.52,-185.12 510.06,-192.13 497.38,-195.93 483.66,-199.98 470.9,-203.74"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="470.04,-200.34 461.43,-206.52 472.01,-207.06 470.04,-200.34"/>
+</g>
+<!-- stdlib_stats_distribution_normal -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_node11" class="node">
+<title>stdlib_stats_distribution_normal</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="510.06,-150.27 331.29,-150.27 331.29,-126 510.06,-126 510.06,-150.27"/>
+<text xml:space="preserve" text-anchor="middle" x="420.68" y="-134.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">stdlib_stats_distribution_normal</text>
+</g>
+<!-- module~lightconvex_dense_vectors&#45;&gt;stdlib_stats_distribution_normal -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_edge10" class="edge">
+<title>module~lightconvex_dense_vectors&#45;&gt;stdlib_stats_distribution_normal</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M545.74,-150.52C537.92,-149.74 529.89,-148.94 521.87,-148.13"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="522.35,-144.67 512.05,-147.15 521.66,-151.63 522.35,-144.67"/>
+</g>
+<!-- module~lightconvex_kkt&#45;&gt;module~lightconvex_abstract -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_edge11" class="edge">
+<title>module~lightconvex_kkt&#45;&gt;module~lightconvex_abstract</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M576.1,-243.95C551.42,-246.54 520.46,-249.78 492.75,-252.69"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="492.59,-249.18 483.01,-253.71 493.32,-256.15 492.59,-249.18"/>
+</g>
+<!-- module~lightconvex_kkt&#45;&gt;module~lightconvex_constants -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_edge12" class="edge">
+<title>module~lightconvex_kkt&#45;&gt;module~lightconvex_constants</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M596.57,-251.71C574.34,-261.93 540.92,-275.54 510.06,-281.13 431.88,-295.31 407.99,-301.87 331.29,-281.13 313.41,-276.3 312.17,-267.76 295.29,-260.13 291.81,-258.56 288.18,-257.05 284.49,-255.6"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="286.03,-252.44 275.43,-252.24 283.59,-259 286.03,-252.44"/>
+</g>
+<!-- module~lightconvex_kkt&#45;&gt;stdlib_optval -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_edge13" class="edge">
+<title>module~lightconvex_kkt&#45;&gt;stdlib_optval</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M576.1,-234.32C544.81,-231.04 503.43,-226.7 471.38,-223.34"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="471.85,-219.87 461.54,-222.31 471.12,-226.84 471.85,-219.87"/>
+</g>
+<!-- module~lightconvex_abstract&#45;&gt;module~lightconvex_constants -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_edge15" class="edge">
+<title>module~lightconvex_abstract&#45;&gt;module~lightconvex_constants</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M359.79,-253.43C342.98,-251.55 324.5,-249.48 306.94,-247.52"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="307.39,-244.05 297.06,-246.41 306.61,-251 307.39,-244.05"/>
+</g>
+<!-- LightKrylov -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_node12" class="node">
+<title>LightKrylov</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="266.42,-293.27 195.65,-293.27 195.65,-269 266.42,-269 266.42,-293.27"/>
+<text xml:space="preserve" text-anchor="middle" x="231.03" y="-277.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">LightKrylov</text>
+</g>
+<!-- module~lightconvex_abstract&#45;&gt;LightKrylov -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_edge14" class="edge">
+<title>module~lightconvex_abstract&#45;&gt;LightKrylov</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M359.79,-266.84C333.31,-269.8 302.66,-273.23 278.02,-275.99"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="277.85,-272.48 268.31,-277.08 278.63,-279.44 277.85,-272.48"/>
+</g>
+<!-- stdlib_linalg_constants -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_node13" class="node">
+<title>stdlib_linalg_constants</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="130.77,-251.27 0,-251.27 0,-227 130.77,-227 130.77,-251.27"/>
+<text xml:space="preserve" text-anchor="middle" x="65.39" y="-235.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">stdlib_linalg_constants</text>
+</g>
+<!-- module~lightconvex_constants&#45;&gt;stdlib_linalg_constants -->
+<g id="module~~lightconvex_dense_kkt~~UsesGraph_edge16" class="edge">
+<title>module~lightconvex_constants&#45;&gt;stdlib_linalg_constants</title>
+<path fill="none" stroke="#ffda00" stroke-dasharray="5,2" d="M166.29,-239.13C158.42,-239.13 150.32,-239.13 142.29,-239.13"/>
+<polygon fill="#ffda00" stroke="#ffda00" points="142.54,-235.64 132.54,-239.14 142.54,-242.64 142.54,-235.64"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var panmodulelightconvex_dense_kktUsesGraph = svgPanZoom('#modulelightconvex_dense_kktUsesGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#UsesGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="UsesGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (20260126.1125)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="511pt" height="32pt"
+ viewBox="0.00 0.00 511.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28.27)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28.27 506.88,-28.27 506.88,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24.27 0,-24.27 0,0 54,0 54,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="27" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="144.13,-24.27 71.87,-24.27 71.87,0 144.13,0 144.13,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="108" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="231.63,-24.27 162.37,-24.27 162.37,0 231.63,0 231.63,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="197" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="306.26,-24.27 249.74,-24.27 249.74,0 306.26,0 306.26,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="278" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="381.26,-24.27 324.74,-24.27 324.74,0 381.26,0 381.26,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="353" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="502.88,-24.27 399.12,-24.27 399.12,0 502.88,0 502.88,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="451" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a submodule to the (sub)module which it is
+descended from. Dashed arrows point from a module or program unit to 
+modules which it uses.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+            </li>
+        </ul>
+      </div>
+    </div>
+
+      
+      <br>
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              LightConvex
+              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-10-07 15:03 +0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

@@ -89,7 +89,7 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="<p>16.8% of total for derived types.</p>Including implementation: 133 statements, 45.4% of total for derived types.">18 statements</a>
+                 title="<p>17.0% of total for derived types.</p>Including implementation: 18 statements, 10.2% of total for derived types.">18 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -280,15 +280,12 @@ large graphs.</div>
     </div>
       <ul class="list-group">
           <li class="list-group-item">
+                <h3>interface </h3>
                     <h3>
-    private  subroutine dense_solve(self, rhs_x, rhs_y, sol_x, sol_y, info, tol)  
+    private module subroutine dense_solve(self, rhs_x, rhs_y, sol_x, sol_y, info, tol)  
 </h3>
 
-  <p>Working vector.</p>
-<p>Solve the linear system.
-Approximated solutions.
-Iterative refinement.
-Book-keeping.</p>
+  
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -427,19 +424,12 @@ Book-keeping.</p>
     </div>
       <ul class="list-group">
           <li class="list-group-item">
+                <h3>interface </h3>
                     <h3>
-    private  subroutine dense_update(self, d1, d2, info, reg1, reg2)  
+    private module subroutine dense_update(self, d1, d2, info, reg1, reg2)  
 </h3>
 
-  <p>Sanity check.
-Regularized diagonals.
-Assembling the regularized KKT matrix.
-Fill the (1, 1) block of K.
-Fill the (2, 1) block of K.
-Fill the (2, 2) diagonal block of K.
-LDLT factorization of K.
-Store unregularized diagonal for iterative refinement.
-Update solver status.</p>
+  
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -565,7 +555,7 @@ Update solver status.</p>
 <span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">K</span><span class="p">(:,</span><span class="w"> </span><span class="p">:)</span><span class="w">      </span><span class="c">! LDLT factors of regularized KKT matrix.</span>
 <span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="n">ilp</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ipiv</span><span class="p">(:)</span><span class="w">  </span><span class="c">! Pivots from LDLT.</span>
 <span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">workspace</span><span class="p">(:)</span><span class="w"> </span><span class="c">! LAPACK workspace (queried only once).</span>
-<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">z</span><span class="p">(:,</span><span class="w"> </span><span class="p">:),</span><span class="w"> </span><span class="n">r</span><span class="p">(:),</span><span class="w"> </span><span class="n">dz</span><span class="p">(:)</span><span class="w">    </span><span class="c">! Length n+m, allocated once. Working set.</span>
+<span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">z</span><span class="p">(:,</span><span class="w"> </span><span class="p">:),</span><span class="w"> </span><span class="n">r</span><span class="p">(:),</span><span class="w"> </span><span class="n">dz</span><span class="p">(:,</span><span class="w"> </span><span class="p">:)</span><span class="w">    </span><span class="c">! Length n+m, allocated once. Working set.</span>
 <span class="w">      </span><span class="kt">logical</span><span class="p">(</span><span class="n">lk</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">factorized</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">false</span><span class="p">.</span>
 <span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="n">ilp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">max_refine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10_ilp</span>
 <span class="w">      </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">refine_tol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0e-13_dp</span>
@@ -595,7 +585,7 @@ Update solver status.</p>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-10-06 18:32 +0000             </p>
+ on 2026-10-07 15:03 +0000             </p>
           </div>
         </div>
         <br>

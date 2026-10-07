@@ -89,7 +89,7 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="<p> 7.5% of total for derived types.</p>Including implementation: 8 statements,  2.7% of total for derived types.">8 statements</a>
+                 title="<p> 6.6% of total for derived types.</p>Including implementation: 7 statements,  4.0% of total for derived types.">7 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -124,7 +124,22 @@
       <div id="sidebar">
       <h3>Contents</h3>
   
-  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#vars-0"
+         aria-expanded="false" aria-controls="vars-0">
+         <h4 class="card-header bg-primary text-white">Variables</h4>
+      </a>
+      <div id="vars-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../type/kkt_info.html#variable-n_iter">n_iter</a>
+            <a class="list-group-item" href="../type/kkt_info.html#variable-n_refine">n_refine</a>
+            <a class="list-group-item" href="../type/kkt_info.html#variable-n_spmv">n_spmv</a>
+            <a class="list-group-item" href="../type/kkt_info.html#variable-residual">residual</a>
+            <a class="list-group-item" href="../type/kkt_info.html#variable-status~3">status</a>
+        </div>
+      </div>
+    </div>
+
   
   
   
@@ -161,6 +176,108 @@
     <p>Derived-type returned by all KKT solvers.</p>
     <br>
 
+    <section>
+    <h2>Components</h2>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n_iter"></span>
+              integer(kind=ilp),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n_iter</strong></td>
+<td> =</td>
+                <td>0_ilp</td>
+            <td>
+                <p>Number of iterations for iterative solvers (0 for direct solvers).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n_refine"></span>
+              integer(kind=ilp),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n_refine</strong></td>
+<td> =</td>
+                <td>0_ilp</td>
+            <td>
+                <p>Number of iterative refinement steps taken.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n_spmv"></span>
+              integer(kind=ilp),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n_spmv</strong></td>
+<td> =</td>
+                <td>0_ilp</td>
+            <td>
+                <p>Number of matrix-vector products (P, A', or A).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-residual"></span>
+              real(kind=dp),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>residual</strong></td>
+<td> =</td>
+                <td>huge(1.0_dp)</td>
+            <td>
+                <p>Relative residual of the unregularized problem (if known).</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-status~3"></span>
+              integer(kind=ilp),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>status</strong></td>
+<td> =</td>
+                <td>kkt_not_initialized</td>
+            <td>
+                <p>Status of the KKT solver.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    </section>
+    <br>
     
 
 
@@ -168,7 +285,6 @@
     <section>
     <h3><span class="anchor" id="src"></span>Source Code</h3>
     <div class="hl codehilite"><pre><span></span><span class="w">   </span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">kkt_info</span>
-<span class="w">      </span><span class="k">private</span>
 <span class="w">      </span><span class="c">!&gt; Status of the KKT solver.</span>
 <span class="w">      </span><span class="kt">integer</span><span class="p">(</span><span class="n">ilp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kkt_not_initialized</span>
 <span class="w">      </span><span class="c">!&gt; Number of iterations for iterative solvers (0 for direct solvers).</span>
@@ -202,7 +318,7 @@
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-10-06 18:32 +0000             </p>
+ on 2026-10-07 15:03 +0000             </p>
           </div>
         </div>
         <br>
