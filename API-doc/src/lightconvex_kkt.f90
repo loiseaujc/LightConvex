@@ -8,7 +8,7 @@ module lightconvex_kkt
    integer(ilp), parameter, public :: kkt_not_initialized = -99_ilp
    integer(ilp), parameter, public :: kkt_success = 0_ilp
    integer(ilp), parameter, public :: kkt_not_converged = -1_ilp
-   integer(ilp), parameter, public :: kkt_not_quasidefinite = -2_ilp
+   integer(ilp), parameter, public :: kkt_invalid_regularization = -2_ilp
    integer(ilp), parameter, public :: kkt_numerical_error = -3_ilp
 
    !> Derived-type returned by all KKT solvers.
@@ -79,7 +79,7 @@ module lightconvex_kkt
       real(dp), allocatable :: z(:, :), r(:), dz(:, :)    ! Length n+m, allocated once. Working set.
       logical(lk) :: factorized = .false.
       integer(ilp) :: max_refine = 10_ilp
-      real(dp) :: refine_tol = 1.0e-13_dp
+      real(dp) :: tol = epsilon(1.0_dp)
    contains
       procedure, pass(self) :: update => dense_update
       procedure, pass(self) :: solve => dense_solve
@@ -110,11 +110,11 @@ module lightconvex_kkt
    !-------------------------------------------
 
    interface kkt_solver
-      module function create_dense_kkt_solver(P, A, max_refine, refine_tol) result(solver)
+      module function create_dense_kkt_solver(P, A, max_refine, tol) result(solver)
          implicit none(type, external)
          real(dp), intent(in) :: P(:, :), A(:, :)
          integer(ilp), optional, intent(in) :: max_refine
-         real(dp), optional, intent(in) :: refine_tol
+         real(dp), optional, intent(in) :: tol
          type(dense_kkt_solver), allocatable :: solver
       end function create_dense_kkt_solver
    end interface

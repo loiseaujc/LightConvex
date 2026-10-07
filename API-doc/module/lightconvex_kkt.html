@@ -130,9 +130,9 @@
       </a>
       <div id="vars-0" class="collapse">
         <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/lightconvex_kkt.html#variable-kkt_invalid_regularization">kkt_invalid_regularization</a>
             <a class="list-group-item" href="../module/lightconvex_kkt.html#variable-kkt_not_converged">kkt_not_converged</a>
             <a class="list-group-item" href="../module/lightconvex_kkt.html#variable-kkt_not_initialized">kkt_not_initialized</a>
-            <a class="list-group-item" href="../module/lightconvex_kkt.html#variable-kkt_not_quasidefinite">kkt_not_quasidefinite</a>
             <a class="list-group-item" href="../module/lightconvex_kkt.html#variable-kkt_numerical_error">kkt_numerical_error</a>
             <a class="list-group-item" href="../module/lightconvex_kkt.html#variable-kkt_success">kkt_success</a>
         </div>
@@ -207,8 +207,8 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
-                  <li class="list-inline-item">stdlib_optval</li>
                   <li class="list-inline-item"><a href='lightconvex_abstract.html'>lightconvex_abstract</a></li>
+                  <li class="list-inline-item">stdlib_optval</li>
                   <li class="list-inline-item"><a href='lightconvex_constants.html'>lightconvex_constants</a></li>
               </ul>
             </li>
@@ -535,6 +535,23 @@ large graphs.</div>
     <tbody>
         <tr>
             <td>
+              <span class="anchor" id="variable-kkt_invalid_regularization"></span>
+              integer(kind=ilp),
+            </td>
+              <td>public,</td>
+            <td>
+parameter               
+            </td>
+            <td>::</td>
+            <td><strong>kkt_invalid_regularization</strong></td>
+<td> =</td>
+                <td>-2_ilp</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
               <span class="anchor" id="variable-kkt_not_converged"></span>
               integer(kind=ilp),
             </td>
@@ -563,23 +580,6 @@ parameter
             <td><strong>kkt_not_initialized</strong></td>
 <td> =</td>
                 <td>-99_ilp</td>
-            <td>
-                
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" id="variable-kkt_not_quasidefinite"></span>
-              integer(kind=ilp),
-            </td>
-              <td>public,</td>
-            <td>
-parameter               
-            </td>
-            <td>::</td>
-            <td><strong>kkt_not_quasidefinite</strong></td>
-<td> =</td>
-                <td>-2_ilp</td>
             <td>
                 
             </td>
@@ -655,7 +655,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~2"></span>
+              <span class="anchor" id="variable-info~4"></span>
               type(<a href='../type/kkt_info.html'>kkt_info</a>),
             </td>
 <td>intent(in)</td>
@@ -690,7 +690,7 @@ parameter
     <ul class="list-group">
           <li class="list-group-item">
                 <h3>
-    private module function create_dense_kkt_solver(P, A, max_refine, refine_tol) result(solver)  
+    private module function create_dense_kkt_solver(P, A, max_refine, tol) result(solver)  
 
     </h3>
   
@@ -708,7 +708,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-p~3"></span>
+              <span class="anchor" id="variable-p~4"></span>
               real(kind=dp),
             </td>
 <td>intent(in)</td>
@@ -723,7 +723,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~5"></span>
+              <span class="anchor" id="variable-a~8"></span>
               real(kind=dp),
             </td>
 <td>intent(in)</td>
@@ -753,7 +753,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-refine_tol~2"></span>
+              <span class="anchor" id="variable-tol~5"></span>
               real(kind=dp),
             </td>
 <td>intent(in),</td>
@@ -761,7 +761,7 @@ parameter
               
             </td>
             <td>::</td>
-            <td><strong>refine_tol</strong></td>
+            <td><strong>tol</strong></td>
             <td>
                 
             </td>
@@ -944,7 +944,7 @@ parameter
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-status~3"></span>
+              <span class="anchor" id="variable-status"></span>
               integer(kind=ilp),
             </td>
               <td>public</td>
@@ -998,7 +998,7 @@ parameter
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~2"></span>
+              <span class="anchor" id="variable-info~4"></span>
               type(<a href='../type/kkt_info.html'>kkt_info</a>),
             </td>
 <td>intent(in)</td>
@@ -1042,7 +1042,7 @@ parameter
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-10-07 16:22 +0000             </p>
+ on 2026-10-07 19:46 +0000             </p>
           </div>
         </div>
         <br>
