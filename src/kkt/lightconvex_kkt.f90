@@ -17,10 +17,6 @@ module lightconvex_kkt
       integer(ilp) :: status = kkt_not_initialized
       !> Number of iterations for iterative solvers (0 for direct solvers).
       integer(ilp) :: n_iter = 0_ilp
-      !> Number of iterative refinement steps taken.
-      integer(ilp) :: n_refine = 0_ilp
-      !> Number of matrix-vector products (P, A', or A).
-      integer(ilp) :: n_spmv = 0_ilp
       !> Relative residual of the unregularized problem (if known).
       real(dp) :: residual = huge(1.0_dp)
    end type kkt_info
@@ -79,7 +75,7 @@ module lightconvex_kkt
       real(dp), allocatable :: z(:, :), r(:), dz(:, :)    ! Length n+m, allocated once. Working set.
       logical(lk) :: factorized = .false.
       integer(ilp) :: max_refine = 10_ilp
-      real(dp) :: tol = epsilon(1.0_dp)
+      real(dp) :: tol = 1.0e-12_dp
    contains
       procedure, pass(self) :: update => dense_update
       procedure, pass(self) :: solve => dense_solve

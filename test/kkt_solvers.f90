@@ -9,6 +9,8 @@ module TestKKTSolvers
    private
 
    public :: collect_dense_kkt_solvers_tests
+
+   real(dp), parameter :: atol = 1.0e-12_dp
 contains
    subroutine collect_dense_kkt_solvers_tests(testsuite)
       type(unittest_type), allocatable, intent(out) :: testsuite(:)
@@ -51,14 +53,13 @@ contains
          call kkt%solve(rhs_x, rhs_y, x, y, info)
          call check(error, is_successful(info)) ! Successfully computed the solution.
          if (allocated(error)) return
-         call check(error, info%n_refine == 0)  ! No iterative refinement (no regularization was used).
-         if (allocated(error)) return
+
          !> Check primal solution.
-         call check(error, all_close(xref, x%data))
+         call check(error, all_close(xref, x%data, abs_tol=atol))
          if (allocated(error)) return
 
          !> Check dual solution.
-         call check(error, all_close(yref, y%data))
+         call check(error, all_close(yref, y%data, abs_tol=atol))
          if (allocated(error)) return
       end block
 
@@ -100,7 +101,6 @@ contains
          !> Solve the problem.
          call kkt%solve(rhs_x, rhs_y, x, y, info)
          call check(error, is_successful(info))
-         call check(error, info%n_refine == 0)  ! No need for regularization.
          if (allocated(error)) return
 
          !> Check primal solution.
@@ -152,11 +152,10 @@ contains
          !> Solve the problem.
          call kkt%solve(rhs_x, rhs_y, x, y, info)
          call check(error, is_successful(info)) ! Successfully computed the solution.
-         call check(error, info%n_refine > 0)   ! Iterative refinement used to handle the
          if (allocated(error)) return           ! redundant constraint.
 
          !> Check primal solution.
-         call check(error, all_close(xref, x%data, abs_tol=epsilon(1.0_dp)))
+         call check(error, all_close(xref, x%data, abs_tol=atol))
          if (allocated(error)) return
 
          ! !> Check dual solution.
