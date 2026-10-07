@@ -44,12 +44,13 @@ contains
          !> Create KKT solver.
          kkt = kkt_solver(P, A)
          call kkt%update(d1, d2, info)
-         call check(error, is_successful(info))
+         call check(error, is_successful(info)) ! Successfully initialized the KKT solver.
          if (allocated(error)) return
 
          !> Solve the problem.
          call kkt%solve(rhs_x, rhs_y, x, y, info)
-         call check(error, is_successful(info))
+         call check(error, is_successful(info)) ! Successfully computed the solution.
+         call check(error, info%n_refine == 0)  ! No iterative refinement (no regularization was used).
          if (allocated(error)) return
 
          !> Check primal solution.
@@ -59,7 +60,6 @@ contains
          !> Check dual solution.
          call check(error, all_close(yref, y%data))
          if (allocated(error)) return
-
       end block
 
       !-----------------------------------------------------------------------
@@ -100,6 +100,7 @@ contains
          !> Solve the problem.
          call kkt%solve(rhs_x, rhs_y, x, y, info)
          call check(error, is_successful(info))
+         call check(error, info%n_refine == 0)  ! No need for regularization.
          if (allocated(error)) return
 
          !> Check primal solution.
@@ -116,7 +117,54 @@ contains
          yref = [-0.0440876_dp, 0.01961271_dp, -0.08465554_dp]
          call check(error, all_close(yref, y%data, abs_tol=1.0e-6_dp))
          if (allocated(error)) return
-
       end block
+
+      !---------------------------------------------------------------------------
+      !-----     SMALL SCALE LEAST-NORM PROBLEM WITH DUPLICATED CONSTRAINT    -----
+      !----------------------------------------------------------------------------
+      block
+         integer(ilp), parameter :: m = 3, n = 4
+         real(dp) :: P(n, n), A(m, n), b(m)
+         real(dp), parameter :: xref(n) = [1.0_dp, 0.0_dp, 0.0_dp, -1.0_dp] ! Reference primal solution.
+         real(dp), parameter :: yref(m - 1) = [-0.5_dp, -0.5_dp]                ! Reference dual solution.
+         type(dense_vector), allocatable :: x, y, rhs_x, rhs_y, d1, d2
+         type(dense_kkt_solver), allocatable :: kkt
+         type(kkt_info) :: info
+
+         !> Problem's matrices.
+         P = eye(n, mold=1.0_dp)
+         A(1, :) = [2.0_dp, -1.0_dp, 1.0_dp, -1.0_dp]
+         A(2, :) = [0.0_dp, 1.0_dp, -1.0_dp, -1.0_dp]
+         A(3, :) = [0.0_dp, 1.0_dp, -1.0_dp, -1.0_dp]
+         b = [3.0_dp, 1.0_dp, 1.0_dp]
+
+         !> Problem's vectors.
+         x = dense_vector(n); d1 = dense_vector(n)
+         y = dense_vector(m); d2 = dense_vector(m)
+         rhs_x = dense_vector(n); rhs_y = dense_vector(b)
+
+         !> Create KKT solver.
+         kkt = kkt_solver(P, A)
+         call kkt%update(d1, d2, info, reg1=1e-6_dp, reg2=1e-6_dp)
+         call check(error, is_successful(info)) ! Successfully initialized the KKT solver.
+         if (allocated(error)) return
+
+         !> Solve the problem.
+         call kkt%solve(rhs_x, rhs_y, x, y, info)
+         call check(error, is_successful(info)) ! Successfully computed the solution.
+         call check(error, info%n_refine > 0)   ! Iterative refinement used to handle the
+         if (allocated(error)) return           ! redundant constraint.
+
+         !> Check primal solution.
+         call check(error, all_close(xref, x%data, abs_tol=epsilon(1.0_dp)))
+         if (allocated(error)) return
+
+         ! !> Check dual solution.
+         ! print *, "yref :", yref
+         ! print *, "y    :", y%data
+         ! call check(error, all_close(yref, y%data(1:m - 1), abs_tol=epsilon(1.0_dp)))
+         ! if (allocated(error)) return
+      end block
+
    end subroutine test_dense_kkt_solver_testsuite
 end module TestKKTSolvers

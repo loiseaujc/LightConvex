@@ -1,5 +1,6 @@
 submodule(lightconvex_kkt) lightconvex_dense_kkt
    use stdlib_linalg_lapack, only: sytrf, sytrs, symv, gemv
+   use stdlib_linalg, only: norm
    use lightconvex_dense_vectors, only: dense_vector
    implicit none(type, external)
 contains
@@ -76,8 +77,7 @@ contains
                integer(ilp) :: lwork, lapack_info
                self%ipiv = 0_ilp
                lwork = size(self%workspace, kind=ilp)
-               call sytrf(uplo, n + m, self%K, n + m, self%ipiv, &
-                          self%workspace, lwork, lapack_info)
+               call sytrf(uplo, n + m, self%K, n + m, self%ipiv, self%workspace, lwork, lapack_info)
                if (lapack_info < 0) then
                   error stop "kkt%update: error in sytrf."
                else if (lapack_info > 0) then
@@ -133,12 +133,12 @@ contains
 
                   !> Iterative refinement.
                   block
-                     integer(ilp) :: iter, lapack_info, nn, lda
+                     integer(ilp) :: iter, lapack_info, nn, lda, i
                      real(dp) :: res, res_prev, rhs_norm
                      logical(lk) :: converged
 
                      nn = n + m; lda = max(1_ilp, m)
-                     rhs_norm = max(maxval(abs(rhs_x%data)), maxval(abs(rhs_y%data)), tiny(1.0_dp))
+                     rhs_norm = max(norm(rhs_x%data, "inf"), norm(rhs_y%data, "inf"), tiny(1.0_dp))
                      res_prev = huge(1.0_dp)
                      converged = .false.
                      info%n_refine = 0_ilp
@@ -146,44 +146,51 @@ contains
 
                      do iter = 1, self%max_refine
                         !> r = rhs - K @ z (with K the unregularized matrix).
-                        self%r(:n) = rhs_x%data
-                        self%r(n + 1:) = rhs_y%data
-                        !> r_x = rhs_x - P @ x (P symmetric, lower triangle storage).
+                        !  -------------------------------------------------
+                        self%r(:n) = rhs_x%data; self%r(n + 1:) = rhs_y%data
+                        ! r_x = rhs_x - P @ x (P symmetric, lower triangle storage).
                         call symv(uplo, n, -1.0_dp, self%P, n, self%z(:n, 1), 1, 1.0_dp, self%r(:n), 1)
-                        !> r_x = r_x - d1 .* x - A.T @ y.
-                        self%r(:n) = self%r(:n) - self%d1*self%z(:n, 1)
+                        ! r_x = r_x - d1 .* x - A.T @ y.
+                        do concurrent(i=1:n)
+                           self%r(i) = self%r(i) - self%d1(i)*self%z(i, 1)
+                        end do
                         call gemv("T", m, n, -1.0_dp, self%A, lda, self%z(n + 1:, 1), 1, 1.0_dp, self%r(:n), 1)
-                        !> r_y = rhs_y - A @ x + d2 .* y
+                        ! r_y = rhs_y - A @ x + d2 .* y
                         call gemv("N", m, n, -1.0_dp, self%A, lda, self%z(:n, 1), 1, 1.0_dp, self%r(n + 1:), 1)
-                        self%r(n + 1:) = self%r(n + 1:) + self%d2*self%z(n + 1:, 1)
+                        do concurrent(i=1:m)
+                           self%r(n + i) = self%r(n + i) + self%d2(i)*self%z(n + i, 1)
+                        end do
+
                         !> Book-keeping
                         info%n_spmv = info%n_spmv + 3_ilp
 
                         !> Residual computation.
-                        res = maxval(abs(self%r))/rhs_norm
+                        !  --------------------
+                        res = norm(self%r, "inf")/rhs_norm
                         info%residual = res
 
-                        !> NaN or Inf: unstable factorization.
+                        ! NaN or Inf: unstable factorization.
                         if (.not. (res <= huge(1.0_dp))) then
                            info%status = kkt_numerical_error
                            return
                         end if
 
-                        !> Converged.
+                        ! Converged.
                         if (res <= self%refine_tol) then
                            converged = .true.
                            exit
                         end if
 
-                        !> Out of refinment steps, or stagnation (less than a factor 2 gained).
-                        if (iter == self%max_refine) exit
+                        ! Stagnation (less than a factor 2 gained).
                         if ((iter > 0) .and. (res > 0.5_dp*res_prev)) exit
 
-                        !> Correction: K_reg dz = r, then z = z + dz
+                        !> Correction: K_reg dz = r, then z = z + dz.
+                        !  -----------------------------------------
                         self%dz(:, 1) = self%r
                         call sytrs(uplo, nn, 1, self%K, nn, self%ipiv, self%dz, nn, lapack_info)
                         if (lapack_info /= 0) error stop "kkt%solve: Error sytrs (refinement)."
-                        self%z(:, 1) = self%z(:, 1) + self%dz(:, 1)
+                        self%z = self%z + self%dz
+
                         info%n_refine = info%n_refine + 1_ilp
                         res_prev = res
                      end do
