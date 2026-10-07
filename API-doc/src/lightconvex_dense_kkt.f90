@@ -121,7 +121,6 @@ contains
                   if (sol_y%get_size() /= m) error stop "kkt%solve: sol_y has inconsistent dimensions."
 
                   converged = .false.
-                  info%n_refine = 0_ilp
 
                   !> Working vector.
                   self%z(:n, 1) = rhs_x%data; self%z(n + 1:, 1) = rhs_y%data
@@ -150,8 +149,6 @@ contains
                         if (lapack_info /= 0) error stop "kkt%solve: Error sytrs (refinement)."
                         self%z = self%z + self%dz
 
-                        info%n_refine = info%n_refine + 1_ilp
-
                         !> r = rhs - K @ z (with K the unregularized matrix).
                         call compute_residual(self%P, self%A, self%K, self%ipiv, self%d1, self%d2, &
                                               rhs_x%data, rhs_y%data, self%z, self%r)
@@ -163,12 +160,12 @@ contains
                            ! NaN or Inf: unstable factorization.
                            info%status = kkt_numerical_error
                            return
-                        else if (info%residual > 0.5_dp*res_prev) then
-                           ! Stagnation.
-                           exit iterative_refinement
                         else if (info%residual <= self%tol) then
                            ! Solver converged.
                            converged = .true.
+                           exit iterative_refinement
+                        else if (info%residual > 0.5_dp*res_prev) then
+                           ! Stagnation.
                            exit iterative_refinement
                         end if
 
