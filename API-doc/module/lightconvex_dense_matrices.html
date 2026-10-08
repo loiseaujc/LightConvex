@@ -1,0 +1,1297 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Convex Programming in Modern Fortran">
+    <meta name="author" content="" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>lightconvex_dense_matrices &ndash; LightConvex</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">LightConvex </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="../page/index.html">Contributing and specs</a></li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>lightconvex_dense_matrices
+      <small>Module</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 8.9% of total for modules and submodules.">117 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/lightconvex_dense_matrices.f90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/lightconvex_dense_matrices.f90.html'>lightconvex_dense_matrices.f90</a></li>
+            <li class="breadcrumb-item active" aria-current="page">lightconvex_dense_matrices</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#inters-0"
+         aria-expanded="false" aria-controls="inters-0">
+         <h4 class="card-header bg-primary text-white">Interfaces</h4>
+      </a>
+      <div id="inters-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/lightconvex_dense_matrices.html#interface-dense_matrix">dense_matrix</a>
+            <a class="list-group-item" href="../module/lightconvex_dense_matrices.html#interface-dense_sym_matrix">dense_sym_matrix</a>
+        </div>
+      </div>
+    </div>
+
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#types-0"
+         aria-expanded="false" aria-controls="types-0">
+         <h4 class="card-header bg-primary text-white">Derived Types</h4>
+      </a>
+      <div id="types-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/lightconvex_dense_matrices.html#type-dense_matrix">dense_matrix</a>
+            <a class="list-group-item" href="../module/lightconvex_dense_matrices.html#type-dense_sym_matrix">dense_sym_matrix</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#modprocs-0"
+         aria-expanded="false" aria-controls="modprocs-0">
+         <h4 class="card-header bg-primary text-white">Module Procedures</h4>
+      </a>
+      <div id="modprocs-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/lightconvex_dense_matrices.html#proc-create_constant_matrix">create_constant_matrix</a>
+            <a class="list-group-item" href="../module/lightconvex_dense_matrices.html#proc-create_constant_sym_matrix">create_constant_sym_matrix</a>
+            <a class="list-group-item" href="../module/lightconvex_dense_matrices.html#proc-create_from_array">create_from_array</a>
+            <a class="list-group-item" href="../module/lightconvex_dense_matrices.html#proc-create_from_sym_array">create_from_sym_array</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+
+
+  </div>
+
+    </div>
+
+    <div class="col-md-9" id='text'>
+      
+<br>          <div class="card mb-4">
+      <h3 class="card-header card-title bg-light">Uses</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <ul class="list-inline">
+                  <li class="list-inline-item"><a href='lightconvex_dense_vectors.html'>lightconvex_dense_vectors</a></li>
+                  <li class="list-inline-item"><a href='lightconvex_constants.html'>lightconvex_constants</a></li>
+                  <li class="list-inline-item">stdlib_linalg_blas</li>
+                  <li class="list-inline-item"><a href='lightconvex_abstract.html'>lightconvex_abstract</a></li>
+                  <li class="list-inline-item">stdlib_optval</li>
+              </ul>
+            </li>
+            <li class="list-group-item">
+              <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (20260126.1125)
+ -->
+<!-- Title: module~~lightconvex_dense_matrices~~UsesGraph Pages: 1 -->
+<svg id="modulelightconvex_dense_matricesUsesGraph" width="641pt" height="272pt"
+ viewBox="0.00 0.00 641.00 272.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~lightconvex_dense_matrices~~UsesGraph" class="graph" transform="scale(0.707818 0.707818) rotate(0) translate(4 380.7)">
+<title>module~~lightconvex_dense_matrices~~UsesGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-380.7 901.6,-380.7 901.6,4 -4,4"/>
+<!-- module~lightconvex_dense_matrices -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_node1" class="node">
+<title>module~lightconvex_dense_matrices</title>
+<polygon fill="none" stroke="black" points="897.6,-167.27 736.08,-167.27 736.08,-143 897.6,-143 897.6,-167.27"/>
+<text xml:space="preserve" text-anchor="middle" x="816.84" y="-151.53" font-family="Helvetica,sans-Serif" font-size="10.50">lightconvex_dense_matrices</text>
+</g>
+<!-- module~lightconvex_abstract -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_node2" class="node">
+<title>module~lightconvex_abstract</title>
+<g id="a_module~~lightconvex_dense_matrices~~UsesGraph_node2"><a xlink:href="../module/lightconvex_abstract.html" xlink:title="lightconvex_abstract">
+<polygon fill="#337ab7" stroke="#337ab7" points="481.19,-66.27 360.17,-66.27 360.17,-42 481.19,-42 481.19,-66.27"/>
+<text xml:space="preserve" text-anchor="middle" x="420.68" y="-50.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lightconvex_abstract</text>
+</a>
+</g>
+</g>
+<!-- module~lightconvex_dense_matrices&#45;&gt;module~lightconvex_abstract -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_edge1" class="edge">
+<title>module~lightconvex_dense_matrices&#45;&gt;module~lightconvex_abstract</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M622.07,-54.13C580.37,-41.6 531.55,-41.32 492.54,-44.31"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="492.46,-40.81 482.8,-45.15 493.06,-47.78 492.46,-40.81"/>
+</g>
+<!-- module~lightconvex_constants -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_node3" class="node">
+<title>module~lightconvex_constants</title>
+<g id="a_module~~lightconvex_dense_matrices~~UsesGraph_node3"><a xlink:href="../module/lightconvex_constants.html" xlink:title="lightconvex_constants">
+<polygon fill="#337ab7" stroke="#337ab7" points="295.29,-107.27 166.77,-107.27 166.77,-83 295.29,-83 295.29,-107.27"/>
+<text xml:space="preserve" text-anchor="middle" x="231.03" y="-91.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lightconvex_constants</text>
+</a>
+</g>
+</g>
+<!-- module~lightconvex_dense_matrices&#45;&gt;module~lightconvex_constants -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_edge2" class="edge">
+<title>module~lightconvex_dense_matrices&#45;&gt;module~lightconvex_constants</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M622.07,-342.13C499.74,-384.66 437.24,-397.62 331.29,-323.13 262.07,-274.48 240.66,-166.69 234.43,-118.83"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="237.92,-118.54 233.27,-109.02 230.96,-119.36 237.92,-118.54"/>
+</g>
+<!-- module~lightconvex_dense_vectors -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_node4" class="node">
+<title>module~lightconvex_dense_vectors</title>
+<g id="a_module~~lightconvex_dense_matrices~~UsesGraph_node4"><a xlink:href="../module/lightconvex_dense_vectors.html" xlink:title="lightconvex_dense_vectors">
+<polygon fill="#337ab7" stroke="#337ab7" points="700.08,-167.27 546.06,-167.27 546.06,-143 700.08,-143 700.08,-167.27"/>
+<text xml:space="preserve" text-anchor="middle" x="623.07" y="-151.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lightconvex_dense_vectors</text>
+</a>
+</g>
+</g>
+<!-- module~lightconvex_dense_matrices&#45;&gt;module~lightconvex_dense_vectors -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_edge3" class="edge">
+<title>module~lightconvex_dense_matrices&#45;&gt;module~lightconvex_dense_vectors</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M735.62,-155.13C727.67,-155.13 719.57,-155.13 711.55,-155.13"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="711.8,-151.64 701.8,-155.14 711.8,-158.64 711.8,-151.64"/>
+</g>
+<!-- stdlib_linalg_blas -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_node5" class="node">
+<title>stdlib_linalg_blas</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="471.44,-314.27 369.92,-314.27 369.92,-290 471.44,-290 471.44,-314.27"/>
+<text xml:space="preserve" text-anchor="middle" x="420.68" y="-298.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">stdlib_linalg_blas</text>
+</g>
+<!-- module~lightconvex_dense_matrices&#45;&gt;stdlib_linalg_blas -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_edge4" class="edge">
+<title>module~lightconvex_dense_matrices&#45;&gt;stdlib_linalg_blas</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M808.58,-167.71C786.6,-204.28 716.53,-309.99 624.07,-342.13"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M622.07,-342.13C608.86,-346.73 535.94,-330.5 481.84,-317.35"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="482.97,-314.02 472.43,-315.04 481.31,-320.82 482.97,-314.02"/>
+</g>
+<!-- stdlib_optval -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_node6" class="node">
+<title>stdlib_optval</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="459.81,-24.27 381.54,-24.27 381.54,0 459.81,0 459.81,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="420.68" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">stdlib_optval</text>
+</g>
+<!-- module~lightconvex_dense_matrices&#45;&gt;stdlib_optval -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_edge5" class="edge">
+<title>module~lightconvex_dense_matrices&#45;&gt;stdlib_optval</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M797.83,-142.56C765.01,-120.38 692.54,-74.71 624.07,-54.13"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M622.07,-54.13C571.61,-38.97 512.41,-27.29 471.5,-20.14"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="472.15,-16.7 461.7,-18.45 470.96,-23.6 472.15,-16.7"/>
+</g>
+<!-- module~lightconvex_abstract&#45;&gt;module~lightconvex_constants -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_edge7" class="edge">
+<title>module~lightconvex_abstract&#45;&gt;module~lightconvex_constants</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M362.1,-66.71C342.74,-70.95 320.94,-75.71 300.81,-80.11"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="300.32,-76.63 291.3,-82.19 301.81,-83.47 300.32,-76.63"/>
+</g>
+<!-- LightKrylov -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_node7" class="node">
+<title>LightKrylov</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="266.42,-65.27 195.65,-65.27 195.65,-41 266.42,-41 266.42,-65.27"/>
+<text xml:space="preserve" text-anchor="middle" x="231.03" y="-49.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">LightKrylov</text>
+</g>
+<!-- module~lightconvex_abstract&#45;&gt;LightKrylov -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_edge6" class="edge">
+<title>module~lightconvex_abstract&#45;&gt;LightKrylov</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M359.79,-53.82C333.31,-53.67 302.66,-53.51 278.02,-53.38"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="278.33,-49.88 268.31,-53.33 278.3,-56.88 278.33,-49.88"/>
+</g>
+<!-- stdlib_linalg_constants -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_node10" class="node">
+<title>stdlib_linalg_constants</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="130.77,-107.27 0,-107.27 0,-83 130.77,-83 130.77,-107.27"/>
+<text xml:space="preserve" text-anchor="middle" x="65.39" y="-91.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">stdlib_linalg_constants</text>
+</g>
+<!-- module~lightconvex_constants&#45;&gt;stdlib_linalg_constants -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_edge8" class="edge">
+<title>module~lightconvex_constants&#45;&gt;stdlib_linalg_constants</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M166.29,-95.13C158.42,-95.13 150.32,-95.13 142.29,-95.13"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="142.54,-91.64 132.54,-95.14 142.54,-98.64 142.54,-91.64"/>
+</g>
+<!-- module~lightconvex_dense_vectors&#45;&gt;module~lightconvex_abstract -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_edge9" class="edge">
+<title>module~lightconvex_dense_vectors&#45;&gt;module~lightconvex_abstract</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M606.66,-142.58C585.87,-126.18 547.15,-97.51 510.06,-80.13 502.12,-76.41 493.52,-73.09 484.91,-70.17"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="486.09,-66.88 475.5,-67.15 483.95,-73.54 486.09,-66.88"/>
+</g>
+<!-- module~lightconvex_dense_vectors&#45;&gt;module~lightconvex_constants -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_edge10" class="edge">
+<title>module~lightconvex_dense_vectors&#45;&gt;module~lightconvex_constants</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M595.58,-142.66C573.29,-132.8 540.31,-119.64 510.06,-113.13 442.37,-98.59 363.45,-94.68 307.03,-94.06"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="307.24,-90.56 297.21,-93.99 307.19,-97.56 307.24,-90.56"/>
+</g>
+<!-- module~lightconvex_dense_vectors&#45;&gt;stdlib_linalg_blas -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_edge13" class="edge">
+<title>module~lightconvex_dense_vectors&#45;&gt;stdlib_linalg_blas</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M614.85,-167.41C599.2,-192.89 559.55,-251.55 510.06,-281.13 501.79,-286.08 492.43,-289.86 482.98,-292.75"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="482.09,-289.36 473.36,-295.35 483.92,-296.12 482.09,-289.36"/>
+</g>
+<!-- module~lightconvex_dense_vectors&#45;&gt;stdlib_optval -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_edge15" class="edge">
+<title>module~lightconvex_dense_vectors&#45;&gt;stdlib_optval</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M611.27,-142.56C585.7,-112.91 522.65,-40.52 510.06,-33.13 498.26,-26.21 484.32,-21.57 471.03,-18.46"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="472.07,-15.1 461.57,-16.49 470.65,-21.95 472.07,-15.1"/>
+</g>
+<!-- stdlib_intrinsics -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_node8" class="node">
+<title>stdlib_intrinsics</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="466.94,-272.27 374.42,-272.27 374.42,-248 466.94,-248 466.94,-272.27"/>
+<text xml:space="preserve" text-anchor="middle" x="420.68" y="-256.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">stdlib_intrinsics</text>
+</g>
+<!-- module~lightconvex_dense_vectors&#45;&gt;stdlib_intrinsics -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_edge11" class="edge">
+<title>module~lightconvex_dense_vectors&#45;&gt;stdlib_intrinsics</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M609.12,-167.73C589.39,-186.2 549.9,-220.46 510.06,-239.13 500.2,-243.76 489.24,-247.41 478.47,-250.29"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="477.74,-246.86 468.86,-252.65 479.4,-253.66 477.74,-246.86"/>
+</g>
+<!-- stdlib_linalg -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_node9" class="node">
+<title>stdlib_linalg</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="457.94,-230.27 383.42,-230.27 383.42,-206 457.94,-206 457.94,-230.27"/>
+<text xml:space="preserve" text-anchor="middle" x="420.68" y="-214.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">stdlib_linalg</text>
+</g>
+<!-- module~lightconvex_dense_vectors&#45;&gt;stdlib_linalg -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_edge12" class="edge">
+<title>module~lightconvex_dense_vectors&#45;&gt;stdlib_linalg</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M592,-167.59C569.65,-176.55 538.27,-188.53 510.06,-197.13 496.86,-201.16 482.36,-204.89 468.99,-208.05"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="468.5,-204.57 459.55,-210.23 470.08,-211.39 468.5,-204.57"/>
+</g>
+<!-- stdlib_math -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_node11" class="node">
+<title>stdlib_math</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="457.19,-188.27 384.17,-188.27 384.17,-164 457.19,-164 457.19,-188.27"/>
+<text xml:space="preserve" text-anchor="middle" x="420.68" y="-172.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">stdlib_math</text>
+</g>
+<!-- module~lightconvex_dense_vectors&#45;&gt;stdlib_math -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_edge14" class="edge">
+<title>module~lightconvex_dense_vectors&#45;&gt;stdlib_math</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M545.74,-163.13C519.81,-165.85 491.62,-168.81 468.67,-171.21"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="468.61,-167.7 459.03,-172.22 469.34,-174.66 468.61,-167.7"/>
+</g>
+<!-- stdlib_stats_distribution_normal -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_node12" class="node">
+<title>stdlib_stats_distribution_normal</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="510.06,-146.27 331.29,-146.27 331.29,-122 510.06,-122 510.06,-146.27"/>
+<text xml:space="preserve" text-anchor="middle" x="420.68" y="-130.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">stdlib_stats_distribution_normal</text>
+</g>
+<!-- module~lightconvex_dense_vectors&#45;&gt;stdlib_stats_distribution_normal -->
+<g id="module~~lightconvex_dense_matrices~~UsesGraph_edge16" class="edge">
+<title>module~lightconvex_dense_vectors&#45;&gt;stdlib_stats_distribution_normal</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M545.74,-147.14C537.92,-146.32 529.89,-145.48 521.87,-144.63"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="522.36,-141.17 512.05,-143.61 521.63,-148.13 522.36,-141.17"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var panmodulelightconvex_dense_matricesUsesGraph = svgPanZoom('#modulelightconvex_dense_matricesUsesGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#UsesGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="UsesGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (20260126.1125)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="511pt" height="32pt"
+ viewBox="0.00 0.00 511.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28.27)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28.27 506.88,-28.27 506.88,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24.27 0,-24.27 0,0 54,0 54,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="27" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="144.13,-24.27 71.87,-24.27 71.87,0 144.13,0 144.13,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="108" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="231.63,-24.27 162.37,-24.27 162.37,0 231.63,0 231.63,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="197" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="306.26,-24.27 249.74,-24.27 249.74,0 306.26,0 306.26,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="278" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="381.26,-24.27 324.74,-24.27 324.74,0 381.26,0 381.26,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="353" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="502.88,-24.27 399.12,-24.27 399.12,0 502.88,0 502.88,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="451" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a submodule to the (sub)module which it is
+descended from. Dashed arrows point from a module or program unit to 
+modules which it uses.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+            </li>
+        </ul>
+      </div>
+    </div>
+
+          <div class="card">
+      <h3 class="card-header card-title bg-light">Used by</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (20260126.1125)
+ -->
+<!-- Title: module~~lightconvex_dense_matrices~~UsedByGraph Pages: 1 -->
+<svg id="modulelightconvex_dense_matricesUsedByGraph" width="336pt" height="74pt"
+ viewBox="0.00 0.00 336.00 74.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~lightconvex_dense_matrices~~UsedByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 70.27)">
+<title>module~~lightconvex_dense_matrices~~UsedByGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-70.27 332.29,-70.27 332.29,4 -4,4"/>
+<!-- module~lightconvex_dense_matrices -->
+<g id="module~~lightconvex_dense_matrices~~UsedByGraph_node1" class="node">
+<title>module~lightconvex_dense_matrices</title>
+<polygon fill="none" stroke="black" points="161.52,-45.27 0,-45.27 0,-21 161.52,-21 161.52,-45.27"/>
+<text xml:space="preserve" text-anchor="middle" x="80.76" y="-29.53" font-family="Helvetica,sans-Serif" font-size="10.50">lightconvex_dense_matrices</text>
+</g>
+<!-- module~lightconvex -->
+<g id="module~~lightconvex_dense_matrices~~UsedByGraph_node2" class="node">
+<title>module~lightconvex</title>
+<g id="a_module~~lightconvex_dense_matrices~~UsedByGraph_node2"><a xlink:href="../module/lightconvex.html" xlink:title="LightConvex">
+<polygon fill="#337ab7" stroke="#337ab7" points="301.29,-66.27 224.52,-66.27 224.52,-42 301.29,-42 301.29,-66.27"/>
+<text xml:space="preserve" text-anchor="middle" x="262.91" y="-50.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">LightConvex</text>
+</a>
+</g>
+</g>
+<!-- module~lightconvex&#45;&gt;module~lightconvex_dense_matrices -->
+<g id="module~~lightconvex_dense_matrices~~UsedByGraph_edge1" class="edge">
+<title>module~lightconvex&#45;&gt;module~lightconvex_dense_matrices</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M224.14,-49.73C209.1,-47.98 191.09,-45.88 173.01,-43.77"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="173.62,-40.32 163.28,-42.64 172.8,-47.27 173.62,-40.32"/>
+</g>
+<!-- module~lightconvex_dense_kkt -->
+<g id="module~~lightconvex_dense_matrices~~UsedByGraph_node3" class="node">
+<title>module~lightconvex_dense_kkt</title>
+<g id="a_module~~lightconvex_dense_matrices~~UsedByGraph_node3"><a xlink:href="../module/lightconvex_dense_kkt.html" xlink:title="lightconvex_dense_kkt">
+<polygon fill="#5bc0de" stroke="#5bc0de" points="328.29,-24.27 197.52,-24.27 197.52,0 328.29,0 328.29,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="262.91" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lightconvex_dense_kkt</text>
+</a>
+</g>
+</g>
+<!-- module~lightconvex_dense_kkt&#45;&gt;module~lightconvex_dense_matrices -->
+<g id="module~~lightconvex_dense_matrices~~UsedByGraph_edge2" class="edge">
+<title>module~lightconvex_dense_kkt&#45;&gt;module~lightconvex_dense_matrices</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M197.12,-19.69C189.38,-20.59 181.36,-21.52 173.32,-22.46"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="173.01,-18.97 163.48,-23.61 173.82,-25.93 173.01,-18.97"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#UsedByGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="UsedByGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (20260126.1125)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="511pt" height="32pt"
+ viewBox="0.00 0.00 511.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28.27)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28.27 506.88,-28.27 506.88,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24.27 0,-24.27 0,0 54,0 54,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="27" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="144.13,-24.27 71.87,-24.27 71.87,0 144.13,0 144.13,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="108" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="231.63,-24.27 162.37,-24.27 162.37,0 231.63,0 231.63,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="197" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="306.26,-24.27 249.74,-24.27 249.74,0 306.26,0 306.26,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="278" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="381.26,-24.27 324.74,-24.27 324.74,0 381.26,0 381.26,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="353" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="502.88,-24.27 399.12,-24.27 399.12,0 502.88,0 502.88,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="451" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a submodule to the (sub)module which it is
+descended from. Dashed arrows point from a module or program unit to 
+modules which it uses.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+            </li>
+        </ul>
+      </div>
+    </div>
+
+      <br>
+
+
+
+
+        <section>
+          <h2>Interfaces</h2>
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-dense_matrix"></span>
+      <h3>public        interface <a href='../interface/dense_matrix.html'>dense_matrix</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private module function create_constant_matrix(m, n, val) result(matrix)  
+    <a href="../proc/create_constant_matrix.html"><button type="button" class="btn btn-info depwarn">Implementation &rarr;</button></a>
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-m~2"></span>
+              integer(kind=ilp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>m</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~2"></span>
+              integer(kind=ilp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-val~4"></span>
+              real(kind=dp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>val</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='../type/dense_matrix.html'>dense_matrix</a>)</small>
+    </h4>
+    
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private module function create_from_array(array) result(matrix)  
+    <a href="../proc/create_from_array.html"><button type="button" class="btn btn-info depwarn">Implementation &rarr;</button></a>
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-array"></span>
+              real(kind=dp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>array</strong>(:,:)</td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='../type/dense_matrix.html'>dense_matrix</a>)</small>
+    </h4>
+    
+
+          </li>
+    </ul>
+  </div>
+
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-dense_sym_matrix"></span>
+      <h3>public        interface <a href='../interface/dense_sym_matrix.html'>dense_sym_matrix</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    private module function create_constant_sym_matrix(n, val) result(matrix)  
+    <a href="../proc/create_constant_sym_matrix.html"><button type="button" class="btn btn-info depwarn">Implementation &rarr;</button></a>
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~3"></span>
+              integer(kind=ilp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-val~5"></span>
+              real(kind=dp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>val</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='../type/dense_sym_matrix.html'>dense_sym_matrix</a>)</small>
+    </h4>
+    
+
+          </li>
+          <li class="list-group-item">
+                <h3>
+    private module function create_from_sym_array(array) result(matrix)  
+    <a href="../proc/create_from_sym_array.html"><button type="button" class="btn btn-info depwarn">Implementation &rarr;</button></a>
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-array~2"></span>
+              real(kind=dp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>array</strong>(:,:)</td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='../type/dense_sym_matrix.html'>dense_sym_matrix</a>)</small>
+    </h4>
+    
+
+          </li>
+    </ul>
+  </div>
+
+        </section>
+        <br>
+
+
+        <section>
+          <h2>Derived Types</h2>
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-dense_matrix"></span>
+      <h3>
+        type, public, extends(<a href='../type/abstractmatrix.html'>AbstractMatrix</a>)&nbsp;::&nbsp;
+        <a href='../type/dense_matrix.html'>dense_matrix</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Base type for dense matrices.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-data"></span>
+              real(kind=dp),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>data</strong>(:,:)</td>
+                <td></td>
+                <td></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+        <h4>Constructor</h4>
+          
+        <table class="table table-striped varlist">
+          <tbody>
+                <tr>
+                  <td>
+                        private
+
+                    module
+                    function
+                    <strong>create_constant_matrix</strong>
+                    (m, n, val)
+                  </td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>
+                        private
+
+                    module
+                    function
+                    <strong>create_from_array</strong>
+                    (array)
+                  </td>
+                  <td></td>
+                </tr>
+          </tbody>
+        </table>
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>  procedure, public, pass(self) ::
+  <strong><a href='../type/dense_matrix.html#boundprocedure-matvec~3'>matvec</a></strong> => dense_matvec</td>
+                  <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-dense_sym_matrix"></span>
+      <h3>
+        type, public, extends(<a href='../type/abstractsymmatrix.html'>AbstractSymMatrix</a>)&nbsp;::&nbsp;
+        <a href='../type/dense_sym_matrix.html'>dense_sym_matrix</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Base type for symmetric dense matrices.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-data~2"></span>
+              real(kind=dp),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>data</strong>(:,:)</td>
+                <td></td>
+                <td></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+        <h4>Constructor</h4>
+          
+        <table class="table table-striped varlist">
+          <tbody>
+                <tr>
+                  <td>
+                        private
+
+                    module
+                    function
+                    <strong>create_constant_sym_matrix</strong>
+                    (n, val)
+                  </td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>
+                        private
+
+                    module
+                    function
+                    <strong>create_from_sym_array</strong>
+                    (array)
+                  </td>
+                  <td></td>
+                </tr>
+          </tbody>
+        </table>
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>  procedure, public, pass(self) ::
+  <strong><a href='../type/dense_sym_matrix.html#boundprocedure-matvec~4'>matvec</a></strong> => dense_sym_matvec</td>
+                  <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+        </section>
+        <br>
+
+
+
+
+
+        <section>
+          <h2>Module Procedures</h2>
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-create_constant_matrix"></span> <h3>module procedure /home/runner/work/LightConvex/LightConvex/API-doc/module/lightconvex_dense_matrices.html <a href='../proc/create_constant_matrix.html'>create_constant_matrix</a> <small>private module function create_constant_matrix(m, n, val) result(matrix)</small>  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-m~2"></span>
+              integer(kind=ilp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>m</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~2"></span>
+              integer(kind=ilp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-val~4"></span>
+              real(kind=dp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>val</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='../type/dense_matrix.html'>dense_matrix</a>)</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-create_constant_sym_matrix"></span> <h3>module procedure /home/runner/work/LightConvex/LightConvex/API-doc/module/lightconvex_dense_matrices.html <a href='../proc/create_constant_sym_matrix.html'>create_constant_sym_matrix</a> <small>private module function create_constant_sym_matrix(n, val) result(matrix)</small>  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~3"></span>
+              integer(kind=ilp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-val~5"></span>
+              real(kind=dp),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>val</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='../type/dense_sym_matrix.html'>dense_sym_matrix</a>)</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-create_from_array"></span> <h3>module procedure /home/runner/work/LightConvex/LightConvex/API-doc/module/lightconvex_dense_matrices.html <a href='../proc/create_from_array.html'>create_from_array</a> <small>private module function create_from_array(array) result(matrix)</small>  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-array"></span>
+              real(kind=dp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>array</strong>(:,:)</td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='../type/dense_matrix.html'>dense_matrix</a>)</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-create_from_sym_array"></span> <h3>module procedure /home/runner/work/LightConvex/LightConvex/API-doc/module/lightconvex_dense_matrices.html <a href='../proc/create_from_sym_array.html'>create_from_sym_array</a> <small>private module function create_from_sym_array(array) result(matrix)</small>  
+</h3></div>
+    <div class="card-body">
+          
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-array~2"></span>
+              real(kind=dp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>array</strong>(:,:)</td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>type(<a href='../type/dense_sym_matrix.html'>dense_sym_matrix</a>)</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+        </section>
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              LightConvex
+              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-10-08 18:17 +0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

@@ -89,7 +89,7 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="<p>24.0% of total for derived types.</p>Including implementation: 104 statements, 59.4% of total for derived types.">25 statements</a>
+                 title="<p>15.7% of total for derived types.</p>Including implementation: 132 statements, 43.0% of total for derived types.">27 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -131,7 +131,7 @@
       </a>
       <div id="vars-0" class="collapse">
         <div class="list-group list-group-flush">
-            <a class="list-group-item" href="../type/dense_vector.html#variable-data">data</a>
+            <a class="list-group-item" href="../type/dense_vector.html#variable-data~4">data</a>
         </div>
       </div>
     </div>
@@ -170,13 +170,15 @@
       <div id="boundprocs-0" class="collapse">
         <div class="list-group list-group-flush">
             <a class="list-group-item" href="../type/dense_vector.html#boundprocedure-axpby">axpby</a>
+            <a class="list-group-item" href="../type/dense_vector.html#boundprocedure-clip~2">clip</a>
             <a class="list-group-item" href="../type/dense_vector.html#boundprocedure-dot">dot</a>
-            <a class="list-group-item" href="../type/dense_vector.html#boundprocedure-fill">fill</a>
+            <a class="list-group-item" href="../type/dense_vector.html#boundprocedure-fill~2">fill</a>
             <a class="list-group-item" href="../type/dense_vector.html#boundprocedure-get_size">get_size</a>
-            <a class="list-group-item" href="../type/dense_vector.html#boundprocedure-hadamard">hadamard</a>
-            <a class="list-group-item" href="../type/dense_vector.html#boundprocedure-norm_inf">norm_inf</a>
+            <a class="list-group-item" href="../type/dense_vector.html#boundprocedure-hadamard~2">hadamard</a>
+            <a class="list-group-item" href="../type/dense_vector.html#boundprocedure-mask_le~2">mask_le</a>
+            <a class="list-group-item" href="../type/dense_vector.html#boundprocedure-norm_inf~2">norm_inf</a>
             <a class="list-group-item" href="../type/dense_vector.html#boundprocedure-rand">rand</a>
-            <a class="list-group-item" href="../type/dense_vector.html#boundprocedure-reciprocal">reciprocal</a>
+            <a class="list-group-item" href="../type/dense_vector.html#boundprocedure-reciprocal~2">reciprocal</a>
             <a class="list-group-item" href="../type/dense_vector.html#boundprocedure-scal">scal</a>
             <a class="list-group-item" href="../type/dense_vector.html#boundprocedure-zero">zero</a>
         </div>
@@ -319,7 +321,7 @@ large graphs.</div>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-data"></span>
+              <span class="anchor" id="variable-data~4"></span>
               real(kind=dp),
             </td>
               <td>public,</td>
@@ -370,7 +372,7 @@ large graphs.</div>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~2"></span>
+              <span class="anchor" id="variable-n~10"></span>
               integer(kind=ilp),
             </td>
 <td>intent(in)</td>
@@ -385,7 +387,7 @@ large graphs.</div>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-val"></span>
+              <span class="anchor" id="variable-val~6"></span>
               real(kind=dp),
             </td>
 <td>intent(in),</td>
@@ -411,7 +413,7 @@ large graphs.</div>
           <li class="list-group-item">
                 <h3>
     private module function create_from_array(x) result(v)  
-    <a href="../proc/create_from_array.html"><button type="button" class="btn btn-info depwarn">Implementation &rarr;</button></a>
+    <a href="../proc/create_from_array~2.html"><button type="button" class="btn btn-info depwarn">Implementation &rarr;</button></a>
 
     </h3>
   
@@ -429,7 +431,7 @@ large graphs.</div>
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x"></span>
+              <span class="anchor" id="variable-x~9"></span>
               real(kind=dp),
             </td>
 <td>intent(in)</td>
@@ -562,6 +564,89 @@ large graphs.</div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-clip~2"></span>
+      <h3>
+          procedure, public, pass(self) ::
+  <strong>clip</strong>
+        
+      </h3>
+    </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
+    private pure subroutine clip(self, l, u)  
+</h3>
+
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='dense_vector.html'>dense_vector</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>self</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='abstract_cvx_vector.html'>abstract_cvx_vector</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>l</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='abstract_cvx_vector.html'>abstract_cvx_vector</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>u</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+          </li>
+      </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
       <span class="anchor" id="boundprocedure-dot"></span>
       <h3>
           procedure, public, pass(self) ::
@@ -635,7 +720,7 @@ large graphs.</div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-fill"></span>
+      <span class="anchor" id="boundprocedure-fill~2"></span>
       <h3>
           procedure, public, pass(self) ::
   <strong>fill</strong>
@@ -765,7 +850,7 @@ large graphs.</div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-hadamard"></span>
+      <span class="anchor" id="boundprocedure-hadamard~2"></span>
       <h3>
           procedure, public, pass(self) ::
   <strong>hadamard</strong>
@@ -833,7 +918,75 @@ large graphs.</div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-norm_inf"></span>
+      <span class="anchor" id="boundprocedure-mask_le~2"></span>
+      <h3>
+          procedure, public, pass(self) ::
+  <strong>mask_le</strong>
+        
+      </h3>
+    </div>
+      <ul class="list-group">
+          <li class="list-group-item">
+                    <h3>
+    private pure subroutine mask_le(self, val)  
+</h3>
+
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(<a href='dense_vector.html'>dense_vector</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>self</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              real(kind=dp),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>val</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+          </li>
+      </ul>
+  </div>
+
+          </div>
+          <div class="row">
+              <div class="card mt-3">
+    <div class="card-header codesum">
+      <span class="anchor" id="boundprocedure-norm_inf~2"></span>
       <h3>
           procedure, public, pass(self) ::
   <strong>norm_inf</strong>
@@ -963,7 +1116,7 @@ large graphs.</div>
           <div class="row">
               <div class="card mt-3">
     <div class="card-header codesum">
-      <span class="anchor" id="boundprocedure-reciprocal"></span>
+      <span class="anchor" id="boundprocedure-reciprocal~2"></span>
       <h3>
           procedure, public, pass(self) ::
   <strong>reciprocal</strong>
@@ -1153,6 +1306,8 @@ large graphs.</div>
 <span class="w">      </span><span class="k">procedure</span><span class="p">,</span><span class="w"> </span><span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">hadamard</span>
 <span class="w">      </span><span class="k">procedure</span><span class="p">,</span><span class="w"> </span><span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">reciprocal</span>
 <span class="w">      </span><span class="k">procedure</span><span class="p">,</span><span class="w"> </span><span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">fill</span>
+<span class="w">      </span><span class="k">procedure</span><span class="p">,</span><span class="w"> </span><span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">clip</span>
+<span class="w">      </span><span class="k">procedure</span><span class="p">,</span><span class="w"> </span><span class="k">pass</span><span class="p">(</span><span class="n">self</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mask_le</span>
 <span class="w">   </span><span class="k">end type </span><span class="n">dense_vector</span>
 </pre></div>
 
@@ -1176,7 +1331,7 @@ large graphs.</div>
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-10-08 12:08 +0000             </p>
+ on 2026-10-08 18:17 +0000             </p>
           </div>
         </div>
         <br>

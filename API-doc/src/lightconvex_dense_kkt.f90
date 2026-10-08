@@ -2,6 +2,7 @@ submodule(lightconvex_kkt) lightconvex_dense_kkt
    use stdlib_linalg_lapack, only: sytrf, sytrs, symv, gemv
    use stdlib_linalg, only: norm
    use lightconvex_dense_vectors, only: dense_vector
+   use lightconvex_dense_matrices, only: dense_matrix, dense_sym_matrix
    implicit none(type, external)
 contains
    !------------------------------------
@@ -11,41 +12,47 @@ contains
    module procedure create_dense_kkt_solver
    !> Allocate solver.
    allocate (solver)
-   associate (n => size(P, 1), m => size(A, 1))
-      !> Sanity checks.
-      if (size(P, 2) /= n) error stop "dense_kkt_solver: P needs to be a square matrix."
-      if (size(A, 2) /= n) error stop "dense_kkt_solver: A needs to have the same number of columns as P."
-      solver%n = n; solver%m = m
+   select type (P)
+   type is (dense_sym_matrix)
+      select type (A)
+      type is (dense_matrix)
+         associate (n => size(P%data, 1), m => size(A%data, 1))
+            !> Sanity checks.
+            if (size(P%data, 2) /= n) error stop "dense_kkt_solver: P needs to be a square matrix."
+            if (size(A%data, 2) /= n) error stop "dense_kkt_solver: A needs to have the same number of columns as P."
+            solver%n = n; solver%m = m
 
-      solver%max_refine = optval(max_refine, solver%max_refine)
-      if (solver%max_refine < 0) error stop "dense_kkt_solver: max_refine needs to be non-negative."
+            solver%max_refine = optval(max_refine, solver%max_refine)
+            if (solver%max_refine < 0) error stop "dense_kkt_solver: max_refine needs to be non-negative."
 
-      solver%tol = optval(tol, solver%tol)
-      if (solver%tol < 0.0_dp) error stop "dense_kkt_solver: tol needs to be positive."
+            solver%tol = optval(tol, solver%tol)
+            if (solver%tol < 0.0_dp) error stop "dense_kkt_solver: tol needs to be positive."
 
-      ! --------------------
+            ! --------------------
 
-      !> Allocate matrices.
-      allocate (solver%P, source=P)
-      allocate (solver%A, source=A)
-      allocate (solver%K(n + m, n + m), source=0.0_dp)
-      allocate (solver%z(n + m, 1), solver%r(n + m), solver%dz(n + m, 1), source=0.0_dp)
-      allocate (solver%d1(n), solver%d2(m), source=0.0_dp)
-      allocate (solver%e1(n), solver%e2(m), source=0.0_dp)
-      allocate (solver%ipiv(n + m), source=0_ilp)
+            !> Allocate matrices.
+            allocate (solver%P, source=P%data)
+            allocate (solver%A, source=A%data)
+            allocate (solver%K(n + m, n + m), source=0.0_dp)
+            allocate (solver%z(n + m, 1), solver%r(n + m), solver%dz(n + m, 1), source=0.0_dp)
+            allocate (solver%d1(n), solver%d2(m), source=0.0_dp)
+            allocate (solver%e1(n), solver%e2(m), source=0.0_dp)
+            allocate (solver%ipiv(n + m), source=0_ilp)
 
-      !> Workspace query.
-      block
-         character(1), parameter :: uplo = "L"
-         integer(ilp), parameter :: lwork = -1_ilp
-         integer(ilp) :: info
-         real(dp) :: dummy_work(1)
-         !> Workspace query.
-         call sytrf(uplo, n + m, solver%K, n + m, solver%ipiv, dummy_work, lwork, info)
-         if (info /= 0) error stop "dense_kkt_solver: error in sytrf."
-         allocate (solver%workspace(int(dummy_work(1), kind=ilp)), source=0.0_dp)
-      end block
-   end associate
+            !> Workspace query.
+            block
+               character(1), parameter :: uplo = "L"
+               integer(ilp), parameter :: lwork = -1_ilp
+               integer(ilp) :: info
+               real(dp) :: dummy_work(1)
+               !> Workspace query.
+               call sytrf(uplo, n + m, solver%K, n + m, solver%ipiv, dummy_work, lwork, info)
+               if (info /= 0) error stop "dense_kkt_solver: error in sytrf."
+               allocate (solver%workspace(int(dummy_work(1), kind=ilp)), source=0.0_dp)
+            end block
+         end associate
+      end select
+   end select
    end procedure create_dense_kkt_solver
 
    module procedure dense_update

@@ -1,5 +1,5 @@
 module lightconvex_abstract
-   use LightKrylov, only: abstract_vector_rdp
+   use LightKrylov, only: abstract_vector_rdp, abstract_linop_rdp, abstract_sym_linop_rdp
    use lightconvex_constants, only: ilp, dp, lk, &
                                     optimal_status, infeasible_status, &
                                     unsolved_status, unbounded_status, maxiter_exceeded
@@ -7,6 +7,8 @@ module lightconvex_abstract
    private
 
    public :: abstract_vector_rdp
+   public :: AbstractMatrix
+   public :: AbstractSymMatrix
 
    !> Base type for defining convex problems.
    type, abstract, public :: abstract_cvx_problem
@@ -24,12 +26,18 @@ module lightconvex_abstract
    type, abstract, public :: abstract_cvx_solution
    end type abstract_cvx_solution
 
+   !------------------------------------
+   !-----     ABSTRACT VECTORS     -----
+   !------------------------------------
+
    type, abstract, public, extends(abstract_vector_rdp) :: abstract_cvx_vector
    contains
       procedure(norm_inf_iface), deferred :: norm_inf
       procedure(hadamard_iface), deferred :: hadamard
       procedure(reciprocal_iface), deferred :: reciprocal
       procedure(fill_iface), deferred :: fill
+      procedure(clip_iface), deferred :: clip
+      procedure(mask_le_iface), deferred :: mask_le
    end type abstract_cvx_vector
 
    abstract interface
@@ -59,7 +67,64 @@ module lightconvex_abstract
          class(abstract_cvx_vector), intent(inout) :: self
          real(dp), intent(in) :: val
       end subroutine fill_iface
+
+      subroutine clip_iface(self, l, u)
+         import abstract_cvx_vector, dp
+         implicit none(type, external)
+         class(abstract_cvx_vector), intent(inout) :: self
+         class(abstract_cvx_vector), intent(in) :: l, u
+      end subroutine clip_iface
+
+      subroutine mask_le_iface(self, val)
+         import abstract_cvx_vector, dp
+         implicit none(type, external)
+         class(abstract_cvx_vector), intent(inout) :: self
+         real(dp), intent(in) :: val
+      end subroutine mask_le_iface
    end interface
+
+   !---------------------------------------------
+   !-----     ABSTRACT LINEAR OPERATORS     -----
+   !---------------------------------------------
+
+   !> Base type for general dense matrices.
+   type, abstract, public :: AbstractMatrix
+   contains
+      procedure(matvec_iface), pass(self), deferred :: matvec
+   end type AbstractMatrix
+
+   abstract interface
+      subroutine matvec_iface(self, alpha, x, beta, y, op)
+         import AbstractMatrix, abstract_cvx_vector, dp
+         implicit none(type, external)
+         class(AbstractMatrix), intent(in) :: self
+         real(dp), intent(in) :: alpha, beta
+         class(abstract_cvx_vector), intent(in) :: x
+         class(abstract_cvx_vector), intent(inout) :: y
+         character(1), intent(in) :: op
+      end subroutine matvec_iface
+   end interface
+
+   !> Base type for symmetric dense matrices.
+   type, abstract, public :: AbstractSymMatrix
+   contains
+      procedure(symmatvec_iface), pass(self), deferred :: matvec
+   end type AbstractSymMatrix
+
+   abstract interface
+      subroutine symmatvec_iface(self, alpha, x, beta, y)
+         import AbstractSymMatrix, abstract_cvx_vector, dp
+         implicit none(type, external)
+         class(AbstractSymMatrix), intent(in) :: self
+         real(dp), intent(in) :: alpha, beta
+         class(abstract_cvx_vector), intent(in) :: x
+         class(abstract_cvx_vector), intent(inout) :: y
+      end subroutine symmatvec_iface
+   end interface
+
+   !-------------------------------------
+   !-----     UTILITY FUNCTIONS     -----
+   !-------------------------------------
 
    interface
       pure module subroutine set_status(self, status)

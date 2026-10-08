@@ -1,0 +1,1237 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Convex Programming in Modern Fortran">
+    <meta name="author" content="" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>lightconvex_qp &ndash; LightConvex</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">LightConvex </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="../page/index.html">Contributing and specs</a></li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/types.html">Derived Types</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>lightconvex_qp
+      <small>Module</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 3.5% of total for modules and submodules.">46 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/lightconvex_quadratic_programs.f90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/lightconvex_quadratic_programs.f90.html'>lightconvex_quadratic_programs.f90</a></li>
+            <li class="breadcrumb-item active" aria-current="page">lightconvex_qp</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#inters-0"
+         aria-expanded="false" aria-controls="inters-0">
+         <h4 class="card-header bg-primary text-white">Interfaces</h4>
+      </a>
+      <div id="inters-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/lightconvex_qp.html#interface-admm_solver">admm_solver</a>
+        </div>
+      </div>
+    </div>
+
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#types-0"
+         aria-expanded="false" aria-controls="types-0">
+         <h4 class="card-header bg-primary text-white">Derived Types</h4>
+      </a>
+      <div id="types-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../module/lightconvex_qp.html#type-admm">ADMM</a>
+            <a class="list-group-item" href="../module/lightconvex_qp.html#type-qp_problem">qp_problem</a>
+            <a class="list-group-item" href="../module/lightconvex_qp.html#type-qp_solution">qp_solution</a>
+        </div>
+      </div>
+    </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+  </div>
+
+    </div>
+
+    <div class="col-md-9" id='text'>
+      
+<br>          <div class="card mb-4">
+      <h3 class="card-header card-title bg-light">Uses</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <ul class="list-inline">
+                  <li class="list-inline-item"><a href='lightconvex_abstract.html'>lightconvex_abstract</a></li>
+                  <li class="list-inline-item"><a href='lightconvex_kkt.html'>lightconvex_kkt</a></li>
+                  <li class="list-inline-item">stdlib_optval</li>
+                  <li class="list-inline-item"><a href='lightconvex_constants.html'>lightconvex_constants</a></li>
+              </ul>
+            </li>
+            <li class="list-group-item">
+              <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (20260126.1125)
+ -->
+<!-- Title: module~~lightconvex_qp~~UsesGraph Pages: 1 -->
+<svg id="modulelightconvex_qpUsesGraph" width="641pt" height="120pt"
+ viewBox="0.00 0.00 641.00 120.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~lightconvex_qp~~UsesGraph" class="graph" transform="scale(0.894502 0.894502) rotate(0) translate(4 130.27)">
+<title>module~~lightconvex_qp~~UsesGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-130.27 712.6,-130.27 712.6,4 -4,4"/>
+<!-- module~lightconvex_qp -->
+<g id="module~~lightconvex_qp~~UsesGraph_node1" class="node">
+<title>module~lightconvex_qp</title>
+<polygon fill="none" stroke="black" points="708.6,-44.27 617.58,-44.27 617.58,-20 708.6,-20 708.6,-44.27"/>
+<text xml:space="preserve" text-anchor="middle" x="663.09" y="-28.53" font-family="Helvetica,sans-Serif" font-size="10.50">lightconvex_qp</text>
+</g>
+<!-- module~lightconvex_abstract -->
+<g id="module~~lightconvex_qp~~UsesGraph_node2" class="node">
+<title>module~lightconvex_abstract</title>
+<g id="a_module~~lightconvex_qp~~UsesGraph_node2"><a xlink:href="../module/lightconvex_abstract.html" xlink:title="lightconvex_abstract">
+<polygon fill="#337ab7" stroke="#337ab7" points="452.31,-124.27 331.29,-124.27 331.29,-100 452.31,-100 452.31,-124.27"/>
+<text xml:space="preserve" text-anchor="middle" x="391.8" y="-108.54" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lightconvex_abstract</text>
+</a>
+</g>
+</g>
+<!-- module~lightconvex_qp&#45;&gt;module~lightconvex_abstract -->
+<g id="module~~lightconvex_qp~~UsesGraph_edge1" class="edge">
+<title>module~lightconvex_qp&#45;&gt;module~lightconvex_abstract</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M533.94,-72.14C503.72,-78.92 470.35,-88.28 443.66,-96.25"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="442.67,-92.89 434.1,-99.13 444.69,-99.59 442.67,-92.89"/>
+</g>
+<!-- module~lightconvex_constants -->
+<g id="module~~lightconvex_qp~~UsesGraph_node3" class="node">
+<title>module~lightconvex_constants</title>
+<g id="a_module~~lightconvex_qp~~UsesGraph_node3"><a xlink:href="../module/lightconvex_constants.html" xlink:title="lightconvex_constants">
+<polygon fill="#337ab7" stroke="#337ab7" points="295.29,-84.27 166.77,-84.27 166.77,-60 295.29,-60 295.29,-84.27"/>
+<text xml:space="preserve" text-anchor="middle" x="231.03" y="-68.54" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lightconvex_constants</text>
+</a>
+</g>
+</g>
+<!-- module~lightconvex_qp&#45;&gt;module~lightconvex_constants -->
+<g id="module~~lightconvex_qp~~UsesGraph_edge2" class="edge">
+<title>module~lightconvex_qp&#45;&gt;module~lightconvex_constants</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M628,-44.71C602.86,-53.55 567.67,-65.02 535.94,-72.14"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M533.94,-72.14C472.74,-85.87 455.38,-67.78 392.8,-72.14"/>
+</g>
+<!-- module~lightconvex_kkt -->
+<g id="module~~lightconvex_qp~~UsesGraph_node4" class="node">
+<title>module~lightconvex_kkt</title>
+<g id="a_module~~lightconvex_qp~~UsesGraph_node4"><a xlink:href="../module/lightconvex_kkt.html" xlink:title="lightconvex_kkt">
+<polygon fill="#337ab7" stroke="#337ab7" points="581.58,-44.27 488.31,-44.27 488.31,-20 581.58,-20 581.58,-44.27"/>
+<text xml:space="preserve" text-anchor="middle" x="534.94" y="-28.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lightconvex_kkt</text>
+</a>
+</g>
+</g>
+<!-- module~lightconvex_qp&#45;&gt;module~lightconvex_kkt -->
+<g id="module~~lightconvex_qp~~UsesGraph_edge3" class="edge">
+<title>module~lightconvex_qp&#45;&gt;module~lightconvex_kkt</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M617.26,-32.13C609.46,-32.13 601.26,-32.13 593.18,-32.13"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="593.42,-28.64 583.42,-32.14 593.42,-35.64 593.42,-28.64"/>
+</g>
+<!-- stdlib_optval -->
+<g id="module~~lightconvex_qp~~UsesGraph_node5" class="node">
+<title>stdlib_optval</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="430.94,-24.27 352.67,-24.27 352.67,0 430.94,0 430.94,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="391.8" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">stdlib_optval</text>
+</g>
+<!-- module~lightconvex_qp&#45;&gt;stdlib_optval -->
+<g id="module~~lightconvex_qp~~UsesGraph_edge4" class="edge">
+<title>module~lightconvex_qp&#45;&gt;stdlib_optval</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M621.94,-19.51C609.17,-16.08 594.9,-12.84 581.58,-11.13 534.74,-5.13 480.82,-6.2 442.63,-8.28"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="442.59,-4.78 432.82,-8.87 443.01,-11.77 442.59,-4.78"/>
+</g>
+<!-- module~lightconvex_abstract&#45;&gt;module~lightconvex_constants -->
+<g id="module~~lightconvex_qp~~UsesGraph_edge6" class="edge">
+<title>module~lightconvex_abstract&#45;&gt;module~lightconvex_constants</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M341,-99.59C325.7,-95.74 308.7,-91.45 292.76,-87.43"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="293.95,-84.12 283.39,-85.08 292.24,-90.91 293.95,-84.12"/>
+</g>
+<!-- LightKrylov -->
+<g id="module~~lightconvex_qp~~UsesGraph_node6" class="node">
+<title>LightKrylov</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="266.42,-126.27 195.65,-126.27 195.65,-102 266.42,-102 266.42,-126.27"/>
+<text xml:space="preserve" text-anchor="middle" x="231.03" y="-110.54" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">LightKrylov</text>
+</g>
+<!-- module~lightconvex_abstract&#45;&gt;LightKrylov -->
+<g id="module~~lightconvex_qp~~UsesGraph_edge5" class="edge">
+<title>module~lightconvex_abstract&#45;&gt;LightKrylov</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M331.23,-112.89C313.5,-113.11 294.36,-113.35 277.67,-113.56"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="278.02,-110.06 268.06,-113.68 278.1,-117.05 278.02,-110.06"/>
+</g>
+<!-- stdlib_linalg_constants -->
+<g id="module~~lightconvex_qp~~UsesGraph_node7" class="node">
+<title>stdlib_linalg_constants</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="130.77,-84.27 0,-84.27 0,-60 130.77,-60 130.77,-84.27"/>
+<text xml:space="preserve" text-anchor="middle" x="65.39" y="-68.54" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">stdlib_linalg_constants</text>
+</g>
+<!-- module~lightconvex_constants&#45;&gt;stdlib_linalg_constants -->
+<g id="module~~lightconvex_qp~~UsesGraph_edge7" class="edge">
+<title>module~lightconvex_constants&#45;&gt;stdlib_linalg_constants</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M166.29,-72.14C158.42,-72.14 150.32,-72.14 142.29,-72.14"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="142.54,-68.64 132.54,-72.14 142.54,-75.64 142.54,-68.64"/>
+</g>
+<!-- module~lightconvex_kkt&#45;&gt;module~lightconvex_abstract -->
+<g id="module~~lightconvex_qp~~UsesGraph_edge8" class="edge">
+<title>module~lightconvex_kkt&#45;&gt;module~lightconvex_abstract</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M510.34,-44.73C503.14,-48.8 495.28,-53.47 488.31,-58.13 471.46,-69.4 469.73,-75.77 452.31,-86.14 447.1,-89.23 441.46,-92.18 435.79,-94.89"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="434.67,-91.56 427.03,-98.89 437.58,-97.92 434.67,-91.56"/>
+</g>
+<!-- module~lightconvex_kkt&#45;&gt;module~lightconvex_constants -->
+<g id="module~~lightconvex_qp~~UsesGraph_edge9" class="edge">
+<title>module~lightconvex_kkt&#45;&gt;module~lightconvex_constants</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M503.49,-44.73C475.34,-55.4 432.06,-69.41 392.8,-72.14"/>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M390.8,-72.14C363.37,-74.04 333.21,-74.46 306.61,-74.27"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="307,-70.77 296.97,-74.16 306.93,-77.77 307,-70.77"/>
+</g>
+<!-- module~lightconvex_kkt&#45;&gt;stdlib_optval -->
+<g id="module~~lightconvex_qp~~UsesGraph_edge10" class="edge">
+<title>module~lightconvex_kkt&#45;&gt;stdlib_optval</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M488.12,-25.64C473.49,-23.57 457.25,-21.27 442.37,-19.16"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="443.2,-15.74 432.81,-17.8 442.22,-22.67 443.2,-15.74"/>
+</g>
+</g>
+</svg>
+</div>                <script>
+                  var panmodulelightconvex_qpUsesGraph = svgPanZoom('#modulelightconvex_qpUsesGraph',
+                    {zoomEnabled: true, controlIconsEnabled: true, fit: true, center: true,}
+                  );
+                </script>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#UsesGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="UsesGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (20260126.1125)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="511pt" height="32pt"
+ viewBox="0.00 0.00 511.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28.27)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28.27 506.88,-28.27 506.88,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24.27 0,-24.27 0,0 54,0 54,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="27" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="144.13,-24.27 71.87,-24.27 71.87,0 144.13,0 144.13,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="108" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="231.63,-24.27 162.37,-24.27 162.37,0 231.63,0 231.63,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="197" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="306.26,-24.27 249.74,-24.27 249.74,0 306.26,0 306.26,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="278" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="381.26,-24.27 324.74,-24.27 324.74,0 381.26,0 381.26,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="353" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="502.88,-24.27 399.12,-24.27 399.12,0 502.88,0 502.88,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="451" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a submodule to the (sub)module which it is
+descended from. Dashed arrows point from a module or program unit to 
+modules which it uses.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+            </li>
+        </ul>
+      </div>
+    </div>
+
+          <div class="card">
+      <h3 class="card-header card-title bg-light">Used by</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <ul class="list-inline">
+                <li class="list-inline-item"><h5>Descendants:</h5></li>
+                  <li class="list-inline-item"><a href='lightconvex_admm.html'>lightconvex_admm</a></li>
+              </ul>
+            </li>
+            <li class="list-group-item">
+              <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (20260126.1125)
+ -->
+<!-- Title: module~~lightconvex_qp~~UsedByGraph Pages: 1 -->
+<svg id="modulelightconvex_qpUsedByGraph" width="247pt" height="74pt"
+ viewBox="0.00 0.00 247.00 74.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~lightconvex_qp~~UsedByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 70.27)">
+<title>module~~lightconvex_qp~~UsedByGraph</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-70.27 243.04,-70.27 243.04,4 -4,4"/>
+<!-- module~lightconvex_qp -->
+<g id="module~~lightconvex_qp~~UsedByGraph_node1" class="node">
+<title>module~lightconvex_qp</title>
+<polygon fill="none" stroke="black" points="91.02,-45.27 0,-45.27 0,-21 91.02,-21 91.02,-45.27"/>
+<text xml:space="preserve" text-anchor="middle" x="45.51" y="-29.53" font-family="Helvetica,sans-Serif" font-size="10.50">lightconvex_qp</text>
+</g>
+<!-- module~lightconvex -->
+<g id="module~~lightconvex_qp~~UsedByGraph_node2" class="node">
+<title>module~lightconvex</title>
+<g id="a_module~~lightconvex_qp~~UsedByGraph_node2"><a xlink:href="../module/lightconvex.html" xlink:title="LightConvex">
+<polygon fill="#337ab7" stroke="#337ab7" points="221.41,-66.27 144.65,-66.27 144.65,-42 221.41,-42 221.41,-66.27"/>
+<text xml:space="preserve" text-anchor="middle" x="183.03" y="-50.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">LightConvex</text>
+</a>
+</g>
+</g>
+<!-- module~lightconvex&#45;&gt;module~lightconvex_qp -->
+<g id="module~~lightconvex_qp~~UsedByGraph_edge1" class="edge">
+<title>module~lightconvex&#45;&gt;module~lightconvex_qp</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M144.28,-48.29C131.3,-46.27 116.48,-43.98 102.38,-41.79"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="103.18,-38.37 92.76,-40.3 102.1,-45.29 103.18,-38.37"/>
+</g>
+<!-- module~lightconvex_admm -->
+<g id="module~~lightconvex_qp~~UsedByGraph_node3" class="node">
+<title>module~lightconvex_admm</title>
+<g id="a_module~~lightconvex_qp~~UsedByGraph_node3"><a xlink:href="../module/lightconvex_admm.html" xlink:title="lightconvex_admm">
+<polygon fill="#5bc0de" stroke="#5bc0de" points="239.04,-24.27 127.02,-24.27 127.02,0 239.04,0 239.04,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="183.03" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">lightconvex_admm</text>
+</a>
+</g>
+</g>
+<!-- module~lightconvex_admm&#45;&gt;module~lightconvex_qp -->
+<g id="module~~lightconvex_qp~~UsedByGraph_edge2" class="edge">
+<title>module~lightconvex_admm&#45;&gt;module~lightconvex_qp</title>
+<path fill="none" stroke="#ff0000" d="M126.91,-20.68C118.84,-21.93 110.52,-23.22 102.44,-24.47"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="102.05,-20.99 92.71,-25.98 103.13,-27.9 102.05,-20.99"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#UsedByGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="UsedByGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 14.1.2 (20260126.1125)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="511pt" height="32pt"
+ viewBox="0.00 0.00 511.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28.27)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-28.27 506.88,-28.27 506.88,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24.27 0,-24.27 0,0 54,0 54,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="27" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="144.13,-24.27 71.87,-24.27 71.87,0 144.13,0 144.13,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="108" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="231.63,-24.27 162.37,-24.27 162.37,0 231.63,0 231.63,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="197" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="306.26,-24.27 249.74,-24.27 249.74,0 306.26,0 306.26,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="278" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="381.26,-24.27 324.74,-24.27 324.74,0 381.26,0 381.26,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="353" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="502.88,-24.27 399.12,-24.27 399.12,0 502.88,0 502.88,-24.27"/>
+<text xml:space="preserve" text-anchor="middle" x="451" y="-8.53" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a submodule to the (sub)module which it is
+descended from. Dashed arrows point from a module or program unit to 
+modules which it uses.
+</p>
+ Where possible, edges connecting nodes are
+given different colours to make them easier to distinguish in
+large graphs.</div>
+            </div>
+          </div>
+        </div>
+            </li>
+        </ul>
+      </div>
+    </div>
+
+      <br>
+
+
+
+
+        <section>
+          <h2>Interfaces</h2>
+              <div class="card">
+    <div class="card-header bg-light codesum">
+      <span class="anchor" id="interface-admm_solver"></span>
+      <h3>        interface
+      </h3>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+              <h3>
+    public module subroutine admm_solver(settings, P, q, A, l, u, kkt, x, y, z, prim_res, dual_res)  
+
+    </h3>
+  
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-settings"></span>
+              type(<a href='../type/admm.html'>ADMM</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>settings</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-p~6"></span>
+              class(<a href='../type/abstractsymmatrix.html'>AbstractSymMatrix</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>P</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-q~2"></span>
+              class(<a href='../type/abstract_cvx_vector.html'>abstract_cvx_vector</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>q</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-a~8"></span>
+              class(<a href='../type/abstractmatrix.html'>AbstractMatrix</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>A</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-l~3"></span>
+              class(<a href='../type/abstract_cvx_vector.html'>abstract_cvx_vector</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>l</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-u~3"></span>
+              class(<a href='../type/abstract_cvx_vector.html'>abstract_cvx_vector</a>),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>u</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-kkt"></span>
+              class(<a href='../type/abstract_kkt_solver.html'>abstract_kkt_solver</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>kkt</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~7"></span>
+              class(<a href='../type/abstract_cvx_vector.html'>abstract_cvx_vector</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~7"></span>
+              class(<a href='../type/abstract_cvx_vector.html'>abstract_cvx_vector</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-z~4"></span>
+              class(<a href='../type/abstract_cvx_vector.html'>abstract_cvx_vector</a>),
+            </td>
+<td>intent(inout)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>z</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-prim_res~2"></span>
+              real(kind=dp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>prim_res</strong>(:)</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-dual_res~2"></span>
+              real(kind=dp),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>dual_res</strong>(:)</td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+        </li>
+    </ul>
+  </div>
+
+        </section>
+        <br>
+
+
+        <section>
+          <h2>Derived Types</h2>
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-admm"></span>
+      <h3>
+        type, public, extends(<a href='../type/abstract_cvx_solver.html'>abstract_cvx_solver</a>)&nbsp;::&nbsp;
+        <a href='../type/admm.html'>ADMM</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-alpha~5"></span>
+              real(kind=dp),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>alpha</strong></td>
+<td> =</td>
+                <td>1.6_dp</td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-atol"></span>
+              real(kind=dp),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>atol</strong></td>
+<td> =</td>
+                <td>1.0e-3_dp</td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-check_every"></span>
+              integer(kind=ilp),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>check_every</strong></td>
+<td> =</td>
+                <td>25_ilp</td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-eq_tol"></span>
+              real(kind=dp),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>eq_tol</strong></td>
+<td> =</td>
+                <td>1.0e-9_dp</td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-maxiter~4"></span>
+              integer(kind=ilp),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>maxiter</strong></td>
+<td> =</td>
+                <td>4000_ilp</td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-rho"></span>
+              real(kind=dp),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>rho</strong></td>
+<td> =</td>
+                <td>0.1_dp</td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-rho_eq_scale"></span>
+              real(kind=dp),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>rho_eq_scale</strong></td>
+<td> =</td>
+                <td>1.0e3_dp</td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-rtol"></span>
+              real(kind=dp),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>rtol</strong></td>
+<td> =</td>
+                <td>1.0e-3_dp</td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-sigma"></span>
+              real(kind=dp),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>sigma</strong></td>
+<td> =</td>
+                <td>1.0e-6_dp</td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-qp_problem"></span>
+      <h3>
+        type, public, extends(<a href='../type/abstract_cvx_problem.html'>abstract_cvx_problem</a>)&nbsp;::&nbsp;
+        <a href='../type/qp_problem.html'>qp_problem</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Base type for QP problem.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-a~7"></span>
+              class(<a href='../type/abstractmatrix.html'>AbstractMatrix</a>),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>A</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-p~5"></span>
+              class(<a href='../type/abstractsymmatrix.html'>AbstractSymMatrix</a>),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>P</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-l~2"></span>
+              class(<a href='../type/abstract_cvx_vector.html'>abstract_cvx_vector</a>),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>l</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-q"></span>
+              class(<a href='../type/abstract_cvx_vector.html'>abstract_cvx_vector</a>),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>q</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-u~2"></span>
+              class(<a href='../type/abstract_cvx_vector.html'>abstract_cvx_vector</a>),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>u</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+
+        <h4>Type-Bound Procedures</h4>
+        <table class="table table-striped varlist">
+          <tbody>
+              <tr>
+                <td>  procedure, public, pass(self) ::
+  <strong><a href='../type/abstract_cvx_problem.html#boundprocedure-set_status'>set_status</a></strong></td>
+                  <td></td>
+              </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum">
+      <span class="anchor" id="type-qp_solution"></span>
+      <h3>
+        type, public, extends(<a href='../type/abstract_cvx_solution.html'>abstract_cvx_solution</a>)&nbsp;::&nbsp;
+        <a href='../type/qp_solution.html'>qp_solution</a>
+        
+      </h3>
+    </div>
+    <div class="card-body">
+      <p>Base type for solution of QP.</p>
+
+        <h4>Components</h4>
+          <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Visibility</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+<th></th><th scope="col">Initial</th>        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-dual_res"></span>
+              real(kind=dp),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>dual_res</strong></td>
+<td> =</td>
+                <td>huge(1.0_dp)</td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-iterations"></span>
+              integer(kind=ilp),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>iterations</strong></td>
+<td> =</td>
+                <td>0_ilp</td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-prim_res"></span>
+              real(kind=dp),
+            </td>
+              <td>public</td>
+            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>prim_res</strong></td>
+<td> =</td>
+                <td>huge(1.0_dp)</td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-x~6"></span>
+              class(<a href='../type/abstract_cvx_vector.html'>abstract_cvx_vector</a>),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>x</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-y~6"></span>
+              class(<a href='../type/abstract_cvx_vector.html'>abstract_cvx_vector</a>),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>y</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-z~3"></span>
+              class(<a href='../type/abstract_cvx_vector.html'>abstract_cvx_vector</a>),
+            </td>
+              <td>public,</td>
+            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>z</strong></td>
+                <td></td>
+                <td></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+
+    </div>
+  </div>
+
+        </section>
+        <br>
+
+
+
+
+
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              LightConvex
+              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-10-08 18:17 +0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

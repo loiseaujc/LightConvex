@@ -89,20 +89,20 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title=" 1.8% of total for procedures.">3 statements</a>
+                 title=" 1.5% of total for procedures.">3 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
               <i class="fa fa-code"></i>
-              <a href="../src/lightconvex_dense_vectors.f90"> Source File</a>
+              <a href="../src/lightconvex_dense_matrices.f90"> Source File</a>
             </li>
         </ul>
       </div>
       <div class="col">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb justify-content-end mb-0">
-                <li class="breadcrumb-item"><a href='../sourcefile/lightconvex_dense_vectors.f90.html'>lightconvex_dense_vectors.f90</a></li>
-                <li class="breadcrumb-item"><a href='../module/lightconvex_dense_vectors.html'>lightconvex_dense_vectors</a></li>
+                <li class="breadcrumb-item"><a href='../sourcefile/lightconvex_dense_matrices.f90.html'>lightconvex_dense_matrices.f90</a></li>
+                <li class="breadcrumb-item"><a href='../module/lightconvex_dense_matrices.html'>lightconvex_dense_matrices</a></li>
             <li class="breadcrumb-item active" aria-current="page">create_from_array</li>
           </ol>
         </nav>
@@ -156,7 +156,7 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <h2>module procedure create_from_array <small>private module function create_from_array(x) result(v)</small>  
+    <h2>module procedure create_from_array <small>private module function create_from_array(array) result(matrix)</small>  
 </h2>
     
 
@@ -175,7 +175,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-x"></span>
+              <span class="anchor" id="variable-array"></span>
               real(kind=dp),
             </td>
 <td>intent(in)</td>
@@ -183,7 +183,7 @@
               
             </td>
             <td>::</td>
-            <td><strong>x</strong>(:)</td>
+            <td><strong>array</strong>(:,:)</td>
             <td>
                 
             </td>
@@ -193,8 +193,8 @@
 
       <h3>Return Value
         <small>
-          <span class="anchor" id="variable-v~2"></span>
-          type(<a href='../type/dense_vector.html'>dense_vector</a>)
+          <span class="anchor" id="variable-matrix~2"></span>
+          type(<a href='../type/dense_matrix.html'>dense_matrix</a>)
         </small>
       </h3>
       
@@ -212,9 +212,9 @@
     
     <section>
     <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="hl codehilite"><pre><span></span><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">dense_vector</span><span class="p">)</span><span class="w"> </span><span class="k">module function </span><span class="n">create_from_array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <div class="hl codehilite"><pre><span></span><span class="w">      </span><span class="k">type</span><span class="p">(</span><span class="n">dense_matrix</span><span class="p">)</span><span class="w"> </span><span class="k">module function </span><span class="n">create_from_array</span><span class="p">(</span><span class="k">array</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
 <span class="w">         </span><span class="k">implicit none</span><span class="p">(</span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">external</span><span class="p">)</span>
-<span class="w">         </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">x</span><span class="p">(:)</span>
+<span class="w">         </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="k">array</span><span class="p">(:,</span><span class="w"> </span><span class="p">:)</span>
 <span class="w">      </span><span class="k">end function </span><span class="n">create_from_array</span>
 </pre></div>
 
@@ -239,7 +239,7 @@
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2026-10-08 12:08 +0000             </p>
+ on 2026-10-08 18:17 +0000             </p>
           </div>
         </div>
         <br>
