@@ -2,6 +2,7 @@ module lightconvex_dense_vectors
    use lightconvex_constants, only: ilp, dp, lk
    use lightconvex_abstract, only: abstract_cvx_vector, abstract_vector_rdp
    use stdlib_optval, only: optval
+   use stdlib_math, only: stdlib_clip => clip
    use stdlib_linalg_blas, only: blas_scal => scal, blas_axpy => axpy
    use stdlib_linalg, only: norm
    use stdlib_intrinsics, only: stdlib_dot_product_kahan
@@ -25,6 +26,8 @@ module lightconvex_dense_vectors
       procedure, pass(self) :: hadamard
       procedure, pass(self) :: reciprocal
       procedure, pass(self) :: fill
+      procedure, pass(self) :: clip
+      procedure, pass(self) :: mask_le
    end type dense_vector
 
    interface dense_vector
@@ -159,5 +162,33 @@ contains
       real(dp), intent(in) :: val
       self%data = val
    end subroutine fill
+
+   pure subroutine clip(self, l, u)
+      implicit none(type, external)
+      class(dense_vector), intent(inout) :: self
+      class(abstract_cvx_vector), intent(in) :: l, u
+      select type (l)
+      type is (dense_vector)
+         select type (u)
+         type is (dense_vector)
+            self%data = stdlib_clip(self%data, l%data, u%data)
+         class default
+            error stop "clip: u needs to be a dense_vector."
+         end select
+      class default
+         error stop "clip: l needs to be a dense_vector."
+      end select
+   end subroutine clip
+
+   pure subroutine mask_le(self, val)
+      implicit none(type, external)
+      class(dense_vector), intent(inout) :: self
+      real(dp), intent(in) :: val
+      where (self%data <= val)
+         self%data = 1.0_dp
+      else where
+         self%data = 0.0_dp
+      end where
+   end subroutine mask_le
 
 end module lightconvex_dense_vectors
