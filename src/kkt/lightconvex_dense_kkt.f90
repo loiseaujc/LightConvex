@@ -165,6 +165,9 @@ contains
                            converged = .true.
                            exit iterative_refinement
                         else if (info%residual > 0.5_dp*res_prev) then
+                           print *, "kkt%solve: Iterative refinement is stagnating."
+                           print *, "           - Previous residual: ", res_prev
+                           print *, "           - New residual     : ", info%residual
                            ! Stagnation.
                            exit iterative_refinement
                         end if
