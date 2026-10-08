@@ -134,7 +134,11 @@ contains
                   call compute_residual(self%P, self%A, self%d1, self%d2, &
                                         rhs_x%data, rhs_y%data, self%z(:, 1), self%r)
 
-                  rhs_norm = max(norm(rhs_x%data, "inf"), norm(rhs_y%data, "inf"), tiny(1.0_dp))
+                  if (m == 0) then
+                     rhs_norm = max(norm(rhs_x%data, "inf"), tiny(1.0_dp))
+                  else
+                     rhs_norm = max(norm(rhs_x%data, "inf"), norm(rhs_y%data, "inf"), tiny(1.0_dp))
+                  end if
                   info%residual = norm(self%r, "inf")/rhs_norm
 
                   if (info%residual <= tol_) then
@@ -167,6 +171,7 @@ contains
                            exit iterative_refinement
                         else if (info%residual > 0.5_dp*res_prev) then
                            print *, "kkt%solve: Iterative refinement is stagnating."
+                           print *, "           - Iterations       : ", i
                            print *, "           - Previous residual: ", res_prev
                            print *, "           - New residual     : ", info%residual
                            ! Stagnation.
@@ -237,15 +242,15 @@ contains
          r(:n) = rhs_x; r(n + 1:) = rhs_y
          ! r_x = rhs_x - P @ x (P symmetric, lower triangle storage).
          call symv(uplo, n, -1.0_dp, P, n, z(:n), 1, 1.0_dp, r(:n), 1)
-         ! r_x = r_x - d1 .* x - A.T @ y.
+         ! r_x = r_x - (d1 .* x + A.T @ y).
          do concurrent(i=1:n)
             r(i) = r(i) - d1(i)*z(i)
          end do
          call gemv("T", m, n, -1.0_dp, A, lda, z(n + 1:), 1, 1.0_dp, r(:n), 1)
-         ! r_y = rhs_y - A @ x - d2 .* y
+         ! r_y = rhs_y - (A @ x - d2 .* y)
          call gemv("N", m, n, -1.0_dp, A, lda, z(:n), 1, 1.0_dp, r(n + 1:), 1)
          do concurrent(i=1:m)
-            r(n + i) = r(n + i) - d2(i)*z(n + i)
+            r(n + i) = r(n + i) + d2(i)*z(n + i)
          end do
       end associate
    end subroutine compute_residual

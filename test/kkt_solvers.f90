@@ -1,10 +1,9 @@
 module TestKKTSolvers
    use, intrinsic :: iso_fortran_env, only: error_unit, output_unit
    use testdrive, only: new_unittest, unittest_type, error_type, check
-   use stdlib_random, only: dist_rand
    use stdlib_stats_distribution_normal, only: rvs_normal
    use stdlib_math, only: all_close, is_close
-   use stdlib_linalg, only: norm, eye, solve
+   use stdlib_linalg, only: eye, solve, diag, norm, mnorm
    use lightconvex_constants, only: ilp, dp
    use lightconvex, only: dense_vector, dense_kkt_solver, kkt_info, kkt_solver, is_successful
    implicit none(external)
@@ -129,7 +128,7 @@ contains
          integer(ilp), parameter :: m = 3, n = 4
          real(dp) :: P(n, n), A(m, n), b(m)
          real(dp), parameter :: xref(n) = [1.0_dp, 0.0_dp, 0.0_dp, -1.0_dp] ! Reference primal solution.
-         real(dp), parameter :: yref(m - 1) = [-0.5_dp, -0.5_dp]                ! Reference dual solution.
+         real(dp), parameter :: yref(m - 1) = [-0.5_dp, -0.5_dp]            ! Reference dual solution.
          type(dense_vector), allocatable :: x, y, rhs_x, rhs_y, d1, d2
          type(dense_kkt_solver), allocatable :: kkt
          type(kkt_info) :: info
@@ -161,9 +160,11 @@ contains
          call check(error, all_close(xref, x%data, abs_tol=atol))
          if (allocated(error)) return
 
-         ! !> Check dual solution.
-         ! call check(error, all_close(yref, y%data(1:m - 1), abs_tol=epsilon(1.0_dp)))
-         ! if (allocated(error)) return
+         !> Check dual solution.
+         call check(error, &
+                    all_close(matmul(transpose(A(:2, :)), yref), matmul(transpose(A), y%data), &
+                              abs_tol=atol))
+         if (allocated(error)) return
       end block
 
       !-----------------------------------
@@ -221,6 +222,200 @@ contains
             !> Deallocate data.
             deallocate (P, q, A, b)
          end do
+      end block
+
+      !----------------------------------------------------------------------------
+      !------      EDGE CASES : UNCONSTRAINED SYSTEM WITH SINGLE VARIABLE     -----
+      !----------------------------------------------------------------------------
+      block
+         integer(ilp), parameter :: n = 1, m = 0
+         integer(ilp) :: i, j
+         real(dp) :: u
+         real(dp), allocatable :: P(:, :), q(:), A(:, :), b(:), xref(:)
+         type(dense_vector), allocatable :: x, y, rhs_x, rhs_y, d1, d2
+         type(dense_kkt_solver), allocatable :: kkt
+         type(kkt_info) :: info
+
+         !> Allocate data.
+         allocate (P(n, n), q(n), A(m, n), b(m), source=0.0_dp)
+
+         !> Random problem.
+
+         do j = 1, n
+            P(:, j) = rvs_normal(array_size=n)
+         end do
+         P = matmul(P, transpose(P))
+         q = rvs_normal(array_size=n)
+
+         x = dense_vector(n); rhs_x = dense_vector(q); d1 = dense_vector(n)
+         y = dense_vector(m); rhs_y = dense_vector(b); d2 = dense_vector(m)
+
+         !> Create KKT solver.
+         kkt = kkt_solver(P, A)
+         call kkt%update(d1, d2, info, reg1=rtol, reg2=rtol)
+         call check(error, is_successful(info))
+         if (allocated(error)) return
+
+         !> Solve the problem.
+         call kkt%solve(rhs_x, rhs_y, x, y, info)
+         call check(error, is_successful(info) .or. info%residual <= rtol)
+         if (allocated(error)) then
+            print *, "Problem's dimensions:"
+            print *, "     - # of variables   :", n
+            print *, "     - # of constraints :", m
+            print *, "Residual of KKT solver  :", info%residual
+            return
+         end if
+
+         !> Check solution.
+         xref = solve(P, q)
+         call check(error, all_close(xref, x%data, abs_tol=atol))
+         if (allocated(error)) return
+      end block
+
+      !-------------------------------------------------
+      !-----     EDGE CASE : SINGULAR P MATRIX     -----
+      !-------------------------------------------------
+      block
+         integer(ilp), parameter :: n = 128, rk = 64, m = n - rk + 1
+         integer(ilp) :: i, j
+         real(dp) :: u
+         real(dp), allocatable :: P(:, :), q(:), A(:, :), b(:)
+         type(dense_vector), allocatable :: x, y, rhs_x, rhs_y, d1, d2
+         type(dense_kkt_solver), allocatable :: kkt
+         type(kkt_info) :: info
+
+         !> Allocate data.
+         allocate (P(n, n), q(n), A(m, n), b(m), source=0.0_dp)
+
+         !> Random problem.
+
+         do j = 1, rk
+            P(:, j) = rvs_normal(array_size=n)
+         end do
+         do j = 1, m
+            A(j, :) = rvs_normal(array_size=n)
+         end do
+         P = matmul(P, transpose(P))
+         q = rvs_normal(array_size=n)
+         b = rvs_normal(array_size=m)
+
+         x = dense_vector(n); rhs_x = dense_vector(q); d1 = dense_vector(n)
+         y = dense_vector(m); rhs_y = dense_vector(b); d2 = dense_vector(m)
+
+         !> Create KKT solver.
+         kkt = kkt_solver(P, A)
+         call kkt%update(d1, d2, info)
+         call check(error, is_successful(info))
+         if (allocated(error)) return
+
+         !> Solve the problem.
+         call kkt%solve(rhs_x, rhs_y, x, y, info)
+         call check(error, is_successful(info) .or. info%residual <= rtol)
+         if (allocated(error)) then
+            print *, "Problem's dimensions:"
+            print *, "     - # of variables   :", n
+            print *, "     - # of constraints :", m
+            print *, "Residual of KKT solver  :", info%residual
+            return
+         end if
+      end block
+
+      !-------------------------------------------------------
+      !------      EDGE CASE : SINGULAR KKT MATRIX      ------
+      !-------------------------------------------------------
+      block
+         integer(ilp), parameter :: n = 128, m = 10
+         integer(ilp) :: i, j
+         real(dp) :: u
+         real(dp), allocatable :: P(:, :), q(:), A(:, :), b(:)
+         type(dense_vector), allocatable :: x, y, rhs_x, rhs_y, d1, d2
+         type(dense_kkt_solver), allocatable :: kkt
+         type(kkt_info) :: info
+
+         !> Allocate data.
+         allocate (P(n, n), q(n), A(m, n), b(m), source=0.0_dp)
+
+         !> Random problem.
+         call random_number(q); q(n) = 0.0_dp
+         P = diag(q)
+
+         do j = 1, m
+            A(j, :) = rvs_normal(array_size=n)
+         end do
+         A(:, n) = 0.0_dp
+         q = rvs_normal(array_size=n); q(n) = 0.0_dp
+         b = rvs_normal(array_size=m)
+
+         x = dense_vector(n); rhs_x = dense_vector(q); d1 = dense_vector(n)
+         y = dense_vector(m); rhs_y = dense_vector(b); d2 = dense_vector(m)
+
+         !> Create KKT solver.
+         kkt = kkt_solver(P, A)
+         call kkt%update(d1, d2, info, reg1=1e-6_dp, reg2=1e-6_dp)
+         call check(error, is_successful(info))
+         if (allocated(error)) return
+
+         !> Solve the problem.
+         call kkt%solve(rhs_x, rhs_y, x, y, info)
+         call check(error, is_successful(info) .or. info%residual <= rtol)
+         if (allocated(error)) then
+            print *, "Problem's dimensions:"
+            print *, "     - # of variables   :", n
+            print *, "     - # of constraints :", m
+            print *, "Residual of KKT solver  :", info%residual
+            return
+         end if
+      end block
+
+      !-------------------------------------------------------------------
+      !------     EDGE CASE : ADMM/IPM LIKE DIAGONALS WITH M > N     -----
+      !-------------------------------------------------------------------
+      block
+         integer(ilp), parameter :: n = 10, m = 100
+         integer(ilp) :: i, j
+         real(dp) :: u
+         real(dp), allocatable :: P(:, :), q(:), A(:, :), b(:)
+         type(dense_vector), allocatable :: x, y, rhs_x, rhs_y, d1, d2
+         type(dense_kkt_solver), allocatable :: kkt
+         type(kkt_info) :: info
+
+         !> Allocate data.
+         allocate (P(n, n), q(n), A(m, n), b(m), source=0.0_dp)
+
+         !> Random problem.
+
+         do j = 1, n
+            P(:, j) = rvs_normal(array_size=n)
+            A(:, j) = rvs_normal(array_size=m)
+         end do
+
+         P = matmul(P, transpose(P)); P = P/mnorm(P, 2); A = A/mnorm(A, 2)
+         q = rvs_normal(array_size=n); q = q/norm(q, 2)
+         b = rvs_normal(array_size=m); b = b/norm(b, 2)
+
+         x = dense_vector(n); rhs_x = dense_vector(q); d1 = dense_vector(n)
+         y = dense_vector(m); rhs_y = dense_vector(b); d2 = dense_vector(m)
+
+         call random_number(d1%data); d1%data = 10.0_dp**(8.0_dp*d1%data - 4.0_dp) ! 1e-4 .. 1e4
+         call random_number(d2%data); d2%data = 10.0_dp**(8.0_dp*d2%data - 4.0_dp)
+
+         !> Create KKT solver.
+         kkt = kkt_solver(P, A)
+         call kkt%update(d1, d2, info, reg1=1.0e-8_dp, reg2=1.0e-8_dp)
+         call check(error, is_successful(info))
+         if (allocated(error)) return
+
+         !> Solve the problem.
+         call kkt%solve(rhs_x, rhs_y, x, y, info)
+         call check(error, is_successful(info) .or. info%residual <= rtol)
+         if (allocated(error)) then
+            print *, "Problem's dimensions:"
+            print *, "     - # of variables   :", n
+            print *, "     - # of constraints :", m
+            print *, "Residual of KKT solver  :", info%residual
+            return
+         end if
       end block
 
    end subroutine test_dense_kkt_solver_testsuite
