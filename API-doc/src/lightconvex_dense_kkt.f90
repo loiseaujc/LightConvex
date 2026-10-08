@@ -100,7 +100,7 @@ contains
 
    module procedure dense_solve
    integer(ilp) :: i, lapack_info
-   real(dp) :: rhs_norm, res, res_prev
+   real(dp) :: rhs_norm, res, res_prev, tol_
    logical(lk) :: converged
    if (.not. self%factorized) then
       error stop "kkt%solve: KKT matrix has not been factorized. Aborting."
@@ -121,6 +121,7 @@ contains
                   if (sol_y%get_size() /= m) error stop "kkt%solve: sol_y has inconsistent dimensions."
 
                   converged = .false.
+                  tol_ = optval(tol, self%tol)
 
                   !> Working vector.
                   self%z(:n, 1) = rhs_x%data; self%z(n + 1:, 1) = rhs_y%data
@@ -130,13 +131,17 @@ contains
                   if (lapack_info /= 0) error stop "kkt%solve: Error in sytrs."
 
                   !> Compute residual.
-                  call compute_residual(self%P, self%A, self%K, self%ipiv, self%d1, self%d2, &
-                                        rhs_x%data, rhs_y%data, self%z, self%r)
+                  call compute_residual(self%P, self%A, self%d1, self%d2, &
+                                        rhs_x%data, rhs_y%data, self%z(:, 1), self%r)
 
-                  rhs_norm = max(norm(rhs_x%data, "inf"), norm(rhs_y%data, "inf"), tiny(1.0_dp))
+                  if (m == 0) then
+                     rhs_norm = max(norm(rhs_x%data, "inf"), tiny(1.0_dp))
+                  else
+                     rhs_norm = max(norm(rhs_x%data, "inf"), norm(rhs_y%data, "inf"), tiny(1.0_dp))
+                  end if
                   info%residual = norm(self%r, "inf")/rhs_norm
 
-                  if (info%residual <= self%tol) then
+                  if (info%residual <= tol_) then
                      converged = .true.
                   else
                      !> Store previous residual for comparison.
@@ -150,8 +155,8 @@ contains
                         self%z = self%z + self%dz
 
                         !> r = rhs - K @ z (with K the unregularized matrix).
-                        call compute_residual(self%P, self%A, self%K, self%ipiv, self%d1, self%d2, &
-                                              rhs_x%data, rhs_y%data, self%z, self%r)
+                        call compute_residual(self%P, self%A, self%d1, self%d2, &
+                                              rhs_x%data, rhs_y%data, self%z(:, 1), self%r)
 
                         !> Residual norm.
                         info%residual = norm(self%r, "inf")/rhs_norm
@@ -160,12 +165,13 @@ contains
                            ! NaN or Inf: unstable factorization.
                            info%status = kkt_numerical_error
                            return
-                        else if (info%residual <= self%tol) then
+                        else if (info%residual <= tol_) then
                            ! Solver converged.
                            converged = .true.
                            exit iterative_refinement
                         else if (info%residual > 0.5_dp*res_prev) then
                            print *, "kkt%solve: Iterative refinement is stagnating."
+                           print *, "           - Iterations       : ", i
                            print *, "           - Previous residual: ", res_prev
                            print *, "           - New residual     : ", info%residual
                            ! Stagnation.
@@ -224,11 +230,10 @@ contains
       end associate
    end subroutine assemble_kkt_matrix
 
-   pure subroutine compute_residual(P, A, K, ipiv, d1, d2, rhs_x, rhs_y, z, r)
-      real(dp), intent(in) :: P(:, :), A(:, :), K(:, :), d1(:), d2(:)
-      real(dp), intent(in) :: rhs_x(:), rhs_y(:), z(:, :)
+   pure subroutine compute_residual(P, A, d1, d2, rhs_x, rhs_y, z, r)
+      real(dp), intent(in) :: P(:, :), A(:, :), d1(:), d2(:)
+      real(dp), intent(in) :: rhs_x(:), rhs_y(:), z(:)
       real(dp), intent(out) :: r(:)
-      integer(ilp), intent(in) :: ipiv(:)
       integer(ilp) :: i, lda
       associate (n => size(P, 1), m => size(A, 1), uplo => "L")
          lda = max(1_ilp, m)
@@ -236,16 +241,16 @@ contains
          !  -------------------------------------------------
          r(:n) = rhs_x; r(n + 1:) = rhs_y
          ! r_x = rhs_x - P @ x (P symmetric, lower triangle storage).
-         call symv(uplo, n, -1.0_dp, P, n, z(:n, 1), 1, 1.0_dp, r(:n), 1)
-         ! r_x = r_x - d1 .* x - A.T @ y.
+         call symv(uplo, n, -1.0_dp, P, n, z(:n), 1, 1.0_dp, r(:n), 1)
+         ! r_x = r_x - (d1 .* x + A.T @ y).
          do concurrent(i=1:n)
-            r(i) = r(i) - d1(i)*z(i, 1)
+            r(i) = r(i) - d1(i)*z(i)
          end do
-         call gemv("T", m, n, -1.0_dp, A, lda, z(n + 1:, 1), 1, 1.0_dp, r(:n), 1)
-         ! r_y = rhs_y - A @ x + d2 .* y
-         call gemv("N", m, n, -1.0_dp, A, lda, z(:n, 1), 1, 1.0_dp, r(n + 1:), 1)
+         call gemv("T", m, n, -1.0_dp, A, lda, z(n + 1:), 1, 1.0_dp, r(:n), 1)
+         ! r_y = rhs_y - (A @ x - d2 .* y)
+         call gemv("N", m, n, -1.0_dp, A, lda, z(:n), 1, 1.0_dp, r(n + 1:), 1)
          do concurrent(i=1:m)
-            r(n + i) = r(n + i) - d2(i)*z(n + i, 1)
+            r(n + i) = r(n + i) + d2(i)*z(n + i)
          end do
       end associate
    end subroutine compute_residual
