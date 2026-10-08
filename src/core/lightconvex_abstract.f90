@@ -7,8 +7,6 @@ module lightconvex_abstract
    private
 
    public :: abstract_vector_rdp
-   public :: AbstractMatrix
-   public :: AbstractSymMatrix
 
    !> Base type for defining convex problems.
    type, abstract, public :: abstract_cvx_problem
