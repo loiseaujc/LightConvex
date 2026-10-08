@@ -57,8 +57,11 @@ contains
                           x, y, z, prim_res, dual_res)
 
          !> Check primal solution.
-         print *, maxval(abs(xref - x%data))
          call check(error, all_close(xref, x%data, abs_tol=1.0e-2_dp))
+         if (allocated(error)) return
+
+         !> Check dual solution (OSQP-ADMM uses a different convetion for the sign, hence the -).
+         call check(error, all_close(yref, -y%data, abs_tol=1.0e-2_dp))
          if (allocated(error)) return
 
       end block
