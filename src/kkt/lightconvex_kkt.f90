@@ -1,7 +1,7 @@
 module lightconvex_kkt
    use stdlib_optval, only: optval
    use lightconvex_constants, only: dp, ilp, lk
-   use lightconvex_abstract, only: abstract_cvx_vector
+   use lightconvex_abstract, only: abstract_cvx_vector, AbstractMatrix, AbstractSymMatrix
    implicit none(type, external)
    private
 
@@ -108,7 +108,8 @@ module lightconvex_kkt
    interface kkt_solver
       module function create_dense_kkt_solver(P, A, max_refine, tol) result(solver)
          implicit none(type, external)
-         real(dp), intent(in) :: P(:, :), A(:, :)
+         class(AbstractSymMatrix), intent(in) :: P
+         class(AbstractMatrix), intent(in) :: A
          integer(ilp), optional, intent(in) :: max_refine
          real(dp), optional, intent(in) :: tol
          type(dense_kkt_solver), allocatable :: solver
