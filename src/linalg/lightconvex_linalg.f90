@@ -3,7 +3,7 @@ module lightconvex_linalg
    use lightconvex_constants, only: ilp, dp, lk
    use stdlib_optval, only: optval
    use stdlib_linalg_lapack, only: geqr, gemqr, trmv
-   implicit none(external)
+   implicit none(type, external)
    private
 
    !----- Derived-types -----!
@@ -21,11 +21,11 @@ module lightconvex_linalg
         !! Data structuted used to represent Q in geqr.
       integer(ilp) :: tsize
         !! Dimension of the array T.
-   end type
+   end type qr_type
 
    interface QR
       type(qr_type) module function qr_fact(A) result(F)
-         implicit none(external)
+         implicit none(type, external)
          real(dp), intent(in) :: A(:, :)
         !! Matrix to be factorized.
       end function qr_fact
@@ -34,7 +34,7 @@ module lightconvex_linalg
 
    interface factmv
       module subroutine qrmv(A, x, y, trans)
-         implicit none(external)
+         implicit none(type, external)
          type(qr_type), intent(inout) :: A
          real(dp), intent(in) :: x(:)
          character(len=*), intent(in), optional :: trans
@@ -90,19 +90,19 @@ contains
 
    select case (trans_)
    case ("N")
-      y(:na) = x(:na)
+      y(:na) = x(:na); y(na + 1:) = 0.0_dp
       !> y = R @ x
       call trmv("u", trans_, "n", na, A%data, ma, y, 1)
       !----- y = Q @ (R @ x) -----
       !> Pointer trick.
-      ymat(1:na, 1:1) => y(:na)
+      ymat(1:ma, 1:1) => y(:ma)
       !> Workspace query.
       lwork = -1; allocate (work(1), source=0.0_dp)
       call gemqr(side, trans_, ma, nc, ma, A%data, ma, A%t, A%tsize, ymat, mc, work, lwork, info)
       call assert(assertion=info == 0, &
                   description="Error during workspace query for gemqr.")
       !> Actual matrix-vector product.
-      lwork = work(1); deallocate (work); allocate (work(lwork), source=0.0_dp)
+      lwork = int(work(1), kind=ilp); deallocate (work); allocate (work(lwork), source=0.0_dp)
       call gemqr(side, trans_, ma, nc, ma, A%data, ma, A%t, A%tsize, ymat, mc, work, lwork, info)
       call assert(assertion=info == 0, &
                   description="Error while computing matrix-vector product in gemqr.")
@@ -119,7 +119,7 @@ contains
          call assert(assertion=info == 0, &
                      description="Error during workspace query for gemqr.")
          !> Actual matrix-vector product.
-         lwork = work(1); deallocate (work); allocate (work(lwork), source=0.0_dp)
+         lwork = int(work(1), kind=ilp); deallocate (work); allocate (work(lwork), source=0.0_dp)
          call gemqr(side, trans_, ma, nc, ma, A%data, ma, A%t, A%tsize, xmat, ma, work, lwork, info)
          call assert(assertion=info == 0, &
                      description="Error while computing matrix-vector product in gemqr.")
@@ -131,5 +131,5 @@ contains
       call assert(assertion=.false., &
                   description="Invalid value for trans.")
    end select
-   end procedure
+   end procedure qrmv
 end module lightconvex_linalg

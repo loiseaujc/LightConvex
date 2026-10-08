@@ -1,18 +1,19 @@
 module lightconvex_constants
    use stdlib_linalg_constants, only: ilp, dp, lk
-   implicit none(external)
+   implicit none(type, external)
    public
 
    real(dp), parameter :: eps = epsilon(1.0_dp)
     !! Machine precision
    real(dp), parameter :: tol = sqrt(eps)
     !! Tolerance used inside the different solvers.
-   integer(ilp), parameter :: unbounded_status = 1
+   integer(ilp), parameter :: unbounded_status = 1_ilp
     !! Return flag for an unbounded problem.
-   integer(ilp), parameter :: optimal_status = 0
+   integer(ilp), parameter :: optimal_status = 0_ilp
     !! Return flag for when an optimal solution has been computed.
-   integer(ilp), parameter :: infeasible_status = -1
+   integer(ilp), parameter :: infeasible_status = -1_ilp
     !! Return flag for an infeasible problem.
-   integer(ilp), parameter :: maxiter_exceeded = -2
+   integer(ilp), parameter :: maxiter_exceeded = -2_ilp
     !! Return flag for excessive number of iterations.
+   integer(ilp), parameter :: unsolved_status = -99_ilp
 end module lightconvex_constants
