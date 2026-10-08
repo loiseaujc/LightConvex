@@ -37,13 +37,13 @@ contains
          type(dense_kkt_solver), allocatable :: kkt
 
          !> Problem's matrices.
-         P = eye(n, mold=1.0_dp)
+         P = eye(n, mold=1.0_dp); q = 0.0_dp
          A(1, :) = [2.0_dp, -1.0_dp, 1.0_dp, -1.0_dp]
          A(2, :) = [0.0_dp, 1.0_dp, -1.0_dp, -1.0_dp]
          b = [3.0_dp, 1.0_dp]
 
          !> Workspace.
-         x = dense_vector(xref)
+         x = dense_vector(n)
          y = dense_vector(m)
          z = dense_vector(m)
 
