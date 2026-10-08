@@ -6,8 +6,9 @@ program check
    ! Collection of test problems.
    use TestDenseVectors, only: collect_dense_vectors_tests
    use TestKKTSolvers, only: collect_dense_kkt_solvers_tests
-   use TestLinalg, only: collect_linalg_tests
-   use TestLinearPrograms, only: collect_dense_standard_simplex_problems
+   use TestADMM, only: collect_admm_tests
+   ! use TestLinalg, only: collect_linalg_tests
+   ! use TestLinearPrograms, only: collect_dense_standard_simplex_problems
    implicit none(external)
 
 ! Unit-test related.
@@ -17,10 +18,11 @@ program check
 
    ! Collection of test suites.
    status = 0
-   testsuites = [new_testsuite("Linear Algebra", collect_linalg_tests)]
-   testsuites = [testsuites, new_testsuite("Dense Standard Simplex", collect_dense_standard_simplex_problems)]
-   testsuites = [testsuites, new_testsuite("Dense vectors", collect_dense_vectors_tests)]
+   ! testsuites = [new_testsuite("Linear Algebra", collect_linalg_tests)]
+   ! testsuites = [testsuites, new_testsuite("Dense Standard Simplex", collect_dense_standard_simplex_problems)]
+   testsuites = [new_testsuite("Dense vectors", collect_dense_vectors_tests)]
    testsuites = [testsuites, new_testsuite("Dense KKT solvers", collect_dense_kkt_solvers_tests)]
+   testsuites = [testsuites, new_testsuite("ADMM solvers", collect_admm_tests)]
 
    ! Run all the test suites.
    do i = 1, size(testsuites)

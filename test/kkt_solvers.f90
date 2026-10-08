@@ -5,7 +5,8 @@ module TestKKTSolvers
    use stdlib_math, only: all_close, is_close
    use stdlib_linalg, only: eye, solve, diag, norm, mnorm
    use lightconvex_constants, only: ilp, dp
-   use lightconvex, only: dense_vector, dense_kkt_solver, kkt_info, kkt_solver, is_successful
+   use lightconvex, only: dense_vector, dense_matrix, dense_sym_matrix, &
+                          dense_kkt_solver, kkt_info, kkt_solver, is_successful
    implicit none(external)
    private
 
@@ -46,7 +47,7 @@ contains
          rhs_x = dense_vector(n); rhs_y = dense_vector(b)
 
          !> Create KKT solver.
-         kkt = kkt_solver(P, A)
+         kkt = kkt_solver(dense_sym_matrix(P), dense_matrix(A))
          call kkt%update(d1, d2, info)
          call check(error, is_successful(info)) ! Successfully initialized the KKT solver.
          if (allocated(error)) return
@@ -95,7 +96,7 @@ contains
          rhs_x = dense_vector(q); rhs_y = dense_vector(b)
 
          !> Create KKT solver.
-         kkt = kkt_solver(P, A)
+         kkt = kkt_solver(dense_sym_matrix(P), dense_matrix(A))
          call kkt%update(d1, d2, info)
          call check(error, is_successful(info))
          if (allocated(error)) return
@@ -146,7 +147,7 @@ contains
          rhs_x = dense_vector(n); rhs_y = dense_vector(b)
 
          !> Create KKT solver.
-         kkt = kkt_solver(P, A)
+         kkt = kkt_solver(dense_sym_matrix(P), dense_matrix(A))
          call kkt%update(d1, d2, info, reg1=rtol, reg2=rtol)
          call check(error, is_successful(info)) ! Successfully initialized the KKT solver.
          if (allocated(error)) return
@@ -203,7 +204,7 @@ contains
             y = dense_vector(m); rhs_y = dense_vector(b); d2 = dense_vector(m)
 
             !> Create KKT solver.
-            kkt = kkt_solver(P, A)
+            kkt = kkt_solver(dense_sym_matrix(P), dense_matrix(A))
             call kkt%update(d1, d2, info, reg1=rtol, reg2=rtol)
             call check(error, is_successful(info))
             if (allocated(error)) return
@@ -251,7 +252,7 @@ contains
          y = dense_vector(m); rhs_y = dense_vector(b); d2 = dense_vector(m)
 
          !> Create KKT solver.
-         kkt = kkt_solver(P, A)
+         kkt = kkt_solver(dense_sym_matrix(P), dense_matrix(A))
          call kkt%update(d1, d2, info, reg1=rtol, reg2=rtol)
          call check(error, is_successful(info))
          if (allocated(error)) return
@@ -304,7 +305,7 @@ contains
          y = dense_vector(m); rhs_y = dense_vector(b); d2 = dense_vector(m)
 
          !> Create KKT solver.
-         kkt = kkt_solver(P, A)
+         kkt = kkt_solver(dense_sym_matrix(P), dense_matrix(A))
          call kkt%update(d1, d2, info)
          call check(error, is_successful(info))
          if (allocated(error)) return
@@ -351,7 +352,7 @@ contains
          y = dense_vector(m); rhs_y = dense_vector(b); d2 = dense_vector(m)
 
          !> Create KKT solver.
-         kkt = kkt_solver(P, A)
+         kkt = kkt_solver(dense_sym_matrix(P), dense_matrix(A))
          call kkt%update(d1, d2, info, reg1=1e-6_dp, reg2=1e-6_dp)
          call check(error, is_successful(info))
          if (allocated(error)) return
@@ -401,7 +402,7 @@ contains
          call random_number(d2%data); d2%data = 10.0_dp**(8.0_dp*d2%data - 4.0_dp)
 
          !> Create KKT solver.
-         kkt = kkt_solver(P, A)
+         kkt = kkt_solver(dense_sym_matrix(P), dense_matrix(A))
          call kkt%update(d1, d2, info, reg1=1.0e-8_dp, reg2=1.0e-8_dp)
          call check(error, is_successful(info))
          if (allocated(error)) return
